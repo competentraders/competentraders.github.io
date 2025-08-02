@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Competentraders</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #fff;
+      color: #333;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px 0;
+    }
+
+    header {
+      background: #0a0a23;
+      color: white;
+      padding: 15px 0;
+      position: relative;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brand {
+      font-size: 1.8rem;
+      color: #f9c846;
+      text-shadow: 0 0 10px #f9c846, 0 0 20px #fff200;
+      animation: flip 4s infinite linear;
+    }
+
+    @keyframes flip {
+      0% { transform: rotateY(0); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    .auth-links a {
+      background: #f9c846;
+      color: #000;
+      padding: 8px 14px;
+      margin-left: 5px;
+      font-weight: bold;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    .menu-toggle {
+      font-size: 30px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Hamburger Menu Panel (adjusted) */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 60%;
+      height: 100vh;
+      background: #000;
+      color: white;
+      padding: 30px 30px;
+      transition: right 0.4s ease-in-out;
+      z-index: 99;
+    }
+
+    .side-menu.show {
+      right: 0;
+    }
+
+    .side-menu .close-toggle {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 30px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .side-menu a {
+      display: block;
+      margin: 25px 0;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: white;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    .side-menu a:hover {
+      color: #f9c846;
+      transform: translateX(10px);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: #1c1c3b;
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background: #f9c846;
+      color: #000;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .about, .services, .contact {
+      padding: 50px 20px;
+    }
+
+    .about h2, .services h2, .contact h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .services .cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .card {
+      background: #f4f4f4;
+      padding: 20px;
+      border-radius: 8px;
+      width: 280px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      background: #0a0a23;
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .footer-links a {
+      color: #f9c846;
+      font-size: 0.9rem;
+    }
+
+    .whatsapp-icon {
+      width: 20px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    @media (min-width: 769px) {
+      .menu-toggle {
+        display: none;
+      }
+
+      .side-menu {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-content">
+      <div class="brand-area">
+        <h1 class="brand">Competentraders</h1>
+        <div class="auth-links">
+          <a href="login.html">Login</a>
+          <a href="register.html">Register</a>
+        </div>
+      </div>
+      <button class="menu-toggle" onclick="toggleMenu()" id="toggleBtn">☰</button>
+    </div>
+
+    <div class="side-menu" id="sideMenu">
+      <button class="close-toggle" onclick="toggleMenu()">✖</button>
+      <a href="#home">Home</a>
+      <a href="about.html">About</a>
+      <a href="#services">Services</a>
+      <a href="contact.html">Contact us</a>
+    </div>
+  </header>
+
+  <section id="home" class="hero">
+    <div class="container">
+      <h2>Trading with Trust & Excellence</h2>
+      <p>Your reliable partner in modern trade and smart business solutions.</p>
+      <a href="#contact" class="btn">Get Started</a>
+    </div>
+  </section>
+
+  <section id="about" class="about">
+    <div class="container">
+      <h2>About Us</h2>
+      <p>Competentraders is dedicated to providing reliable and efficient trade solutions. We support businesses and individuals with services that simplify commerce and empower growth — with excellence at every step.</p>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <div class="container">
+      <h2>Our Services</h2>
+      <div class="cards">
+        <div class="card">
+          <img src="forex.jpg" alt="Forex Trading" />
+          <h3>Forex Trading</h3>
+          <p>Expert-level guidance and support in the global forex market.</p>
+        </div>
+        <div class="card">
+          <img src="sport.jpg" alt="Sports Trading" />
+          <h3>Sports Trading</h3>
+          <p>Smart betting strategies and tools for consistent returns.</p>
+        </div>
+        <div class="card">
+          <img src="crypto.jpg" alt="Cryptocurrency" />
+          <h3>Cryptocurrency</h3>
+          <p>Secure insights and support for buying, holding, and trading crypto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+
+
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="faq.html">FAQ</a>
+        <a href="help.html">Help</a>
+        <a href="https://wa.me/+2349153258628" target="_blank">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon" /> WhatsApp
+        </a>
+        <a href="support.html">Customer Support</a>
+       <a href="support.html">Contact us</a>
+        <a href="terms.html">Terms & Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="disclaimer.html">Disclaimer</a>
+      </div>
+      <p>© 2025 Competentraders | Built by You & Angelou A.I.</p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('sideMenu');
+      const btn = document.getElementById('toggleBtn');
+      const isOpen = menu.classList.toggle('show');
+      btn.textContent = isOpen ? "✖" : "☰";
+    }
+  </script>
+
+</body>
+</html>
