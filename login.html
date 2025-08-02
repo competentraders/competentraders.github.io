@@ -4,44 +4,105 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login | Competentraders</title>
-</head>
-<body style="margin:0; font-family:Segoe UI, sans-serif; background:#f4f4f4; color:#333;">
-
-  <div style="background:#0a0a23; padding:20px; text-align:center;">
-    <h1 style="color:#f9c846; text-shadow:0 0 10px #f9c846, 0 0 20px #fff200; animation:flip 4s infinite linear; font-size:2rem;">
-      Competentraders
-    </h1>
-  </div>
-
-  <div style="max-width:500px; margin:40px auto; background:white; padding:30px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
-    <h2 style="text-align:center; margin-bottom:20px;">Login to Your Account</h2>
-    
-    <form onsubmit="return loginUser()" style="display:flex; flex-direction:column; gap:15px;">
-      <input type="text" id="loginUsername" placeholder="Username" required style="padding:10px; border:1px solid #ccc; border-radius:5px;" />
-
-      <div style="position:relative;">
-        <input type="password" id="loginPassword" placeholder="Password" required style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;" />
-        <span onclick="togglePassword('loginPassword')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;">👁️</span>
-      </div>
-
-      <button type="submit" style="background:#0a0a23; color:#f9c846; padding:12px; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">
-        Login
-      </button>
-    </form>
-
-    <p id="loginMessage" style="text-align:center; color:red; margin-top:10px;"></p>
-
-    <p style="text-align:center; margin-top:20px;">
-      Don't have an account? <a href="register.html" style="color:#0a0a23; font-weight:bold;">Register</a>
-    </p>
-  </div>
-
   <style>
     @keyframes flip {
       0% { transform: rotateY(0); }
       100% { transform: rotateY(360deg); }
     }
+
+    body {
+      margin: 0;
+      font-family: Segoe UI, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      transition: background 0.4s, color 0.4s;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .dark-mode {
+      background: #1a1a1a !important;
+      color: #eee !important;
+    }
+
+    .dark-mode .login-container {
+      background: #2b2b2b !important;
+      color: #eee !important;
+    }
+
+    .dark-mode input {
+      background: #2b2b2b !important;
+      color: #eee !important;
+      border: 1px solid #666 !important;
+    }
+
+    .login-container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: background 0.4s, color 0.4s;
+    }
+
+    .form-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      transition: background 0.4s, color 0.4s;
+    }
   </style>
+</head>
+<body id="pageBody">
+
+  <div style="background:#0a0a23; padding:20px; text-align:center; position:relative;">
+    <h1 style="color:#f9c846; text-shadow:0 0 10px #f9c846, 0 0 20px #fff200; animation:flip 4s infinite linear; font-size:2rem;">
+      Competentraders
+    </h1>
+
+    <!-- Toggle Switch -->
+    <label style="position:absolute; top:20px; right:20px; cursor:pointer;">
+      <input type="checkbox" onchange="toggleDark()" style="display:none;" id="toggleSwitch">
+      <span style="display:inline-block; width:50px; height:26px; background:#ccc; border-radius:20px; position:relative;">
+        <span id="switchCircle" style="width:22px; height:22px; background:#fff; border-radius:50%; position:absolute; top:2px; left:2px; transition:0.3s;"></span>
+      </span>
+    </label>
+  </div>
+
+  <div class="form-wrapper">
+    <div class="login-container">
+      <h2 style="text-align:center; margin-bottom:20px;">Login to Your Account</h2>
+
+      <form onsubmit="return loginUser()" style="display:flex; flex-direction:column; gap:15px;">
+        <input type="text" id="loginUsername" placeholder="Username" required />
+
+        <div style="position:relative;">
+          <input type="password" id="loginPassword" placeholder="Password" required />
+          <span onclick="togglePassword('loginPassword')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></span>
+        </div>
+
+        <button type="submit" style="background:#0a0a23; color:#f9c846; padding:12px; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">
+          Login
+        </button>
+      </form>
+
+      <p id="loginMessage" style="text-align:center; color:red; margin-top:10px;"></p>
+
+      <p style="text-align:center; margin-top:20px;">
+        Don't have an account? <a href="register.html" style="color:#0a0a23; font-weight:bold;">Register</a>
+      </p>
+    </div>
+  </div>
 
   <script>
     function togglePassword(id) {
@@ -62,6 +123,21 @@
       } else {
         document.getElementById("loginMessage").textContent = "User not identified. Please register.";
         return false;
+      }
+    }
+
+    function toggleDark() {
+      const body = document.getElementById('pageBody');
+      const switchCircle = document.getElementById('switchCircle');
+
+      body.classList.toggle('dark-mode');
+
+      if (body.classList.contains('dark-mode')) {
+        switchCircle.style.left = '26px';
+        switchCircle.style.background = '#0a0a23';
+      } else {
+        switchCircle.style.left = '2px';
+        switchCircle.style.background = '#fff';
       }
     }
   </script>
