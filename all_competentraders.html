@@ -15,37 +15,38 @@
     }
 
     body.dark {
-      background: #121212;
-      color: #eee;
+      background: #101a10;
+      color: #f0f0f0;
     }
 
     .header {
-  background: 
-    linear-gradient(rgba(0, 77, 64, 0.8), rgba(255, 235, 59, 0.7)),
-    url('https://images.unsplash.com/photo-1565373679183-b8ef1ed7fa1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
-  background-size: cover;
-  background-position: center;
-  padding: 25px 20px 35px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-  color: #fff;
-}
+      background: linear-gradient(to right, #33691e, #ffeb3b);
+      background-image: 
+        linear-gradient(to right, rgba(255, 235, 59, 0.3), rgba(51, 105, 30, 0.6)),
+        url('https://images.unsplash.com/photo-1605902711622-cfb43c44367f?auto=format&fit=crop&w=1400&q=80');
+      background-size: cover;
+      background-position: center;
+      padding: 30px 20px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
     .brand {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: bold;
       color: #fffde7;
-      animation: flipSlow 10s infinite linear;
+      animation: flipSlow 12s infinite linear;
       margin: 0;
-      text-shadow: 0 0 10px #cddc39;
+      text-shadow: 0 0 12px #cddc39;
     }
 
     .subtext {
-      font-size: 0.95rem;
-      color: #f9fbe7;
-      margin: 8px 0 18px;
+      font-size: 1rem;
+      color: #f1f8e9;
+      margin: 10px 0 20px;
     }
 
     .nav-links {
@@ -57,15 +58,16 @@
     }
 
     .nav-links a {
-      padding: 5px 12px;
+      padding: 6px 14px;
       background: rgba(255, 255, 255, 0.85);
-      color: #1b5e20;
+      color: #2e7d32;
       font-weight: 600;
-      font-size: 0.75rem;
+      font-size: 0.60rem;
       text-decoration: none;
-      border-radius: 10px;
+      border-radius: 50px;
       transition: 0.3s;
       white-space: nowrap;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
     }
 
     .nav-links a:hover {
@@ -74,11 +76,11 @@
 
     body.dark .nav-links a {
       background: #2e7d32;
-      color: #fff9c4;
+      color: #fffde7;
     }
 
     body.dark .nav-links a:hover {
-      background: #388e3c;
+      background: #33691e;
     }
 
     .toggle-container {
@@ -157,7 +159,7 @@
 </head>
 <body>
 
-  <!-- HEADER ONLY -->
+  <!-- HEADER -->
   <div class="header">
     <h1 class="brand">Competentraders</h1>
     <p class="subtext">Select your preferred trading service</p>
@@ -169,14 +171,181 @@
       <a href="#">Cpt Investment</a>
     </div>
 
-    <!-- Toggle -->
     <label class="toggle-container">
       <div class="toggle-switch">
         <input type="checkbox" id="darkModeToggle">
         <span class="slider"></span>
       </div>
     </label>
+  </div><br>
+
+
+
+
+
+
+<!-- HORIZONTAL SCROLLABLE SERVICE SLIDER -->
+<div style="margin:50px 0; overflow-x:auto; white-space:nowrap; padding:10px 0;">
+  <div style="display:inline-flex; gap:30px; padding:10px 20px;">
+
+    <!-- Service Card -->
+    <div style="background:white; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,0.08); padding:20px; width:220px; display:inline-block; text-align:center; flex-shrink:0;">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Forex" style="width:60px; margin-bottom:15px;">
+      <h3 style="color:#1b5e20; font-size:1rem;">CPT Forex</h3>
+      <p style="font-size:0.8rem; color:#555;">Expert forex mentorship and signals.</p>
+      <a href="forex.html" style="margin-top:10px; display:inline-block; padding:6px 12px; background:#1b5e20; color:#fffde7; font-size:0.75rem; border-radius:5px; text-decoration:none;">Enter</a>
+    </div>
+
+    <div style="background:white; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.08); padding:20px; width:220px; display:inline-block; text-align:center; flex-shrink:0;">
+      <img src="https://cdn-icons-png.flaticon.com/512/1034/1034131.png" alt="Sport" style="width:60px; margin-bottom:15px;">
+      <h3 style="color:#1b5e20; font-size:1rem;">CPT Sport</h3>
+      <p style="font-size:0.8rem; color:#555;">Smart betting and sport strategies.</p>
+      <a href="sport.html" style="margin-top:10px; display:inline-block; padding:6px 12px; background:#1b5e20; color:#fffde7; font-size:0.75rem; border-radius:5px; text-decoration:none;">Enter</a>
+    </div>
+
+    <div style="background:white; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.08); padding:20px; width:220px; display:inline-block; text-align:center; flex-shrink:0;">
+      <img src="https://cdn-icons-png.flaticon.com/512/825/825466.png" alt="Crypto" style="width:60px; margin-bottom:15px;">
+      <h3 style="color:#1b5e20; font-size:1rem;">CPT Crypto</h3>
+      <p style="font-size:0.8rem; color:#555;">Real-time crypto strategies and support.</p>
+      <a href="crypto.html" style="margin-top:10px; display:inline-block; padding:6px 12px; background:#1b5e20; color:#fffde7; font-size:0.75rem; border-radius:5px; text-decoration:none;">Enter</a>
+    </div>
+
+    <div style="background:white; border-radius:12px; box-shadow:0 4px 14px rgba(0,0,0,0.08); padding:20px; width:220px; display:inline-block; text-align:center; flex-shrink:0;">
+      <img src="https://cdn-icons-png.flaticon.com/512/2910/2910766.png" alt="Investment" style="width:60px; margin-bottom:15px;">
+      <h3 style="color:#1b5e20; font-size:1rem;">CPT Investment</h3>
+      <p style="font-size:0.8rem; color:#555;">Trusted investment guidance and plans.</p>
+      <a href="investment.html" style="margin-top:10px; display:inline-block; padding:6px 12px; background:#1b5e20; color:#fffde7; font-size:0.75rem; border-radius:5px; text-decoration:none;">Enter</a>
+    </div>
+
   </div>
+</div><br>
+
+
+
+
+<!-- SERVICES SECTION -->
+<div style="padding: 60px 20px; background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: #e0f7fa;">
+
+  <h2 style="text-align:center; font-size: 2.2rem; color:#76ff03; text-shadow: 0 0 15px #76ff03; margin-bottom: 40px;">
+    💡 Our Powerful Services
+  </h2>
+
+<!-- SERVICE: FOREX -->
+<div style="background: rgba(255,255,255,0.05); margin-bottom: 30px; padding: 25px; border-left: 5px solid #64ffda; border-radius: 10px; box-shadow: 0 0 15px #00e5ff;">
+  <div style="display: flex; align-items: center; gap: 20px;">
+    <img src="https://img.icons8.com/fluency/96/currency-exchange.png" alt="Forex Icon" style="width:60px;" />
+    <div>
+      <h3 style="margin:0; color:#00e5ff;">Cpt Forex Trading</h3>
+      <p style="margin-top:8px;">
+        Learn to analyze the forex market, spot trends, manage risks, and trade currencies confidently with expert mentorship and real-time strategies.
+      </p>
+    </div>
+  </div>
+</div>
+
+  <!-- SERVICE: SPORT -->
+  <div style="background: rgba(255,255,255,0.05); margin-bottom: 30px; padding: 25px; border-left: 5px solid #64ffda; border-radius: 10px; box-shadow: 0 0 15px #00e5ff;">
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <img src="https://img.icons8.com/color/100/football2.png" alt="Sport" style="width:60px;" />
+      <div>
+        <h3 style="margin:0; color:#00e5ff;">Cpt Sport Trading</h3>
+        <p style="margin-top:8px;">Strategic betting with deep analysis, predictions, and proven win patterns across sports events worldwide.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE: CRYPTO -->
+  <div style="background: rgba(255,255,255,0.05); margin-bottom: 30px; padding: 25px; border-left: 5px solid #ffea00; border-radius: 10px; box-shadow: 0 0 15px #ffee58;">
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <img src="https://img.icons8.com/color/100/bitcoin--v1.png" alt="Crypto" style="width:60px;" />
+      <div>
+        <h3 style="margin:0; color:#ffee58;">Cpt Cryptocurrency</h3>
+        <p style="margin-top:8px;">Guided exposure to top crypto assets, daily trend insights, and beginner-friendly strategies for steady gains.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE: INVESTMENT -->
+  <div style="background: rgba(255,255,255,0.05); margin-bottom: 30px; padding: 25px; border-left: 5px solid #ff4081; border-radius: 10px; box-shadow: 0 0 15px #ff80ab;">
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <img src="https://img.icons8.com/color/100/investment-portfolio.png" alt="Investment" style="width:60px;" />
+      <div>
+        <h3 style="margin:0; color:#ff80ab;">Cpt Investment</h3>
+        <p style="margin-top:8px;">Smart investments with realistic ROI, guided plans, and secured channels to grow your money safely.</p>
+      </div>
+    </div>
+  </div>
+
+</div><br>
+
+
+
+
+
+
+
+<!-- SERVICE VIDEOS SECTION -->
+<div style="margin-top: 50px;">
+
+  <!-- FOREX VIDEO -->
+  <div style="margin-bottom: 40px; border-left: 5px solid #64ffda; padding-left: 15px;">
+    <h3 style="color: #00e5ff; margin-bottom: 10px;">Cpt Forex Trading (Video Preview)</h3>
+    <iframe width="95%" height="315" 
+      src="forex.mp4" 
+      title="Forex Trading" frameborder="0" 
+      allow="autoplay; encrypted-media" allowfullscreen
+      style="border-radius: 10px; box-shadow: 0 0 20px #00e5ff;">
+    </iframe>
+  </div>
+
+  <!-- SPORT TRADING VIDEO -->
+  <div style="margin-bottom: 40px; border-left: 5px solid #00e676; padding-left: 15px;">
+    <h3 style="color: #00e676; margin-bottom: 10px;">Cpt Sport Trading (Video Preview)</h3>
+    <iframe width="95%" height="315" 
+      src="sport.mp4" 
+      title="Sport Trading" frameborder="0" 
+      allow="autoplay; encrypted-media" allowfullscreen
+      style="border-radius: 10px; box-shadow: 0 0 20px #00e676;">
+    </iframe>
+  </div>
+
+  <!-- CRYPTO TRADING VIDEO -->
+  <div style="margin-bottom: 40px; border-left: 5px solid #ffc107; padding-left: 15px;">
+    <h3 style="color: #ffc107; margin-bottom: 10px;">Cpt Cryptocurrency (Video Preview)</h3>
+    <iframe width="95%" height="315" 
+      src="cryptocurrency.mp4" 
+      title="Crypto Trading" frameborder="0" 
+      allow="autoplay; encrypted-media" allowfullscreen
+      style="border-radius: 10px; box-shadow: 0 0 20px #ffc107;">
+    </iframe>
+  </div>
+
+  <!-- INVESTMENT VIDEO -->
+  <div style="margin-bottom: 40px; border-left: 5px solid #ff4081; padding-left: 15px;">
+    <h3 style="color: #ff4081; margin-bottom: 10px;">Cpt Investment (Video Preview)</h3>
+    <iframe width="95%" height="315" 
+      src="investment.mp4" 
+      title="Investment Strategies" frameborder="0" 
+      allow="autoplay; encrypted-media" allowfullscreen
+      style="border-radius: 10px; box-shadow: 0 0 20px #ff4081;">
+    </iframe>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
