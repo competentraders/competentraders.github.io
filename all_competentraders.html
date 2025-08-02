@@ -4,56 +4,179 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard | Competentraders</title>
-</head>
-<body style="margin:0; font-family:Segoe UI, sans-serif; background:#f4f4f4; color:#333;">
 
-  <!-- HEADER -->
-  <div style="background:#0a0a23; padding:20px; text-align:center;">
-    <h1 style="color:#f9c846; text-shadow:0 0 10px #f9c846, 0 0 20px #fff200; animation:flip 4s infinite linear; font-size:2rem;">
-      Competentraders
-    </h1>
-    <p style="color:#fff;">Select your preferred trading service</p>
-  </div>
-
-  <!-- SERVICE CARDS -->
-  <div style="max-width:1000px; margin:40px auto; display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:0 20px;">
-    
-    <div onclick="alert('Navigating to Competent Traders FX')" style="background:white; width:280px; padding:25px; text-align:center; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer; transition:0.3s;">
-      <img src="https://via.placeholder.com/100?text=FX" alt="FX" style="margin-bottom:15px;" />
-      <h3 style="color:#0a0a23;">Competent Traders FX</h3>
-      <p style="font-size:0.9rem;">Forex trading and mentorship with reliable tools and guidance.</p>
-    </div>
-
-    <div onclick="alert('Navigating to Competent Traders Sport')" style="background:white; width:280px; padding:25px; text-align:center; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer; transition:0.3s;">
-      <img src="https://via.placeholder.com/100?text=Sport" alt="Sport" style="margin-bottom:15px;" />
-      <h3 style="color:#0a0a23;">Competent Traders Sport</h3>
-      <p style="font-size:0.9rem;">Smart betting strategies and sports trading techniques.</p>
-    </div>
-
-    <div onclick="alert('Navigating to Competent Traders Crypto')" style="background:white; width:280px; padding:25px; text-align:center; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer; transition:0.3s;">
-      <img src="https://via.placeholder.com/100?text=Crypto" alt="Crypto" style="margin-bottom:15px;" />
-      <h3 style="color:#0a0a23;">Competent Traders Crypto</h3>
-      <p style="font-size:0.9rem;">Crypto trading, holding strategies and support for beginners.</p>
-    </div>
-
-  </div>
-
-  <!-- FOOTER -->
-  <div style="text-align:center; padding:20px; font-size:0.9rem; color:#777;">
-    &copy; 2025 Competentraders. Powered by You & Angelou A.I.
-  </div>
-
-  <!-- Flip animation -->
   <style>
-    @keyframes flip {
-      0% { transform: rotateY(0); }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background: #121212;
+      color: #eee;
+    }
+
+    .header {
+  background: 
+    linear-gradient(rgba(0, 77, 64, 0.8), rgba(255, 235, 59, 0.7)),
+    url('https://images.unsplash.com/photo-1565373679183-b8ef1ed7fa1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+  background-size: cover;
+  background-position: center;
+  padding: 25px 20px 35px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+    .brand {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fffde7;
+      animation: flipSlow 10s infinite linear;
+      margin: 0;
+      text-shadow: 0 0 10px #cddc39;
+    }
+
+    .subtext {
+      font-size: 0.95rem;
+      color: #f9fbe7;
+      margin: 8px 0 18px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: center;
+    }
+
+    .nav-links a {
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #1b5e20;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: 0.3s;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      background: #dcedc8;
+    }
+
+    body.dark .nav-links a {
+      background: #2e7d32;
+      color: #fff9c4;
+    }
+
+    body.dark .nav-links a:hover {
+      background: #388e3c;
+    }
+
+    .toggle-container {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 46px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.4s;
+    }
+
+    .toggle-switch input:checked + .slider {
+      background-color: #ffee58;
+    }
+
+    .toggle-switch input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    @keyframes flipSlow {
+      0% { transform: rotateY(0deg); }
       100% { transform: rotateY(360deg); }
     }
 
-    div[onclick]:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+    .nav-links::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .nav-links::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 10px;
     }
   </style>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const toggle = document.getElementById('darkModeToggle');
+      toggle.addEventListener('change', () => {
+        document.body.classList.toggle('dark');
+      });
+    });
+  </script>
+</head>
+<body>
+
+  <!-- HEADER ONLY -->
+  <div class="header">
+    <h1 class="brand">Competentraders</h1>
+    <p class="subtext">Select your preferred trading service</p>
+
+    <div class="nav-links">
+      <a href="#">Cpt Forex Trading</a>
+      <a href="#">Cpt Sport Trading</a>
+      <a href="#">Cpt Cryptocurrency</a>
+      <a href="#">Cpt Investment</a>
+    </div>
+
+    <!-- Toggle -->
+    <label class="toggle-container">
+      <div class="toggle-switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider"></span>
+      </div>
+    </label>
+  </div>
+
 </body>
 </html>
