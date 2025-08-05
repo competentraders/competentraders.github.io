@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms and Conditions - Competent Traders</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+    header {
+      background: #111;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #0ff;
+    }
+    section {
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h2 {
+      color: #0ff;
+      margin-top: 40px;
+    }
+    p {
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    footer {
+      background: #111;
+      padding: 20px;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Competent Traders - Terms and Conditions
+  </header>
+
+  <section id="terms">
+    <p class="fade-in">Please read these Terms and Conditions carefully before using our services. By accessing or using Competent Traders, you agree to be bound by these terms.</p>
+
+    <!-- List of 100+ Terms and Conditions -->
+    <div id="termsList" class="fade-in"></div>
+  </section>
+
+  <footer>
+    &copy; 2025 Competent Traders. All rights reserved.
+  </footer>
+
+  <script>
+    const terms = [
+      "You must be at least 18 years old to use our services.",
+      "You agree to provide accurate and truthful personal information.",
+      "You are responsible for maintaining the confidentiality of your account.",
+      "Unauthorized use of your account must be reported immediately.",
+      "All investments carry risk. We are not liable for any losses.",
+      "Forex trading profits are not guaranteed.",
+      "Sports trading profits depend on real-time analysis and market volatility.",
+      "All robot-assisted trades are executed based on programmed algorithms.",
+      "Deposits are processed manually and require confirmation.",
+      "Withdrawals are processed manually and require identity verification.",
+      "Investment plans must be selected carefully and understood by the user.",
+      "The minimum investment amount is determined by the current company rate.",
+      "Users agree not to use the platform for illegal or fraudulent activities.",
+      "Our company reserves the right to terminate accounts violating our rules.",
+      "You agree not to hack, clone, or manipulate any part of our platform.",
+      "Intellectual property rights of the platform remain with Competent Traders.",
+      "You shall not copy, distribute, or exploit any platform feature without permission.",
+      "All payments made are final and non-refundable.",
+      "You must verify wallet addresses before depositing crypto.",
+      "We are not responsible for incorrectly sent cryptocurrencies.",
+      "Interest rates and ROI are subject to change with prior notice.",
+      "We will not tolerate spamming, abusive language, or threats.",
+      "Robot services may be paused during technical upgrades or maintenance.",
+      "You agree not to impersonate any staff or company representative.",
+      "Misleading marketing or affiliate promotions may result in ban.",
+      "The platform is provided 'as is' without warranties.",
+      "Competent Traders is not a registered bank or financial institution.",
+      "Tax compliance is the user's responsibility according to their country laws.",
+      "We do not guarantee third-party services connected to our platform.",
+      "Referral bonuses are paid only after successful investment confirmation.",
+      "We may update terms at any time, with or without prior notice.",
+      "Users will be notified via email of critical updates.",
+      "Trading history is accessible on your dashboard only.",
+      "You may only use one account per identity.",
+      "Multiple account usage may lead to account suspension.",
+      "Support is provided through official emails and WhatsApp only.",
+      "We do not request passwords or login details via email.",
+      "You must report bugs or system errors immediately.",
+      "We may monitor user activity for security purposes.",
+      "Our system uses end-to-end encryption to protect user data.",
+      "Deposits may take 0–24 hours to reflect depending on network traffic.",
+      "Withdrawals may take up to 24 hours based on manual review.",
+      "Investments are locked until the maturity date.",
+      "You are advised to make screenshots of each transaction for reference.",
+      "We reserve the right to delay withdrawal during high-traffic periods.",
+      "Robot traders are available based on subscription or plan access.",
+      "Abuse of promotional offers may result in account limitations.",
+      "User complaints must be submitted via the support email.",
+      "Users must keep their contact info updated.",
+      "Inactive accounts for 90 days may be disabled.",
+      "We reserve the right to audit accounts periodically.",
+      "Attempting to deceive staff or admin may lead to suspension.",
+      "Company branding must not be reused or altered without approval.",
+      "WhatsApp support is available only during business hours.",
+      "Cryptocurrency prices used in investments are updated in real-time.",
+      "You may not exploit bugs or vulnerabilities in the system.",
+      "You must complete KYC (Know Your Customer) before large transactions.",
+      "We are not liable for government actions restricting access to crypto.",
+      "Team bonuses apply only to verified affiliate structures.",
+      "You are responsible for tracking your financial transactions.",
+      "No chargeback or reversal is allowed after successful deposits.",
+      "Legal actions may be taken against fraudulent activity.",
+      "Competent Traders is headquartered in Nigeria and operates globally.",
+      "All users agree to resolve disputes via email before legal means.",
+      "We reserve the right to request additional verification.",
+      "Withdrawals above $5,000 may require a phone confirmation.",
+      "Our platform updates regularly to improve user experience.",
+      "You agree not to use bots, crawlers, or scripts to automate actions.",
+      "All announcements are published via the official homepage.",
+      "Our investment calculator is a projection tool, not a guarantee.",
+      "We are not liable for internet downtimes or disruptions.",
+      "Investment returns are calculated on a daily compound basis.",
+      "Users who abuse customer care may be banned from support.",
+      "IP tracking is used to monitor multiple login attempts.",
+      "Account bans are final unless overturned by admin appeal.",
+      "We do not offer investment advice. Users invest at their own risk.",
+      "Cryptocurrency wallets must be correctly entered before submitting forms.",
+      "Promotions have expiration dates and must be used accordingly.",
+      "The platform may undergo emergency maintenance without prior notice.",
+      "We do not support token swaps unless clearly stated.",
+      "Investment in high-volatility markets comes with known risk.",
+      "System data is encrypted, stored securely, and not sold to third parties.",
+      "Interest accrual stops when the account is under investigation.",
+      "You must agree to these terms before using any feature.",
+      "Account upgrades (e.g., VIP, Premium) come with their own terms.",
+      "We may partner with third-party brokers; you accept their terms also.",
+      "All users are subject to anti-money laundering (AML) policies.",
+      "These terms represent a binding agreement between user and Competent Traders.",
+      "By using this site, you accept our privacy policy.",
+      "You agree not to misrepresent your earning potential.",
+      "You may cancel an investment within 10 minutes of initiating.",
+      "Bonuses are non-withdrawable unless conditions are met.",
+      "System fraud detection may delay your transactions.",
+      "Time-limited offers are first come, first served.",
+      "All deposits must include transaction reference screenshots.",
+      "Competent Traders does not store private keys.",
+      "You are encouraged to use two-factor authentication.",
+      "Scam reports from users will be treated with utmost priority.",
+      "No employee is allowed to request funds outside official channels.",
+      "The company holds the right to limit access during overloads.",
+      "All data breaches will be communicated within 72 hours of confirmation.",
+      "Investments in dollar-pegged plans are calculated via fixed rate.",
+      "Competent Traders may discontinue any service without liability.",
+      "All third-party tools are used under respective licenses.",
+      "Legal jurisdiction is under Nigerian commercial law unless otherwise stated.",
+      "Each term is independently enforceable even if one is found void.",
+      "Violation of these terms may result in legal prosecution."
+    ];
+
+    const container = document.getElementById("termsList");
+    terms.forEach((term, i) => {
+      const para = document.createElement("p");
+      para.textContent = `${i + 1}. ${term}`;
+      container.appendChild(para);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support – Competent Traders</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; font-family: 'Segoe UI', sans-serif; background: #0c0f15; color: white;">
+
+  <header style="padding: 20px; background: #111827; text-align: center;">
+    <h1 style="margin: 0; font-size: 32px; color: #00ffcc;">Support Center</h1>
+    <p style="color: #999;">We're here to help you 24/7</p>
+  </header>
+
+  <main style="padding: 30px;">
+    <div style="max-width: 800px; margin: auto;">
+
+      <h2 style="color: #00ffcc; font-size: 24px;">Browse Support Topics</h2>
+      <div id="support-container">
+        <!-- FAQ Items inserted via JS -->
+      </div>
+    </div>
+  </main>
+
+  <footer style="text-align: center; padding: 20px; color: #aaa; font-size: 14px;">
+    &copy; 2025 Competent Traders. All rights reserved.
+  </footer>
+
+  <script>
+    const supportTopics = [
+      'How to open a trading account?',
+      'How to recover forgotten password?',
+      'What are your deposit methods?',
+      'Manual deposit process explained',
+      'How to withdraw profits manually?',
+      'Crypto wallet address submission',
+      'How to buy cryptocurrency on our platform?',
+      'Minimum investment amount required?',
+      'Supported cryptocurrencies list',
+      'Trading robot guide and usage',
+      'Live support chat hours',
+      'How to reach our WhatsApp team?',
+      'Mobile responsiveness explained',
+      'How to enable 2FA on account?',
+      'I didn’t receive deposit confirmation',
+      'Can I use multiple accounts?',
+      'Account upgrade requirements',
+      'Trading sessions explained',
+      'How to track deposit countdown?',
+      'Dashboard overview and guide',
+      'Is your platform secure?',
+      'Where are you legally registered?',
+      'Can I cancel a deposit?',
+      'Buying PI cryptocurrency process',
+      'Manual KYC verification help',
+      'Investment plans explained',
+      'Returns structure and calculation',
+      'Why is your crypto price 10x cheaper?',
+      'Can I use third-party wallets?',
+      'Do you support local currencies?'
+    ];
+
+    const container = document.getElementById('support-container');
+    supportTopics.forEach((topic, index) => {
+      const item = document.createElement('div');
+      item.style = 'background: #1f2937; margin: 10px 0; padding: 15px 20px; border-radius: 10px; cursor: pointer; transition: 0.3s;';
+      item.innerHTML = `
+        <div style="font-size: 18px; font-weight: bold; color: #00ffcc;">${topic}</div>
+        <div class="answer" style="display: none; margin-top: 10px; color: #ccc; line-height: 1.5;">
+          This section provides detailed support on: <strong>${topic}</strong>. If you need more help, contact us at <a href="mailto:competentraders@gmail.com" style="color: #00ffcc;">competentraders@gmail.com</a>.
+        </div>
+      `;
+      item.addEventListener('click', () => {
+        const answer = item.querySelector('.answer');
+        answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+      });
+      container.appendChild(item);
+    });
+
+    // Entrance Animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = document.querySelectorAll('#support-container > div');
+      items.forEach((item, i) => {
+        item.style.opacity = 0;
+        item.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+          item.style.opacity = 1;
+          item.style.transform = 'translateY(0)';
+        }, 100 * i);
+      });
+    });
+  </script>
+
+</body>
+</html>

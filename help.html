@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Help - Competent Traders</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0a0f1a;
+      color: #f1f1f1;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #141c2c;
+      padding: 20px;
+      text-align: center;
+      color: #00ffe0;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .help-box {
+      background: #1e2b40;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+      transition: 0.3s ease;
+    }
+    .help-question {
+      padding: 15px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      background: #24344e;
+      font-weight: bold;
+      position: relative;
+    }
+    .help-question:hover {
+      background: #2e4464;
+    }
+    .help-answer {
+      padding: 15px 20px;
+      background: #1a2335;
+      display: none;
+      font-size: 16px;
+      line-height: 1.6;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>Help & Support - Competent Traders</header>
+
+<div class="container">
+  <!-- Help Section -->
+  <div class="help-box">
+    <div class="help-question">1. What is Competent Traders?</div>
+    <div class="help-answer">Competent Traders is a professional investment and trading platform offering Forex trading, sports trading, cryptocurrency investment, and financial training services.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">2. How do I register?</div>
+    <div class="help-answer">Click the “Register” button on the homepage and fill out the form with your accurate details. A confirmation will be sent to your email.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">3. How can I login?</div>
+    <div class="help-answer">Click the “Login” button, enter your registered email and password to access your dashboard.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">4. How do I deposit?</div>
+    <div class="help-answer">Go to the Deposit section of your dashboard and follow the manual deposit instructions. Send a message to CompetentTraders@gmail.com after payment.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">5. How do I withdraw my profits?</div>
+    <div class="help-answer">Withdrawal is manual. Kindly go to the Withdraw section and send a request. Our support team will process it within 24 hours.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">6. What trading services do you offer?</div>
+    <div class="help-answer">We offer Forex Trading, Sports Trading, and automated crypto robot trading using advanced market strategies.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">7. Can I view crypto prices on your site?</div>
+    <div class="help-answer">Yes. The crypto section lists real-time prices at a discount rate based on mining value, not market exchange rates.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">8. Is there a referral bonus?</div>
+    <div class="help-answer">Yes, invite users using your referral link and earn a commission for every deposit they make.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">9. How secure is my data?</div>
+    <div class="help-answer">We implement top-level encryption and manual verification to ensure user data is protected at all times.</div>
+  </div>
+
+  <div class="help-box">
+    <div class="help-question">10. Can I contact customer support?</div>
+    <div class="help-answer">Absolutely. You can contact us via email: CompetentTraders@gmail.com or use the Contact form on our website.</div>
+  </div>
+
+  <!-- Add 20 more questions -->
+  <script>
+    const questions = [
+      ["11. Can I invest with Bitcoin?", "Yes, we accept Bitcoin, USDT, and other cryptocurrencies for investment."],
+      ["12. What is the minimum investment?", "The minimum investment depends on the plan selected. We offer flexible options for all users."],
+      ["13. How long does it take to process withdrawals?", "Withdrawals are processed manually within 24 hours of request."],
+      ["14. Do you offer trading tutorials?", "Yes, our training section provides full courses on trading strategies and investment techniques."],
+      ["15. Can I change my password?", "Yes, go to your profile settings and select ‘Change Password’."],
+      ["16. What if I forgot my password?", "Click on ‘Forgot Password’ at login, and follow the reset instructions sent to your email."],
+      ["17. What is the trading robot?", "Our robot executes trades automatically for clients based on AI and market analysis."],
+      ["18. Is there a mobile app?", "We are working on a mobile app, but currently all features are accessible via the website."],
+      ["19. Can I cancel an investment?", "No, investments are locked for the duration of the plan to ensure trading efficiency."],
+      ["20. How do I upgrade my plan?", "Login to your dashboard and select a higher plan from the ‘Investment Plans’ section."],
+      ["21. Do you provide testimonials?", "Yes, we have a live testimonials section showing real clients and results."],
+      ["22. Can I trade manually?", "We offer both manual and automated trading options based on user preference."],
+      ["23. What is the minimum withdrawal amount?", "The minimum withdrawal is $20."],
+      ["24. Can I use bank transfer?", "Yes, bank transfer is supported for Nigerian users. Others can use crypto."],
+      ["25. How often are profits paid?", "Profits are updated daily and available for withdrawal after plan maturity."],
+      ["26. Do you offer 24/7 support?", "Support is available 24/7 through email and the support page."],
+      ["27. Can I invest as a beginner?", "Absolutely! We guide beginners with step-by-step instructions."],
+      ["28. How can I track my investment?", "Login to your dashboard to view active and past investments."],
+      ["29. Do you charge any hidden fees?", "No. There are no hidden charges or fees."],
+      ["30. How do I report an issue?", "Use the Help page or email CompetentTraders@gmail.com directly."]
+    ];
+
+    const container = document.querySelector('.container');
+    questions.forEach((item, i) => {
+      const box = document.createElement('div');
+      box.className = 'help-box';
+      box.innerHTML = `
+        <div class="help-question">${item[0]}</div>
+        <div class="help-answer">${item[1]}</div>
+      `;
+      container.appendChild(box);
+    });
+
+    document.querySelectorAll('.help-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const answer = q.nextElementSibling;
+        answer.style.display = (answer.style.display === "block") ? "none" : "block";
+      });
+    });
+  </script>
+
+</body>
+</html>

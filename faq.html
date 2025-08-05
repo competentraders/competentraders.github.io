@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ - Competent Traders</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #111;
+      padding: 1rem 2rem;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #f4c10f;
+      border-bottom: 2px solid #444;
+    }
+    .faq-container {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .faq-item {
+      background: #1c1c1c;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      padding: 1rem;
+      border-left: 4px solid #f4c10f;
+      transition: transform 0.3s ease, background 0.3s;
+      cursor: pointer;
+    }
+    .faq-item:hover {
+      transform: scale(1.02);
+      background: #222;
+    }
+    .faq-question {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .faq-answer {
+      display: none;
+      margin-top: 0.5rem;
+      color: #ccc;
+    }
+    footer {
+      background: #111;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #aaa;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>Frequently Asked Questions (FAQ)</header>
+
+<div class="faq-container" id="faq-list">
+  <!-- FAQs will be inserted here by JavaScript -->
+</div>
+
+<footer>
+  &copy; 2025 Competent Traders. All Rights Reserved.
+</footer>
+
+<script>
+  const faqs = [
+    { q: "What is Competent Traders?", a: "Competent Traders is a multi-service investment and trading platform offering Forex trading, sports trading, crypto buying/selling, investment plans, and a trading robot." },
+    { q: "How do I register on the platform?", a: "Click the 'Register' button on the homepage, fill in your details, and you'll get access to your dashboard." },
+    { q: "What is the minimum investment amount?", a: "You can start investing with as little as $10 depending on the plan you choose." },
+    { q: "How do I deposit funds?", a: "All deposits are handled manually. Send an email to Competentraders@gmail.com with your intent to deposit and receive payment details." },
+    { q: "How do I withdraw funds?", a: "Withdrawals are manual. Contact support with your request and details; funds will be processed accordingly." },
+    { q: "How long does a withdrawal take?", a: "Manual withdrawals are processed within 1-24 hours." },
+    { q: "What cryptocurrencies can I buy?", a: "We support Bitcoin, Ethereum, USDT, Tron, PI, BNB, Cardano, Solana, Dogecoin, and many more." },
+    { q: "How is the crypto price set?", a: "We sell at the current mining rate — which is 10x lower than exchange market price." },
+    { q: "Can I trust the trading robot?", a: "Yes. Our trading robot is highly optimized and has traded successfully for multiple clients. Testimonials are shown on the homepage." },
+    { q: "What’s the return on Forex plans?", a: "Returns vary by plan, starting from daily 5x ROI on higher plans." },
+    { q: "Are the investment plans guaranteed?", a: "Our plans are high-performing but all investments carry risk. Trade responsibly." },
+    { q: "How do I contact support?", a: "Email Competentraders@gmail.com or use the contact form on the website." },
+    { q: "What is PI Network?", a: "PI is a mobile mined cryptocurrency. We sell at its mining value." },
+    { q: "How secure is my data?", a: "We use secure encryption and never share your information." },
+    { q: "What’s the role of the trading robot?", a: "The robot handles live Forex and crypto trading on your behalf once activated." },
+    { q: "How do I activate the robot?", a: "After registration, deposit the required amount and request robot activation via email." },
+    { q: "Can I invest in sports trading?", a: "Yes. We offer curated sports trading strategies for both beginners and experts." },
+    { q: "Where do I watch Forex tutorial videos?", a: "On the Forex page, we embedded multiple tutorial videos to help guide you." },
+    { q: "Are deposits refundable?", a: "Deposits are used for investment and trading. No refunds once processing starts." },
+    { q: "Do I need to verify my account?", a: "Not mandatory, but it's recommended for extra security." },
+    { q: "Can I trade manually?", a: "Yes, you can also trade manually if you prefer not using the robot." },
+    { q: "What are your trading hours?", a: "Crypto trades 24/7, while Forex is open Monday–Friday." },
+    { q: "How do I know if my deposit was received?", a: "You’ll get a confirmation email once your manual deposit is verified." },
+    { q: "Is there a referral program?", a: "Yes! Invite users and earn 10% commission on their first investment." },
+    { q: "Do you support mobile users?", a: "Yes, our website is fully responsive and mobile-friendly." },
+    { q: "Is there an app?", a: "Not yet, but we're working on launching one soon." },
+    { q: "Can I cancel an investment plan?", a: "No. Once a plan starts, it must complete its cycle." },
+    { q: "What payment methods are accepted?", a: "We accept crypto (USDT, BTC, etc.) for now. More coming soon." },
+    { q: "How do I track my investments?", a: "Login to your dashboard to monitor your account balance and trades." },
+    { q: "Is Competent Traders legit?", a: "Yes. We are fully committed to transparency, security, and consistent growth for our users." }
+  ];
+
+  const container = document.getElementById("faq-list");
+  faqs.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "faq-item";
+    div.innerHTML = `
+      <div class="faq-question">${index + 1}. ${item.q}</div>
+      <div class="faq-answer">${item.a}</div>
+    `;
+    div.addEventListener("click", () => {
+      const answer = div.querySelector(".faq-answer");
+      answer.style.display = answer.style.display === "block" ? "none" : "block";
+    });
+    container.appendChild(div);
+  });
+</script>
+
+</body>
+</html>

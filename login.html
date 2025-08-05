@@ -61,6 +61,30 @@
       width: 100%;
       transition: background 0.4s, color 0.4s;
     }
+
+    button {
+      background: #0a0a23;
+      color: #f9c846;
+      padding: 12px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 14px;
+      color: #999;
+    }
+
+    .dark-mode .password-toggle {
+      color: #ccc;
+    }
   </style>
 </head>
 <body id="pageBody">
@@ -88,12 +112,10 @@
 
         <div style="position:relative;">
           <input type="password" id="loginPassword" placeholder="Password" required />
-          <span onclick="togglePassword('loginPassword')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></span>
+          <span onclick="togglePassword('loginPassword')" class="password-toggle">👁️</span>
         </div>
 
-        <button type="submit" style="background:#0a0a23; color:#f9c846; padding:12px; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">
-          Login
-        </button>
+        <button type="submit">Login</button>
       </form>
 
       <p id="loginMessage" style="text-align:center; color:red; margin-top:10px;"></p>
@@ -118,6 +140,7 @@
       const storedPassword = localStorage.getItem("competentraders_password");
 
       if (username === storedUsername && password === storedPassword) {
+        localStorage.setItem("loggedInUsername", username); // Save for use across pages
         window.location.href = "all_competentraders.html";
         return false;
       } else {
@@ -135,9 +158,26 @@
       if (body.classList.contains('dark-mode')) {
         switchCircle.style.left = '26px';
         switchCircle.style.background = '#0a0a23';
+        localStorage.setItem('darkMode', 'enabled');
       } else {
         switchCircle.style.left = '2px';
         switchCircle.style.background = '#fff';
+        localStorage.setItem('darkMode', 'disabled');
+      }
+    }
+
+    // On load, check and apply dark mode setting
+    window.onload = function() {
+      const darkMode = localStorage.getItem('darkMode');
+      const body = document.getElementById('pageBody');
+      const toggle = document.getElementById('toggleSwitch');
+      const switchCircle = document.getElementById('switchCircle');
+
+      if (darkMode === 'enabled') {
+        body.classList.add('dark-mode');
+        toggle.checked = true;
+        switchCircle.style.left = '26px';
+        switchCircle.style.background = '#0a0a23';
       }
     }
   </script>

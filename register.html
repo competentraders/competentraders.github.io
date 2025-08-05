@@ -4,45 +4,139 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Register | Competentraders</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: florawhite;
+      background-size: 200% 200%;
+      animation: gradientBG 15s ease infinite;
+      color: #eee;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: rgba(0, 0, 0, 0.85);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #f9c846;
+    }
+
+    .input {
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #666;
+      background: #2e2e2e;
+      color: #fff;
+      width: 100%;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    .button {
+      background: #f9c846;
+      color: #0a0a23;
+      padding: 12px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .toggle-box {
+      position: absolute;
+      top: 40px;
+      right: 80px;
+    }
+
+    .toggle-box input {
+      display: true;
+    }
+
+    .toggle-slider {
+      width: 50px;
+      height: 26px;
+      background: white;
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .toggle-slider::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: grey;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: 0.3s;
+    }
+
+    input[type="checkbox"]:checked + .toggle-slider::before {
+      left: 26px;
+      background: #0a0a23;
+    }
+
+    label {
+      color: #eee;
+    }
+
+    @keyframes flip {
+      0% { transform: rotateY(0); }
+      100% { transform: rotateY(360deg); }
+    }
+  </style>
 </head>
-<body id="pageBody" style="margin:0; font-family:Segoe UI, sans-serif; background:#f4f4f4; color:#333; transition:background 0.4s, color 0.4s;">
+<body>
 
-  <div style="background:#0a0a23; padding:20px; text-align:center; position:relative;">
-    <h1 style="color:#f9c846; text-shadow:0 0 10px #f9c846, 0 0 20px #fff200; animation:flip 4s infinite linear; font-size:2rem;">
-      Competentraders
-    </h1>
-
-    <!-- Toggle Switch -->
-    <label style="position:absolute; top:20px; right:20px; cursor:pointer;">
-      <input type="checkbox" onchange="toggleDark()" style="display:none;" id="toggleSwitch">
-      <span style="display:inline-block; width:50px; height:26px; background:#ccc; border-radius:20px; position:relative;">
-        <span id="switchCircle" style="width:22px; height:22px; background:#fff; border-radius:50%; position:absolute; top:2px; left:2px; transition:0.3s;"></span>
-      </span>
+  <div class="toggle-box">
+    <label>
+      <input type="checkbox" onchange="toggleDark()" id="toggleSwitch">
+      <span class="toggle-slider"></span>
     </label>
   </div>
 
-  <div id="formContainer" style="max-width:600px; margin:40px auto; background:white; padding:30px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); transition:background 0.4s, color 0.4s;">
-    <h2 style="text-align:center; margin-bottom:20px;">Create Your Account</h2>
-    
-    <form onsubmit="return validateForm()" style="display:flex; flex-direction:column; gap:15px;">
+  <h1 style="text-shadow: 0 0 10px #f9c846, 0 0 20px #fff200; animation: flip 4s infinite linear;">Competentraders</h1>
+
+  <div class="container" id="formContainer">
+    <h2>Create Your Account</h2>
+
+    <form onsubmit="return validateForm()">
       <input type="text" id="first" placeholder="First Name" required class="input" />
       <input type="text" id="last" placeholder="Last Name" required class="input" />
       <input type="text" id="other" placeholder="Other Name (Optional)" class="input" />
       <input type="text" id="username" placeholder="Username" required class="input" />
+      <input type="text" id="referral" placeholder="Referral Username (Optional)" class="input" />
+      <input type="text" id="phone" placeholder="Phone Number" required class="input" />
+      <input type="text" id="country" placeholder="Country" required class="input" />
+      <input type="text" id="address" placeholder="Address" required class="input" />
 
-      <div style="position:relative;">
-        <input type="password" id="password" placeholder="Password" required class="input" />
-        <span onclick="togglePassword('password')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></span>
-      </div>
-
-      <div style="position:relative;">
-        <input type="password" id="confirm_password" placeholder="Confirm Password" required class="input" />
-        <span onclick="togglePassword('confirm_password')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;"></span>
-      </div>
-
+      <input type="password" id="password" placeholder="Password" required class="input" />
+      <input type="password" id="confirm_password" placeholder="Confirm Password" required class="input" />
       <input type="email" id="email" placeholder="Email" required class="input" />
       <input type="date" id="dob" required class="input" />
-      
+
       <select id="gender" required class="input">
         <option value="">-- Select Gender --</option>
         <option>Male</option>
@@ -50,51 +144,19 @@
         <option>Other</option>
       </select>
 
-      <div style="text-align:center; font-weight:bold; color:#0a0a23;">
+      <div style="text-align:center; font-weight:bold; margin: 10px 0;">
         Security Code: <span id="randomNumber" style="color:#f9c846;"></span>
       </div>
-
       <input type="text" id="security_input" placeholder="Enter Security Code Above" required class="input" />
 
-      <button type="submit" style="background:#0a0a23; color:#f9c846; padding:12px; font-weight:bold; border:none; border-radius:5px; cursor:pointer;">
-        Register
-      </button>
+      <button type="submit" class="button">Register</button>
     </form>
 
-    <p style="text-align:center; margin-top:15px;">
-      Already registered? <a href="login.html" style="color:#0a0a23; font-weight:bold;">Login</a>
-    </p>
+    <p class="footer">Already registered? <a href="login.html" style="color:#f9c846;">Login</a></p>
   </div>
-
-  <style>
-    @keyframes flip {
-      0% { transform: rotateY(0); }
-      100% { transform: rotateY(360deg); }
-    }
-
-    .input {
-      padding:10px;
-      border:1px solid #ccc;
-      border-radius:5px;
-      background:white;
-      color:#000;
-      transition:background 0.4s, color 0.4s;
-    }
-
-    .dark-mode .input {
-      background:#2b2b2b;
-      color:#eee;
-      border:1px solid #666;
-    }
-  </style>
 
   <script>
     let currentSecurityCode = "";
-
-    function togglePassword(id) {
-      const input = document.getElementById(id);
-      input.type = input.type === "password" ? "text" : "password";
-    }
 
     function updateRandom() {
       currentSecurityCode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -102,7 +164,38 @@
     }
 
     setInterval(updateRandom, 10000);
-    window.onload = updateRandom;
+    window.onload = function () {
+      updateRandom();
+
+      // Load dark mode setting
+      const isDark = localStorage.getItem("darkMode") === "enabled";
+      const body = document.body;
+      const form = document.getElementById('formContainer');
+      const toggle = document.getElementById('toggleSwitch');
+
+      if (isDark) {
+        body.classList.add('dark-mode');
+        form.style.background = '#121212';
+        form.style.color = '#eee';
+        toggle.checked = true;
+      }
+    }
+
+    function toggleDark() {
+      const body = document.body;
+      const form = document.getElementById('formContainer');
+      const isDark = body.classList.toggle('dark-mode');
+
+      if (isDark) {
+        form.style.background = '#121212';
+        form.style.color = '#eee';
+        localStorage.setItem("darkMode", "enabled");
+      } else {
+        form.style.background = 'rgba(0, 0, 0, 0.85)';
+        form.style.color = '#fff';
+        localStorage.setItem("darkMode", "disabled");
+      }
+    }
 
     function validateForm() {
       const pass = document.getElementById("password").value;
@@ -124,37 +217,15 @@
         return false;
       }
 
-      localStorage.setItem("competentraders_username", document.getElementById("username").value.trim());
-      localStorage.setItem("competentraders_password", document.getElementById("password").value.trim());
+      // Save credentials
+      const username = document.getElementById("username").value.trim();
+      localStorage.setItem("competentraders_username", username);
+      localStorage.setItem("competentraders_password", pass);
 
+      alert("Registered successfully!");
       window.location.href = "all_competentraders.html";
       return false;
     }
-
-    function toggleDark() {
-      const body = document.getElementById('pageBody');
-      const form = document.getElementById('formContainer');
-      const switchCircle = document.getElementById('switchCircle');
-
-      body.classList.toggle('dark-mode');
-
-      if (body.classList.contains('dark-mode')) {
-        body.style.background = '#1a1a1a';
-        body.style.color = '#eee';
-        form.style.background = '#2b2b2b';
-        form.style.color = '#fff';
-        switchCircle.style.left = '26px';
-        switchCircle.style.background = '#0a0a23';
-      } else {
-        body.style.background = '#f4f4f4';
-        body.style.color = '#333';
-        form.style.background = '#fff';
-        form.style.color = '#000';
-        switchCircle.style.left = '2px';
-        switchCircle.style.background = '#fff';
-      }
-    }
   </script>
-
 </body>
 </html>

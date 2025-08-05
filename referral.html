@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Referral | Competent Traders</title>
+</head>
+<body style="background: #0f0f0f; color: white; font-family: Arial; text-align: center; padding: 30px;">
+
+  <h1 style="color: lime;">Referral Program</h1>
+  <p>Refer friends and earn bonuses when they deposit above $5 each!</p>
+
+  <div style="margin-top: 30px;">
+    <input type="text" id="username" placeholder="Enter your username" style="padding: 10px; width: 60%; font-size: 16px;" />
+    <button onclick="generateLink()" style="padding: 10px 20px; font-size: 16px; background: lime; border: none; color: black; margin-left: 10px;">Generate Referral Link</button>
+  </div>
+
+  <div id="referralOutput" style="margin-top: 30px; display: none;">
+    <h3>Your Referral Link:</h3>
+    <input type="text" id="referralLink" readonly style="padding: 10px; width: 80%; font-size: 16px;" />
+    <button onclick="copyLink()" style="margin-top: 10px; background: #444; padding: 8px 16px; border: none; color: white;">Copy Link</button>
+  </div>
+
+  <hr style="margin: 40px auto; width: 80%; border-color: gray;" />
+
+  <div style="background: #1a1a1a; padding: 20px; border-radius: 10px; display: inline-block;">
+    <h3 style="color: gold;">Referral Status</h3>
+    <p>People Referred: <span id="refCount">0</span></p>
+    <p>Total Bonus: $<span id="bonus">0</span></p>
+  </div>
+
+  <script>
+    let referrals = 0;
+    let bonus = 0;
+
+    function generateLink() {
+      const username = document.getElementById('username').value.trim();
+      if (username === "") {
+        alert("Please enter your username.");
+        return;
+      }
+
+      const referralURL = `https://competentraders.com/register?ref=${username}`;
+      document.getElementById('referralLink').value = referralURL;
+      document.getElementById('referralOutput').style.display = "block";
+    }
+
+    function copyLink() {
+      const copyText = document.getElementById("referralLink");
+      copyText.select();
+      copyText.setSelectionRange(0, 99999);
+      document.execCommand("copy");
+      alert("Referral link copied to clipboard!");
+    }
+
+    // Simulate referral deposit logic
+    function simulateReferral(depositedAmount) {
+      if (depositedAmount > 5) {
+        referrals++;
+        if (referrals % 2 === 0) {
+          bonus += 10;
+        }
+        document.getElementById("refCount").innerText = referrals;
+        document.getElementById("bonus").innerText = bonus;
+      }
+    }
+
+    // TEST ONLY — REMOVE in production
+    // Simulate people depositing after visiting referral link
+    // simulateReferral(10);
+    // simulateReferral(7);
+    // simulateReferral(4); // will not count
+    // simulateReferral(8);
+  </script>
+</body>
+</html>
