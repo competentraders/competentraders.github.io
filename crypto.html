@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cryptocurrency Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f172a;
+      color: #fff;
+    }
+    header {
+      background-color: #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .hamburger {
+      font-size: 28px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .hamburger:hover {
+      color: #38bdf8;
+    }
+    .menu {
+      display: none;
+      flex-direction: column;
+      background: #1e293b;
+      padding: 20px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .menu a {
+      text-decoration: none;
+      color: #f1f5f9;
+      padding: 10px 0;
+      border-bottom: 1px solid #334155;
+      transition: 0.2s;
+    }
+    .menu a:hover {
+      color: #38bdf8;
+    }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 30px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+    .card:hover {
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 22px;
+      color: #38bdf8;
+    }
+    .amount {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #facc15;
+    }
+    input[type="number"] {
+      width: 48%;
+      padding: 12px;
+      margin: 10px 1%;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      width: 48%;
+      margin: 10px 1%;
+      padding: 12px;
+      background: #38bdf8;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0ea5e9;
+    }
+    .spinner {
+      display: none;
+      margin: 20px auto;
+      border: 6px solid #1e293b;
+      border-top: 6px solid #38bdf8;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      input, button {
+        width: 100%;
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div><strong>📈 Cryptocurrency Dashboard</strong></div>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="menu" id="menu">
+  <a href="forex.html">🏠 Dashboard</a>
+  <a href="mailto:depositcompetenttraders@gmail.com">💰 Deposit</a>
+  <a href="mailto:depositcompetenttraders@gmail.com">💸 Withdraw</a>
+  <a href="referral.html">👥 Referrals</a>
+  <a href="settings.html">⚙️ Settings</a>
+  <a href="index.html">🔐 Logout</a>
+</div>
+
+<div class="container">
+  <div class="card">
+    <h2>👋 Welcome, <span id="usernameDisplay"></span></h2>
+    <p><strong>Total Balance:</strong></p>
+    <p class="amount">$<span id="balance">0</span></p>
+    <p>Deposited: $<span id="deposited">0</span> | Withdrawn: $<span id="withdrawn">0</span></p>
+  </div>
+
+  <div class="card">
+    <h2>💳 Make a Deposit</h2>
+    <input type="number" id="depositAmount" placeholder="Enter deposit amount" />
+    <button onclick="handleDeposit()">Deposit</button>
+  </div>
+
+  <div class="card">
+    <h2>🏧 Make a Withdrawal</h2>
+    <input type="number" id="withdrawAmount" placeholder="Enter withdraw amount" />
+    <button onclick="handleWithdraw()">Withdraw</button>
+  </div>
+
+
+
+
+
+  <div class="spinner" id="spinner"></div>
+</div>
+
+<script>
+  let username = prompt("Enter your username:") || "Guest";
+
+  function getData() {
+    return JSON.parse(localStorage.getItem("forex_" + username)) || {
+      deposit: 0,
+      withdraw: 0
+    };
+  }
+
+  function saveData(data) {
+    localStorage.setItem("forex_" + username, JSON.stringify(data));
+  }
+
+  function updateUI() {
+    let data = getData();
+    document.getElementById("usernameDisplay").innerText = username;
+    document.getElementById("deposited").innerText = data.deposit.toFixed(2);
+    document.getElementById("withdrawn").innerText = data.withdraw.toFixed(2);
+    document.getElementById("balance").innerText = (data.deposit - data.withdraw).toFixed(2);
+  }
+
+  function handleDeposit() {
+    let amount = parseFloat(document.getElementById("depositAmount").value);
+    if (!isNaN(amount) && amount > 0) {
+      document.getElementById("spinner").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("spinner").style.display = "none";
+        window.location.href = `mailto:team.competentraders@gmail.com?subject=Deposit Request&body=Username: ${username}%0AAmount: $${amount}`;
+      }, 10000);
+    }
+  }
+
+  function handleWithdraw() {
+    let amount = parseFloat(document.getElementById("withdrawAmount").value);
+    if (!isNaN(amount) && amount > 0) {
+      document.getElementById("spinner").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("spinner").style.display = "none";
+        window.location.href = `mailto:team.competentraders@gmail.com?subject=Withdraw Request&body=Username: ${username}%0AAmount: $${amount}`;
+      }, 10000);
+    }
+  }
+
+  function toggleMenu() {
+    let menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+  }
+
+  // Initialize UI
+  updateUI();
+</script>
+
+
+
+
+<div style="padding: 20px; background: #000; color: #fff;">
+  <h2 style="text-align:center; font-size: 30px; margin-bottom: 20px;">🔥 Buy Cryptocurrencies at Unbeatable Prices</h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+
+    <!-- Sample asset block (repeat for each crypto) -->
+    <div style="background: #111; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #222;">
+      <h3 style="margin-bottom: 10px;">Bitcoin (BTC)</h3>
+      <p>💰 Market Price: <strong>$11,138.25</strong></p>
+      <p>🔥 CompetentTraders Price: <strong style="color: #0f0;">$1,113.82</strong></p>
+      <a href="mailto:Competentraders@gmail.com?subject=Crypto%20Purchase%20Request&body=Hello,%20I%20want%20to%20buy%20Bitcoin%20at%20$1,113.82" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: #0f0; color: #000; text-decoration: none; border-radius: 5px;">Buy Now</a>
+    </div>
+
+    <!-- Ethereum -->
+    <div style="background: #111; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #222;">
+      <h3>Ethereum (ETH)</h3>
+      <p>💰 Market Price: <strong>$5,590.15</strong></p>
+      <p>🔥 CompetentTraders Price: <strong style="color: #0f0;">$559.01</strong></p>
+      <a href="mailto:Competentraders@gmail.com?subject=Crypto%20Purchase%20Request&body=Hello,%20I%20want%20to%20buy%20Ethereum%20at%20$559.01" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: #0f0; color: #000; text-decoration: none; border-radius: 5px;">Buy Now</a>
+    </div>
+
+    <!-- Tether -->
+    <div style="background: #111; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #222;">
+      <h3>Tether (USDT)</h3>
+      <p>💰 Market Price: <strong>$37,609.61</strong></p>
+      <p>🔥 CompetentTraders Price: <strong style="color: #0f0;">$3,760.96</strong></p>
+      <a href="mailto:Competentraders@gmail.com?subject=Crypto%20Purchase%20Request&body=Hello,%20I%20want%20to%20buy%20Tether%20at%20$3,760.96" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: #0f0; color: #000; text-decoration: none; border-radius: 5px;">Buy Now</a>
+    </div>
+
+    <!-- BNB -->
+    <div style="background: #111; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #222;">
+      <h3>BNB (BNB)</h3>
+      <p>💰 Market Price: <strong>$17,590.20</strong></p>
+      <p>🔥 CompetentTraders Price: <strong style="color: #0f0;">$1,759.02</strong></p>
+      <a href="mailto:Competentraders@gmail.com?subject=Crypto%20Purchase%20Request&body=Hello,%20I%20want%20to%20buy%20BNB%20at%20$1,759.02" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: #0f0; color: #000; text-decoration: none; border-radius: 5px;">Buy Now</a>
+    </div>
+
+    <!-- Solana -->
+    <div style="background: #111; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #222;">
+      <h3>Solana (SOL)</h3>
+      <p>💰 Market Price: <strong>$45,931.91</strong></p>
+      <p>🔥 CompetentTraders Price: <strong style="color: #0f0;">$4,593.19</strong></p>
+      <a href="mailto:Competentraders@gmail.com?subject=Crypto%20Purchase%20Request&body=Hello,%20I%20want%20to%20buy%20Solana%20at%20$4,593.19" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: #0f0; color: #000; text-decoration: none; border-radius: 5px;">Buy Now</a>
+    </div>
+
+    <!-- More assets -->
+    <div style="background: #111; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #222;">
+      <h3>Ripple (XRP)</h3>
+      <p>💰 Market Price: <strong>$0.64</strong></p>
+      <p>🔥 CompetentTraders Price: <strong style="color: #0f0;">$0.064</strong></p>
+      <a href="mailto:Competentraders@gmail.com?subject=Crypto%20Purchase%20Request&body=Hello,%20I%20want%20to%20buy%20XRP%20at%20$0.064" style="display: inline-block; margin-top: 10px; padding: 10px 20px; background: #0f0; color: #000; text-decoration: none; border-radius: 5px;">Buy Now</a>
+    </div>
+
+    <!-- You can repeat for more cryptos like: -->
+    <!-- Cardano (ADA), Dogecoin (DOGE), Litecoin (LTC), Polkadot (DOT), TRON (TRX), Chainlink (LINK), Avalanche (AVAX), Stellar (XLM), NEAR, Cosmos (ATOM), Filecoin (FIL), VeChain (VET), Monero (XMR), PI Network (PI) -->
+
+  </div>
+  <p style="text-align: center; margin-top: 30px; color: #aaa;">Note: All cryptocurrencies are sold at 10x cheaper than the current market price. Prices change regularly based on Competent traders live market updates mining ⛏️ Machine and mining Farm.</p>
+</div>
+
+
+
+
+
+
+<div style="padding: 30px; background: #111; color: white; font-family: Arial;">
+  <h2 style="text-align: center; margin-bottom: 20px;">🔥 Real-Time Crypto Market Base on Competent traders Minners Farm</h2>
+  <div id="cryptoList" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;"></div>
+</div>
+
+<script>
+  const cryptoAssets = [
+    "Bitcoin", "Ethereum", "BNB", "Solana", "XRP", "Cardano", "Dogecoin", "Polkadot", "Avalanche", "Chainlink",
+    "Litecoin", "Stellar", "Uniswap", "VeChain", "TRON", "Cosmos", "Monero", "Algorand", "Tezos", "Zcash",
+    "Aave", "Maker", "NEAR", "Chiliz", "Dash", "Hedera", "Fantom", "EOS", "Kusama", "Waves",
+    "Enjin", "Sushi", "Loopring", "Quant", "Lido DAO", "Filecoin", "BAT", "Gala", "IOTA", "Celo",
+    "Flow", "Injective", "Arbitrum", "Optimism", "Curve DAO", "NEM", "Kava", "Ocean", "Helium", "Nexo",
+    "Radix", "BitTorrent", "Cortex", "Orchid", "Balancer", "DigiByte", "1inch", "Bancor", "Ren", "Reserve Rights",
+    "Stacks", "Terra Luna", "Moonbeam", "Serum", "Cartesi", "Numeraire", "iExec", "Keep Network", "Ankr", "Dent",
+    "Status", "Civic", "Alien Worlds", "Ravencoin", "XYO", "Syscoin", "Fetch.ai", "Mask", "Arweave", "Decentraland",
+    "The Sandbox", "Render", "Audius", "Magic", "Metis", "IoTeX", "Akash", "Tokamak", "Tellor", "Orion Protocol",
+    "Badger DAO", "PowerPool", "Hifi", "Perpetual", "DODO", "Rari", "Origin Protocol", "COTI", "RSK", "Vega",
+    "PI Network", "Shiba Inu", "Pepe Coin", "Floki", "Baby Doge", "Bonk"
+  ];
+
+  // Simulated prices
+  let cryptoPrices = cryptoAssets.map(name => {
+    const price = (Math.random() * 50000 + 500).toFixed(2);
+    return { name, price: parseFloat(price) };
+  });
+
+  const container = document.getElementById("cryptoList");
+
+  function renderPrices() {
+    container.innerHTML = "";
+    cryptoPrices.forEach(asset => {
+      const assetDiv = document.createElement("div");
+      assetDiv.style = `
+        width: 220px;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 0 10px #000;
+        transition: all 0.3s ease;
+      `;
+      assetDiv.innerHTML = `
+        <h3 style="margin: 0 0 10px 0;">${asset.name}</h3>
+        <p style="font-size: 18px; color: #0f0;">$${asset.price.toLocaleString()}</p>
+        <p style="font-size: 14px; color: #999;">Our Price: <span style="color: orange;">$${(asset.price / 10).toFixed(2)}</span></p>
+        <a href="mailto:Competentraders@gmail.com?subject=Buy ${asset.name}&body=I want to buy ${asset.name}" 
+          style="display:inline-block;margin-top:10px;padding:8px 15px;background:orange;color:black;border-radius:5px;text-decoration:none;">Buy</a>
+      `;
+      container.appendChild(assetDiv);
+    });
+  }
+
+  function updatePrices() {
+    cryptoPrices = cryptoPrices.map(asset => {
+      const change = (Math.random() * 1000 - 500).toFixed(2); // +/- up to $500
+      let newPrice = parseFloat(asset.price) + parseFloat(change);
+      newPrice = newPrice < 0 ? 10 : newPrice;
+      return { ...asset, price: parseFloat(newPrice.toFixed(2)) };
+    });
+    renderPrices();
+  }
+
+  // Initial render
+  renderPrices();
+
+  // Update prices every 5 seconds
+  setInterval(updatePrices, 5000);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<footer style="background-color:#0b0f1a; color:#f4f4f4; text-align:center; padding:40px 20px; font-family:'Segoe UI', sans-serif; margin-top:60px;">
+  <div>
+    <h2 style="color:#16f2b3; margin-bottom:12px; font-size:26px;">Cryptocurrency Investment — Competent Traders</h2>
+    <p style="font-size:14px; line-height:1.8;">
+      Unlock massive returns from the smallest investments.<br>
+      Smart. Secure. Scalable. Powered by blockchain technology.
+    </p>
+    <p style="margin-top:25px; font-size:13px;">&copy; 2025 Competent Traders. All rights reserved.</p>
+    <p style="font-size:12px; margin-top:6px;">Email: investcompetenttraders@gmail.com</p>
+  </div>
+</footer>
+
+</body>
+</html>
