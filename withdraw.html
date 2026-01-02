@@ -93,7 +93,7 @@
             if (savedBank) {
                 container.innerHTML = `
                     <p class="font-black text-white">${savedBank.bank}</p>
-                    <p class="text-sm text-gray-400">${savedBank.num} - ${savedBank.name}</p>
+                    <p class="text-sm text-gray-400">₦{savedBank.num} - ₦ {savedBank.name}</p>
                 `;
             } else {
                 container.innerHTML = `<p class="text-red-400 text-xs">No bank account saved. Please add one in settings.</p>`;

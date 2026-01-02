@@ -49,7 +49,7 @@
             </div>
             <div class="bg-blue-600/10 border border-blue-500/30 p-4 rounded-2xl">
                 <p class="text-[10px] text-blue-400 font-black uppercase tracking-widest">Account Balance</p>
-                <p class="text-3xl font-black text-white" id="menuBalance">N0.00</p>
+                <p class="text-3xl font-black text-white" id="menuBalance">₦0.00</p>
             </div>
         </div>
 
@@ -198,7 +198,7 @@
         // Load Balance logic
         let balance = parseFloat(localStorage.getItem('accountBalance')) || 0.00;
         function updateUI() {
-            document.getElementById('menuBalance').innerText = "$" + balance.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('menuBalance').innerText = "₦" + balance.toLocaleString(undefined, {minimumFractionDigits: 2});
             localStorage.setItem('accountBalance', balance);
         }
 
