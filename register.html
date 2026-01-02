@@ -146,70 +146,84 @@
     </div>
 
     <script>
-        let currentCaptcha = "";
-        let timeLeft = 30;
+    let currentCaptcha = "";
+    let timeLeft = 30;
 
-        function generateCaptcha() {
-            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-            let result = "";
-            for (let i = 0; i < 6; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            currentCaptcha = result;
-            document.getElementById('captcha-code').innerText = result;
-            document.getElementById('captcha-input').value = "";
-            document.getElementById('verified-badge').classList.add('hidden');
-            updateBtnState();
-            timeLeft = 30;
+    function generateCaptcha() {
+        const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let result = "";
+        for (let i = 0; i < 6; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        currentCaptcha = result;
+        document.getElementById('captcha-code').innerText = result;
+        document.getElementById('captcha-input').value = "";
+        document.getElementById('verified-badge').classList.add('hidden');
+        updateBtnState();
+        timeLeft = 30;
+    }
+
+    function verifyCaptcha() {
+        const input = document.getElementById('captcha-input').value.toUpperCase();
+        const badge = document.getElementById('verified-badge');
+        if (input === currentCaptcha) {
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+        updateBtnState();
+    }
+
+    function updateBtnState() {
+        const btn = document.getElementById('reg-btn');
+        const isVerified = !document.getElementById('verified-badge').classList.contains('hidden');
+        const pass = document.getElementById('reg_pass').value;
+        const passConf = document.getElementById('reg_pass_confirm').value;
+        const email = document.getElementById('reg_email').value;
+        const emailConf = document.getElementById('reg_email_confirm').value;
+
+        if (isVerified && pass === passConf && pass !== "" && email === emailConf) {
+            btn.disabled = false;
+            btn.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
+            btn.classList.add('bg-blue-600', 'text-white');
+        } else {
+            btn.disabled = true;
+            btn.classList.add('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
+            btn.classList.remove('bg-blue-600', 'text-white');
+        }
+    }
+
+    // THE FIX: SAVE DATA LOCALLY
+    function handleRegister(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('reg_user').value;
+        const password = document.getElementById('reg_pass').value;
+
+        // Save to LocalStorage so login.html can see it
+        localStorage.setItem('competent_username', username);
+        localStorage.setItem('competent_password', password);
+        
+        // Optional: Initialize balance for new users
+        if(!localStorage.getItem('accountBalance')) {
+            localStorage.setItem('accountBalance', '0.00');
         }
 
-        function verifyCaptcha() {
-            const input = document.getElementById('captcha-input').value.toUpperCase();
-            const badge = document.getElementById('verified-badge');
-            
-            if (input === currentCaptcha) {
-                badge.classList.remove('hidden');
-                updateBtnState();
-            } else {
-                badge.classList.add('hidden');
-                updateBtnState();
-            }
-        }
+        alert("Registration Successful! Please login.");
+        window.location.href = "login.html";
+    }
 
-        function updateBtnState() {
-            const btn = document.getElementById('reg-btn');
-            const isVerified = !document.getElementById('verified-badge').classList.contains('hidden');
-            const pass = document.getElementById('reg_pass').value;
-            const passConf = document.getElementById('reg_pass_confirm').value;
-            const email = document.getElementById('reg_email').value;
-            const emailConf = document.getElementById('reg_email_confirm').value;
-
-            if (isVerified && pass === passConf && pass !== "" && email === emailConf) {
-                btn.disabled = false;
-                btn.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
-                btn.classList.add('bg-blue-600', 'text-white', 'glow-blue');
-            } else {
-                btn.disabled = true;
-                btn.classList.add('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
-                btn.classList.remove('bg-blue-600', 'text-white');
-            }
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            // In a static site, we redirect to dashboard
-            window.location.href = "user-dashboard.html";
-        }
-
-        // Timer Logic
-        setInterval(() => {
-            timeLeft--;
+    setInterval(() => {
+        timeLeft--;
+        if(document.getElementById('timer')) {
             document.getElementById('timer').innerText = `Refreshing in ${timeLeft}s`;
-            if (timeLeft <= 0) generateCaptcha();
-        }, 1000);
+        }
+        if (timeLeft <= 0) generateCaptcha();
+    }, 1000);
 
-        window.onload = generateCaptcha;
-    </script>
+    window.onload = generateCaptcha;
+</script>
+
 
 </body>
 </html>

@@ -104,46 +104,49 @@
     </div>
 
     <script>
-        function handleLogin(e) {
-            e.preventDefault();
-            
-            const user = document.getElementById('login_user').value;
-            const pass = document.getElementById('login_pass').value;
-            const container = document.getElementById('login-container');
-            const errorBox = document.getElementById('error-msg');
+    function handleLogin(e) {
+        e.preventDefault();
+        
+        const inputUser = document.getElementById('login_user').value;
+        const inputPass = document.getElementById('login_pass').value;
+        const container = document.getElementById('login-container');
+        const errorBox = document.getElementById('error-msg');
 
-            // --- SECURITY CHECK LOGIC ---
-            // On a real site, this checks a database.
-            // For your static site, we check if user exists in LocalStorage from the register page.
-            
-            const savedUser = localStorage.getItem('competent_username') || "admin"; // default for testing
-            const savedPass = localStorage.getItem('competent_password') || "password123";
+        // GET THE DATA SAVED DURING REGISTRATION
+        const savedUser = localStorage.getItem('competent_username');
+        const savedPass = localStorage.getItem('competent_password');
 
-            if (user === savedUser && pass === savedPass) {
-                // SUCCESS
-                errorBox.classList.add('hidden');
-                container.style.opacity = "0.5";
-                container.style.pointerEvents = "none";
-                
-                // Show a fake "Verifying" state for realism
-                setTimeout(() => {
-                    window.location.href = "user-dashboard.html";
-                }, 1000);
-            } else {
-                // FAILURE
-                errorBox.classList.remove('hidden');
-                container.classList.add('error-shake');
-                
-                // Remove shake effect after animation so it can trigger again
-                setTimeout(() => {
-                    container.classList.remove('error-shake');
-                }, 400);
-
-                // Clear password for security
-                document.getElementById('login_pass').value = "";
-            }
+        // Check if the user even exists first
+        if (!savedUser) {
+            errorBox.querySelector('span').innerText = "No account found. Please register.";
+            errorBox.classList.remove('hidden');
+            return;
         }
-    </script>
+
+        if (inputUser === savedUser && inputPass === savedPass) {
+            // SUCCESS
+            errorBox.classList.add('hidden');
+            container.style.opacity = "0.5";
+            container.style.pointerEvents = "none";
+            
+            setTimeout(() => {
+                window.location.href = "user-dashboard.html";
+            }, 1000);
+        } else {
+            // FAILURE
+            errorBox.querySelector('span').innerText = "Invalid Username or Password.";
+            errorBox.classList.remove('hidden');
+            container.classList.add('error-shake');
+            
+            setTimeout(() => {
+                container.classList.remove('error-shake');
+            }, 400);
+
+            document.getElementById('login_pass').value = "";
+        }
+    }
+</script>
+
 
 </body>
 </html>
