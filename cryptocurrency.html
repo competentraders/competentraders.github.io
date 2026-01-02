@@ -3,27 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Exchange | Competentraders</title>
+    <title>Live Crypto Terminal | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
         body { font-family: 'Outfit', sans-serif; background-color: #06070a; color: white; }
+        .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         
-        .glass-panel { 
-            background: rgba(15, 18, 24, 0.8); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-        }
+        /* Fluctuation Flash Effects */
+        .price-up { color: #22c55e !important; transition: color 0.3s ease; }
+        .price-down { color: #ef4444 !important; transition: color 0.3s ease; }
+        .normal { color: white; transition: color 1s ease; }
 
-        /* Price Flash Animation */
-        @keyframes flash-green { 0% { color: #22c55e; } 100% { color: white; } }
-        @keyframes flash-red { 0% { color: #ef4444; } 100% { color: white; } }
-        .price-up { animation: flash-green 1s; }
-        .price-down { animation: flash-red 1s; }
-
-        .crypto-row { transition: background 0.2s; border-bottom: 1px solid rgba(255,255,255,0.02); }
-        .crypto-row:hover { background: rgba(59, 130, 246, 0.05); }
+        .crypto-row { border-bottom: 1px solid rgba(255,255,255,0.02); transition: all 0.2s; }
+        .crypto-row:hover { background: rgba(59, 130, 246, 0.03); }
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -31,18 +25,16 @@
     <div class="max-w-6xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center gap-6">
         <div>
             <div class="inline-flex items-center gap-2 mb-2">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-chart-line text-white text-sm"></i>
-                </div>
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-chart-line text-white"></i></div>
                 <span class="text-xl font-black uppercase tracking-tighter">Competent<span class="text-blue-500">raders</span></span>
             </div>
             <h2 class="text-3xl font-black uppercase tracking-tight">Live Terminal</h2>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-[0.3em]">Direct Binance WebSocket Stream</p>
+            <p class="text-gray-500 text-xs font-bold uppercase tracking-[0.3em]">Direct Market Execution • No BTC</p>
         </div>
         <div class="flex gap-4">
-            <a href="user-dashboard.html" class="px-6 py-3 glass-panel rounded-xl text-xs font-bold uppercase hover:bg-white/5 transition-all">Back</a>
+            <a href="user-dashboard.html" class="px-6 py-3 glass-panel rounded-xl text-xs font-bold uppercase">Back</a>
             <div class="px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-[10px] font-black uppercase text-green-500">
-                <i class="fas fa-circle text-[8px] animate-pulse mr-2"></i> Live Market
+                <i class="fas fa-circle animate-pulse mr-2"></i> Live Feed
             </div>
         </div>
     </div>
@@ -57,94 +49,84 @@
         </div>
 
         <div id="market-list" class="divide-y divide-white/5">
-            <div class="p-20 text-center text-gray-500 uppercase font-black text-xs tracking-widest">
-                Opening Secure Socket...
             </div>
-        </div>
     </div>
 
     <script>
-        // List of 50 high-growth startup/altcoins (No Bitcoin)
-        const symbols = [
-            'ethusdt', 'solusdt', 'adausdt', 'dotusdt', 'maticusdt', 'linkusdt', 'nearusdt', 
-            'atomusdt', 'avaxusdt', 'uniusdt', 'algousdt', 'ftmusdt', 'sandusdt', 'manausdt',
-            'axsusdt', 'grtusdt', 'thetausdt', 'egldusdt', 'vetusdt', 'filusdt', 'icpusdt',
-            'runeusdt', 'enjusdt', 'chzusdt', 'hotusdt', 'oneusdt', 'arbusdt', 'aptusdt',
-            'ldousdt', 'opusdt', 'stxusdt', 'rndrusdt', 'injusdt', 'suiusdt', 'pepeusdt',
-            'dogeusdt', 'shibusdt', 'cakeusdt', 'roseusdt', ' galausdt', 'woousdt', 'qtumusdt',
-            'neousdt', 'zecusdt', 'dashusdt', 'xmrusdt', 'iotausdt', 'bttusdt', 'ankrusdt'
+        // Curated list of 40+ startup/high-growth coins (No Bitcoin)
+        const assets = [
+            { s: 'ETHUSDT', name: 'Ethereum' }, { s: 'SOLUSDT', name: 'Solana' }, { s: 'BNBUSDT', name: 'Binance' },
+            { s: 'ADAUSDT', name: 'Cardano' }, { s: 'AVAXUSDT', name: 'Avalanche' }, { s: 'DOTUSDT', name: 'Polkadot' },
+            { s: 'MATICUSDT', name: 'Polygon' }, { s: 'LINKUSDT', name: 'Chainlink' }, { s: 'NEARUSDT', name: 'Near' },
+            { s: 'ATOMUSDT', name: 'Cosmos' }, { s: 'FILUSDT', name: 'Filecoin' }, { s: 'LDOUSDT', name: 'Lido' },
+            { s: 'APTUSDT', name: 'Aptos' }, { s: 'ARBUSDT', name: 'Arbitrum' }, { s: 'OPUSDT', name: 'Optimism' },
+            { s: 'SUIUSDT', name: 'Sui' }, { s: 'GRTUSDT', name: 'The Graph' }, { s: 'RNDRUSDT', name: 'Render' },
+            { s: 'INJUSDT', name: 'Injective' }, { s: 'FETUSDT', name: 'Fetch.ai' }, { s: 'STXUSDT', name: 'Stacks' },
+            { s: 'IMXUSDT', name: 'Immutable' }, { s: 'KASUSDT', name: 'Kaspa' }, { s: 'TIAUSDT', name: 'Celestia' }
         ];
 
         const marketList = document.getElementById('market-list');
-        const prices = {};
+        const prevPrices = {};
 
-        // 1. Initialize the UI rows
-        function initUI() {
-            marketList.innerHTML = '';
-            symbols.forEach(s => {
-                const cleanSymbol = s.replace('usdt', '').toUpperCase();
-                marketList.innerHTML += `
-                    <div id="row-${s}" class="crypto-row grid grid-cols-4 md:grid-cols-5 p-5 items-center">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center text-[10px] font-black text-blue-500">${cleanSymbol}</div>
-                            <div>
-                                <p class="text-xs font-black uppercase">${cleanSymbol}</p>
-                                <p class="text-[9px] text-gray-600 font-bold uppercase">Startup Asset</p>
-                            </div>
-                        </div>
-                        <div id="price-${s}" class="text-right font-mono text-sm font-bold">$0.00</div>
-                        <div id="change-${s}" class="text-right hidden md:block text-[10px] font-black">0.00%</div>
-                        <div class="text-right">
-                            <a href="deposit.html" class="px-4 py-2 bg-blue-600 rounded-lg text-[9px] font-black uppercase hover:bg-blue-500">Buy</a>
-                        </div>
-                        <div id="sell-${s}" class="text-right text-[10px] font-black text-green-500">$0.00</div>
+        // 1. Create the rows immediately
+        assets.forEach(asset => {
+            const cleanS = asset.s.replace('USDT', '');
+            marketList.innerHTML += `
+                <div id="row-${asset.s}" class="crypto-row grid grid-cols-4 md:grid-cols-5 p-5 items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center text-[10px] font-black text-blue-500">${cleanS}</div>
+                        <div><p class="text-xs font-black uppercase">${cleanS}</p><p class="text-[9px] text-gray-600 font-bold uppercase">${asset.name}</p></div>
                     </div>
-                `;
-            });
-        }
+                    <div id="price-${asset.s}" class="text-right font-mono text-sm font-bold normal">Connecting...</div>
+                    <div id="change-${asset.s}" class="text-right hidden md:block text-[10px] font-black">--</div>
+                    <div class="text-right"><a href="deposit.html" class="px-4 py-2 bg-blue-600 rounded-lg text-[9px] font-black uppercase">Buy</a></div>
+                    <div id="sell-${asset.s}" class="text-right text-[10px] font-black text-green-500">--</div>
+                </div>
+            `;
+        });
 
-        // 2. Connect to Binance WebSocket for all 50 coins
-        function connectWebsocket() {
-            const streamNames = symbols.map(s => `${s}@ticker`).join('/');
-            const ws = new WebSocket(`wss://stream.binance.com:9443/ws/${streamNames}`);
+        // 2. Connect Live WebSocket
+        function startLiveStream() {
+            const streams = assets.map(a => a.s.toLowerCase() + '@ticker').join('/');
+            const socket = new WebSocket(`wss://stream.binance.com:9443/ws/${streams}`);
 
-            ws.onmessage = (event) => {
+            socket.onmessage = (event) => {
                 const data = JSON.parse(event.data);
-                const s = data.s.toLowerCase();
+                const sym = data.s;
                 const price = parseFloat(data.c);
                 const change = data.P;
-                const oldPrice = prices[s] || 0;
+                
+                const priceEl = document.getElementById(`price-${sym}`);
+                const changeEl = document.getElementById(`change-${sym}`);
+                const sellEl = document.getElementById(`sell-${sym}`);
 
-                // Update UI elements
-                const priceEl = document.getElementById(`price-${s}`);
-                const changeEl = document.getElementById(`change-${s}`);
-                const sellEl = document.getElementById(`sell-${s}`);
-
-                if(priceEl) {
-                    // Visual fluctuation effect
-                    if (price > oldPrice) {
-                        priceEl.className = 'text-right font-mono text-sm font-bold price-up';
-                    } else if (price < oldPrice) {
-                        priceEl.className = 'text-right font-mono text-sm font-bold price-down';
+                if (priceEl) {
+                    // Visual Fluctuation Logic
+                    if (prevPrices[sym] < price) {
+                        priceEl.classList.add('price-up');
+                        priceEl.classList.remove('price-down');
+                    } else if (prevPrices[sym] > price) {
+                        priceEl.classList.add('price-down');
+                        priceEl.classList.remove('price-up');
                     }
+                    
+                    // Reset color after short flash
+                    setTimeout(() => { priceEl.classList.remove('price-up', 'price-down'); }, 500);
 
                     priceEl.innerText = `$${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}`;
                     changeEl.innerText = `${change}%`;
-                    changeEl.className = `text-right hidden md:block text-[10px] font-black ${parseFloat(change) >= 0 ? 'text-green-500' : 'text-red-500'}`;
+                    changeEl.style.color = parseFloat(change) >= 0 ? '#22c55e' : '#ef4444';
                     
-                    // Sell Rate logic: 1.5% profit margin for the platform
-                    const sellPrice = (price * 0.985).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4});
-                    sellEl.innerText = `$${sellPrice}`;
+                    // Sell Rate (Calculated at 98.2% of market value)
+                    sellEl.innerText = `$${(price * 0.982).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}`;
                 }
-
-                prices[s] = price;
+                prevPrices[sym] = price;
             };
 
-            ws.onclose = () => setTimeout(connectWebsocket, 5000); // Reconnect if dropped
+            socket.onclose = () => setTimeout(startLiveStream, 3000);
         }
 
-        initUI();
-        connectWebsocket();
+        startLiveStream();
     </script>
 
 </body>
