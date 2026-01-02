@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #06070a; color: white; }
+        .input-field { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-field:focus { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        .label-text { font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 6px; display: block; text-transform: uppercase; }
+        .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div class="max-w-xl mx-auto">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-2 mb-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-user-plus text-white text-sm"></i>
+                </div>
+                <span class="text-xl font-black uppercase">Competent<span class="text-blue-500">raders</span></span>
+            </div>
+            <h2 class="text-2xl font-bold">Create Account</h2>
+            <p class="text-gray-500 text-xs">Security Check: Level 1 Encryption Active</p>
+        </div>
+
+        <form onsubmit="return handleRegister(event)" class="glass-panel p-6 rounded-3xl space-y-5">
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="label-text">First Name</label>
+                    <input type="text" class="input-field" required placeholder="John">
+                </div>
+                <div>
+                    <label class="label-text">Last Name</label>
+                    <input type="text" class="input-field" required placeholder="Doe">
+                </div>
+            </div>
+
+            <div>
+                <label class="label-text">Other Name (Optional)</label>
+                <input type="text" class="input-field" placeholder="Middle Name">
+            </div>
+
+            <div>
+                <label class="label-text">Username</label>
+                <input type="text" id="reg_user" class="input-field" required placeholder="UniqueUsername">
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="label-text">Email</label>
+                    <input type="email" id="reg_email" class="input-field" required placeholder="email@example.com">
+                </div>
+                <div>
+                    <label class="label-text">Confirm Email</label>
+                    <input type="email" id="reg_email_confirm" class="input-field" required placeholder="Confirm email">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="label-text">Password</label>
+                    <input type="password" id="reg_pass" class="input-field" required placeholder="••••••••">
+                </div>
+                <div>
+                    <label class="label-text">Confirm Password</label>
+                    <input type="password" id="reg_pass_confirm" class="input-field" required placeholder="Confirm password">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="label-text">Date of Birth</label>
+                    <input type="date" class="input-field" required>
+                </div>
+                <div>
+                    <label class="label-text">Gender</label>
+                    <select class="input-field">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label class="label-text">Nationality (Africa)</label>
+                <select class="input-field" required>
+                    <option value="">Select Country</option>
+                    <option value="Nigeria">Nigeria</option>
+                    <option value="South Africa">South Africa</option>
+                    <option value="Ghana">Ghana</option>
+                    <option value="Kenya">Kenya</option>
+                    <option value="Egypt">Egypt</option>
+                    <option value="Ethiopia">Ethiopia</option>
+                    <option value="Algeria">Algeria</option>
+                    <option value="Morocco">Morocco</option>
+                    <option value="Angola">Angola</option>
+                    <option value="Tanzania">Tanzania</option>
+                    <option value="Uganda">Uganda</option>
+                    </select>
+            </div>
+
+            <div class="bg-blue-600/5 p-4 rounded-2xl border border-blue-500/20">
+                <label class="label-text text-blue-400">Security Check</label>
+                <div class="flex items-center gap-4 mb-3">
+                    <div id="captcha-code" class="bg-gray-800 px-4 py-2 rounded font-mono text-xl tracking-widest text-blue-400 italic select-none">
+                        -----
+                    </div>
+                    <span id="timer" class="text-[10px] text-gray-500">Refreshing in 30s</span>
+                </div>
+                <div class="relative">
+                    <input type="text" id="captcha-input" oninput="verifyCaptcha()" class="input-field pr-12" placeholder="Enter Security Code">
+                    <div id="verified-badge" class="hidden absolute right-3 top-3 text-green-500">
+                        <i class="fas fa-check-circle"></i> VERIFIED
+                    </div>
+                </div>
+            </div>
+
+            <button id="reg-btn" disabled class="w-full py-4 bg-gray-700 text-gray-500 rounded-2xl font-black transition-all cursor-not-allowed">
+                FINALIZE REGISTRATION
+            </button>
+
+            <div class="flex flex-col gap-3 text-center pt-4">
+                <a href="login.html" class="text-sm text-gray-400">Already registered? <span class="text-blue-500 font-bold">Login Here</span></a>
+                <a href="forgot-password.html" class="text-xs text-gray-600">Forgot Password?</a>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        let currentCaptcha = "";
+        let timeLeft = 30;
+
+        function generateCaptcha() {
+            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+            let result = "";
+            for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCaptcha = result;
+            document.getElementById('captcha-code').innerText = result;
+            document.getElementById('captcha-input').value = "";
+            document.getElementById('verified-badge').classList.add('hidden');
+            updateBtnState();
+            timeLeft = 30;
+        }
+
+        function verifyCaptcha() {
+            const input = document.getElementById('captcha-input').value.toUpperCase();
+            const badge = document.getElementById('verified-badge');
+            
+            if (input === currentCaptcha) {
+                badge.classList.remove('hidden');
+                updateBtnState();
+            } else {
+                badge.classList.add('hidden');
+                updateBtnState();
+            }
+        }
+
+        function updateBtnState() {
+            const btn = document.getElementById('reg-btn');
+            const isVerified = !document.getElementById('verified-badge').classList.contains('hidden');
+            const pass = document.getElementById('reg_pass').value;
+            const passConf = document.getElementById('reg_pass_confirm').value;
+            const email = document.getElementById('reg_email').value;
+            const emailConf = document.getElementById('reg_email_confirm').value;
+
+            if (isVerified && pass === passConf && pass !== "" && email === emailConf) {
+                btn.disabled = false;
+                btn.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
+                btn.classList.add('bg-blue-600', 'text-white', 'glow-blue');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
+                btn.classList.remove('bg-blue-600', 'text-white');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            // In a static site, we redirect to dashboard
+            window.location.href = "user-dashboard.html";
+        }
+
+        // Timer Logic
+        setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = `Refreshing in ${timeLeft}s`;
+            if (timeLeft <= 0) generateCaptcha();
+        }, 1000);
+
+        window.onload = generateCaptcha;
+    </script>
+
+</body>
+</html>

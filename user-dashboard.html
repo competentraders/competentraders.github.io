@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Competentraders | Pro Terminal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; overflow-x: hidden; }
+
+        /* FLOATING MENU TRIGGER */
+        .master-trigger {
+            position: fixed; top: 12px; left: 12px; width: 45px; height: 45px;
+            background: #3b82f6; color: white; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2147483647 !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        /* FULL MENU OVERLAY */
+        #master-sidebar {
+            position: fixed; inset: 0; background: #0b0d12;
+            z-index: 2147483646 !important; display: none;
+            flex-direction: column; overflow-y: auto;
+        }
+        #master-sidebar.active { display: flex; }
+
+        .nav-link { display: flex; align-items: center; gap: 15px; padding: 14px 25px; color: #94a3b8; font-size: 15px; font-weight: 600; border-bottom: 1px solid #1e293b; }
+        .section-tag { font-size: 10px; color: #475569; padding: 18px 25px 5px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; }
+
+        .chart-section { height: 45vh; width: 100%; position: relative; border-bottom: 2px solid #1e222d; }
+        .plan-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 20px; padding: 20px; margin-bottom: 15px; }
+        
+        .ticker-bar { position: fixed; bottom: 0; width: 100%; height: 46px; background: #131722; z-index: 1000; border-top: 1px solid #2d3343; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <button class="master-trigger" onclick="toggleMenu()">
+        <i class="fas fa-bars fa-lg"></i>
+    </button>
+
+    <div id="master-sidebar">
+        <div class="p-6 bg-[#131722] border-b border-gray-800">
+            <div class="flex justify-between items-center mb-4">
+                <span class="font-black italic text-white uppercase text-xs">Competent<span class="text-blue-500">raders</span></span>
+                <button onclick="toggleMenu()" class="text-white text-3xl">&times;</button>
+            </div>
+            <div class="bg-blue-600/10 border border-blue-500/30 p-4 rounded-2xl">
+                <p class="text-[10px] text-blue-400 font-black uppercase tracking-widest">Account Balance</p>
+                <p class="text-3xl font-black text-white" id="menuBalance">$0.00</p>
+            </div>
+        </div>
+
+        <p class="section-tag">Finance</p>
+        <a href="bank-account.html" class="nav-link"><i class="fas fa-university text-yellow-500"></i> Bank Account</a>
+        <a href="deposit.html" class="nav-link"><i class="fas fa-wallet text-green-500"></i> Deposit Funds</a>
+        <a href="withdraw.html" class="nav-link"><i class="fas fa-money-bill-transfer text-orange-500"></i> Withdrawal</a>
+
+        <p class="section-tag">Account & Settings</p>
+        <a href="profile.html" class="nav-link"><i class="fas fa-user-circle text-blue-400"></i> User Profile</a>
+        <a href="settings.html" class="nav-link"><i class="fas fa-cog text-gray-400"></i> Settings</a>
+        <a href="referral.html" class="nav-link"><i class="fas fa-users text-purple-500"></i> Referral System</a>
+
+        <p class="section-tag">Support & Company</p>
+        <a href="ceo.html" class="nav-link"><i class="fas fa-crown text-yellow-600"></i> CEO / Founder</a>
+        <a href="customer-service.html" class="nav-link"><i class="fas fa-headset text-pink-500"></i> Customer Service</a>
+        <a href="faq.html" class="nav-link"><i class="fas fa-question-circle text-cyan-400"></i> FAQ</a>
+        <a href="help.html" class="nav-link"><i class="fas fa-life-ring text-red-400"></i> Help Center</a>
+        <a href="terms.html" class="nav-link"><i class="fas fa-file-contract text-gray-500"></i> Terms & Conditions</a>
+        
+        <div class="p-6 mt-4 pb-12">
+            <a href="login.html" class="flex items-center justify-center p-4 bg-red-500/10 text-red-500 rounded-xl font-bold border border-red-500/20">LOGOUT</a>
+        </div>
+    </div>
+
+    <div class="chart-section">
+        <div id="tradingview_live" style="height: 100%; width: 100%;"></div>
+    </div>
+
+    <div class="p-4 bg-[#06070a]">
+        
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-4"><i class="fas fa-futbol"></i> SPORTS INVESTMENT</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500">DAILY</p>
+                <h3 class="text-2xl font-black">1,000</h3>
+                <p class="text-green-500 text-sm mb-4">Return: 2,500</p>
+                <button onclick="buyPlan(1000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
+            </div>
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500">WEEKLY</p>
+                <h3 class="text-2xl font-black">5,000</h3>
+                <p class="text-green-500 text-sm mb-4">Return: 15,000</p>
+                <button onclick="buyPlan(5000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8"><i class="fas fa-chart-line"></i> FOREX TRADING</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500">WEEKLY</p>
+                <h3 class="text-2xl font-black">50,000</h3>
+                <p class="text-green-500 text-sm mb-4">Return: 100,000</p>
+                <button onclick="buyPlan(50,000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8"><i class="fas fa-vault"></i> CPT INVEST 4 ME</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="plan-card border-blue-500/30">
+                <p class="text-xs font-bold text-gray-500">MONTHLY</p>
+                <h3 class="text-2xl font-black">20,000</h3>
+                <p class="text-green-500 text-sm mb-4">Return: 40,000</p>
+                <button onclick="buyPlan(20000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="ticker-bar">
+        <div class="tradingview-widget-container">
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                {"symbols": [{"proName":"BINANCE:BTCUSDT","title":"BTC"}], "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en"}
+            </script>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script>
+        // Load Balance logic
+        let balance = parseFloat(localStorage.getItem('accountBalance')) || 0.00;
+        function updateUI() {
+            document.getElementById('menuBalance').innerText = "$" + balance.toLocaleString(undefined, {minimumFractionDigits: 2});
+            localStorage.setItem('accountBalance', balance);
+        }
+
+        function buyPlan(amt) {
+            if (balance >= amt) {
+                balance -= amt;
+                updateUI();
+                alert("Success! Plan purchased.");
+            } else {
+                alert("Insufficient Balance. Redirecting to Deposit...");
+                window.location.href = "deposit.html";
+            }
+        }
+
+        function toggleMenu() { document.getElementById('master-sidebar').classList.toggle('active'); }
+
+        updateUI();
+        new TradingView.widget({
+            "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1S",
+            "theme": "dark", "container_id": "tradingview_live", "preset": "mobile"
+        });
+    </script>
+</body>
+</html>

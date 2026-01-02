@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        .glass-card { background: rgba(19, 23, 34, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.05); }
+        input { background: #131722 !important; border: 1px solid #2d3343 !important; color: white !important; }
+        input:focus { border-color: #3b82f6 !important; outline: none; }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="flex items-center gap-4 mb-8">
+        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="text-xl font-black uppercase italic">User <span class="text-blue-500">Profile</span></h1>
+    </div>
+
+    <div class="flex flex-col items-center mb-8">
+        <div class="relative">
+            <div class="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center border-4 border-[#131722] shadow-xl">
+                <i class="fas fa-user-shield text-4xl"></i>
+            </div>
+            <div class="absolute bottom-0 right-0 w-8 h-8 bg-green-500 rounded-full border-4 border-[#06070a] flex items-center justify-center">
+                <i class="fas fa-check text-[10px]"></i>
+            </div>
+        </div>
+        <p class="mt-4 text-gray-400 text-sm font-bold" id="display-name">New Trader</p>
+    </div>
+
+    <div class="glass-card p-6 rounded-3xl shadow-2xl">
+        <form id="profileForm" class="space-y-6">
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Full Name</label>
+                <input type="text" id="fullName" placeholder="Enter full name" class="w-full p-4 rounded-xl font-semibold">
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Email Address</label>
+                <input type="email" id="email" placeholder="email@example.com" class="w-full p-4 rounded-xl font-semibold">
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Phone Number</label>
+                <input type="tel" id="phone" placeholder="+234..." class="w-full p-4 rounded-xl font-semibold">
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Country</label>
+                <input type="text" id="country" placeholder="Nigeria" class="w-full p-4 rounded-xl font-semibold">
+            </div>
+
+            <button type="submit" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-500/20 active:scale-95 transition">
+                Update & Save Profile
+            </button>
+        </form>
+    </div>
+
+    <div id="successMsg" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 bg-green-500 text-white px-8 py-3 rounded-full font-bold shadow-2xl">
+        Data Saved Locally!
+    </div>
+
+    <script>
+        // 1. SELECT ELEMENTS
+        const profileForm = document.getElementById('profileForm');
+        const displayName = document.getElementById('display-name');
+        const successMsg = document.getElementById('successMsg');
+
+        const inputs = {
+            fullName: document.getElementById('fullName'),
+            email: document.getElementById('email'),
+            phone: document.getElementById('phone'),
+            country: document.getElementById('country')
+        };
+
+        // 2. LOAD DATA ON REFRESH
+        window.onload = () => {
+            const savedData = JSON.parse(localStorage.getItem('userProfile'));
+            if (savedData) {
+                inputs.fullName.value = savedData.fullName || '';
+                inputs.email.value = savedData.email || '';
+                inputs.phone.value = savedData.phone || '';
+                inputs.country.value = savedData.country || '';
+                displayName.innerText = savedData.fullName || 'New Trader';
+            }
+        };
+
+        // 3. SAVE DATA ON SUBMIT
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const userData = {
+                fullName: inputs.fullName.value,
+                email: inputs.email.value,
+                phone: inputs.phone.value,
+                country: inputs.country.value
+            };
+
+            // Save to browser LocalStorage
+            localStorage.setItem('userProfile', JSON.stringify(userData));
+            
+            // Visual feedback
+            displayName.innerText = userData.fullName;
+            successMsg.classList.remove('hidden');
+            setTimeout(() => successMsg.classList.add('hidden'), 3000);
+        });
+    </script>
+</body>
+</html>

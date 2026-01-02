@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit Funds | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        .deposit-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 28px; }
+        .copy-box { background: #131722; border: 1px dashed #3b82f6; }
+        input { background: #131722 !important; border: 1px solid #2d3343 !important; color: white !important; }
+    </style>
+</head>
+<body class="p-4 pb-12">
+
+    <div class="flex items-center gap-4 mb-8">
+        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="text-xl font-black uppercase italic">Deposit <span class="text-blue-500">Funds</span></h1>
+    </div>
+
+    <div class="deposit-card p-6 mb-6 shadow-2xl">
+        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">1. Enter Deposit Amount ($)</label>
+        <input type="number" id="depositAmount" placeholder="Example: 5000" class="w-full p-4 rounded-2xl font-black text-xl mb-2">
+        <p class="text-gray-500 text-[10px]">Note: Minimum deposit is $1,000</p>
+    </div>
+
+    <div class="deposit-card p-6 mb-8 border-blue-500/20 shadow-2xl">
+        <label class="text-[10px] font-black text-blue-500 uppercase tracking-widest mb-4 block">2. Transfer to Account Below</label>
+        
+        <div class="copy-box p-5 rounded-2xl relative mb-4">
+            <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Account Number</p>
+            <p class="text-2xl font-black tracking-tighter" id="accNum">6119316029</p>
+            <button onclick="copyText('6119316029')" class="absolute top-5 right-5 text-blue-500"><i class="fas fa-copy"></i></button>
+        </div>
+
+        <div class="flex gap-4">
+            <div class="flex-1 bg-[#131722] p-4 rounded-2xl border border-gray-800">
+                <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Bank Name</p>
+                <p class="font-black text-sm">Opay</p>
+            </div>
+            <div class="flex-1 bg-[#131722] p-4 rounded-2xl border border-gray-800">
+                <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Account Name</p>
+                <p class="font-black text-sm">Godswill</p>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="processDeposit()" class="w-full py-5 bg-blue-600 rounded-3xl font-black text-sm uppercase shadow-xl shadow-blue-500/20 active:scale-95 transition">
+        I Have Paid - Confirm Now
+    </button>
+
+    <p class="text-center text-gray-600 text-[10px] mt-6 px-10">
+        Clicking "I Have Paid" will automatically update your balance and open your email to send the payment receipt.
+    </p>
+
+    <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 bg-green-500 text-white px-8 py-3 rounded-full font-bold shadow-2xl">
+        Balance Updated Successfully!
+    </div>
+
+    <script>
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert("Account Number Copied!");
+        }
+
+        function processDeposit() {
+            const amountInput = document.getElementById('depositAmount');
+            const amount = parseFloat(amountInput.value);
+
+            if (!amount || amount < 1) {
+                alert("Please enter a valid deposit amount.");
+                return;
+            }
+
+            // 1. UPDATE LOCAL STORAGE BALANCE
+            let currentBalance = parseFloat(localStorage.getItem('accountBalance')) || 0.00;
+            let newBalance = currentBalance + amount;
+            localStorage.setItem('accountBalance', newBalance);
+
+            // 2. SHOW SUCCESS MESSAGE
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+
+            // 3. REDIRECT TO EMAIL
+            setTimeout(() => {
+                const subject = encodeURIComponent("Deposit Confirmation - Competentraders");
+                const body = encodeURIComponent(`Hello Admin,\n\nI have just deposited $${amount.toLocaleString()} into the Opay account.\n\nPlease confirm my transaction.\n\nUser Name: (Enter your name here)`);
+                window.location.href = `mailto:competentraders@gmail.com?subject=${subject}&body=${body}`;
+                
+                // Redirect back to dashboard after a short delay
+                setTimeout(() => {
+                    window.location.href = "user-dashboard.html";
+                }, 1000);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

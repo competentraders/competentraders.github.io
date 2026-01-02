@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competentraders | The Ultimate Earning Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #06070a; color: white; overflow-x: hidden; }
+        
+        .glass-card { background: linear-gradient(145deg, #0f1218, #080a0f); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glow-blue { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+        
+        .marquee-track { display: flex; gap: 1.5rem; animation: marquee 35s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        
+        .stat-pulse { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <nav class="sticky top-0 z-[100] bg-[#06070a]/95 backdrop-blur-lg border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 bg-blue-600 rounded flex items-center justify-center glow-blue">
+                    <i class="fas fa-bolt text-white text-[12px]"></i>
+                </div>
+                <span class="text-[15px] font-black tracking-tighter uppercase">Competent<span class="text-blue-500">raders</span></span>
+            </div>
+            <div class="flex items-center gap-2">
+                <a href="login.html" class="text-[10px] font-bold px-3 py-2 border border-white/10 rounded-lg">LOGIN</a>
+                <a href="register.html" class="text-[10px] font-bold px-3 py-2 bg-blue-600 rounded-lg glow-blue">REGISTER</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="bg-black border-b border-white/5">
+        <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+            {
+                "symbols": [
+                    {"proName": "BINANCE:BTCUSDT", "title": "BTC"},
+                    {"proName": "BINANCE:ETHUSDT", "title": "ETH"},
+                    {"proName": "BINANCE:SOLUSDT", "title": "SOL"},
+                    {"proName": "BINANCE:BNBUSDT", "title": "BNB"}
+                ],
+                "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en"
+            }
+            </script>
+        </div>
+    </div>
+
+    <header class="px-6 py-14 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-blue-600/10 blur-[100px]"></div>
+        <span class="text-[10px] font-bold text-blue-500 tracking-[0.3em] uppercase mb-4 block">The Gold Standard of Earning</span>
+        <h1 class="text-4xl font-black mb-4 leading-tight">Stop Guessing.<br><span class="text-blue-500">Start Profiting.</span></h1>
+        <p class="text-gray-400 text-xs max-w-xs mx-auto mb-8">Join 50,000+ traders using our multi-channel ecosystem to build generational wealth across 6+ financial sectors.</p>
+        <div class="flex flex-col gap-3">
+            <a href="register.html" class="bg-blue-600 text-sm py-4 rounded-xl font-black glow-blue">OPEN YOUR FREE ACCOUNT</a>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest"><i class="fas fa-shield-halved mr-1"></i> Secured by Enterprise-Grade Encryption</p>
+        </div>
+    </header>
+
+    <div class="px-6 py-2 bg-blue-600/10 border-y border-blue-500/20 flex justify-between items-center">
+        <span class="text-[10px] font-bold flex items-center gap-2">
+            <span class="w-1.5 h-1.5 bg-green-500 rounded-full stat-pulse"></span> 1,204 Active Traders Online
+        </span>
+        <span class="text-[10px] text-gray-400 italic">24/7</span>
+    </div>
+
+    <section class="px-5 py-12">
+        <h2 class="text-xl font-black mb-8 border-l-4 border-blue-600 pl-4 uppercase">Our Earning Channels</h2>
+        <div class="grid grid-cols-1 gap-4">
+            
+            <div class="glass-card p-6 rounded-2xl flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+                    <i class="fas fa-chart-line text-blue-500 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Forex Trading</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">Access 90% accuracy signals for USD, EUR, and GBP pairs with daily market analysis.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-green-500/10 flex items-center justify-center shrink-0">
+                    <i class="fas fa-futbol text-green-500 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Sports Betting</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">Expert predictions for Football, Basketball, and Tennis. Beat the bookies with data.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
+                    <i class="fab fa-bitcoin text-orange-500 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Crypto Currency</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">Spot and futures trading signals. Long and short strategies for Bitcoin & Altcoins.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+                    <i class="fas fa-microchip text-purple-500 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Mining Option</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">Don't have hardware? Use our cloud hash-power to mine BTC and ETH 24/7 passively.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center shrink-0">
+                    <i class="fas fa-vault text-yellow-500 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">Investment Plans</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">Locked savings with high interest rates. Let your capital work for you securely.</p>
+                </div>
+            </div>
+
+            <div class="glass-card p-6 rounded-2xl flex items-start gap-4">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0">
+                    <i class="fas fa-plus text-cyan-500 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm">And Much More...</h3>
+                    <p class="text-[11px] text-gray-500 mt-1">Copy-trading, NFT flipping, and daily webinars. We never stop expanding.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="px-6 py-12 bg-white/5">
+        <div class="text-center mb-10">
+            <h2 class="text-2xl font-black">Why Competentraders?</h2>
+        </div>
+        <div class="space-y-6">
+            <div class="flex gap-4">
+                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                <p class="text-xs text-gray-300"><b>No Experience Needed:</b> Our experts handle the complex charts while you follow the profit.</p>
+            </div>
+            <div class="flex gap-4">
+                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                <p class="text-xs text-gray-300"><b>Global Support:</b> Dedicated account managers available 24/7 to guide your journey.</p>
+            </div>
+            <div class="flex gap-4">
+                <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                <p class="text-xs text-gray-300"><b>Fast Withdrawals:</b> Your money, your choice. Get paid instantly via Crypto or Local Bank.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="py-6 bg-black border-y border-white/5 overflow-hidden">
+        <div class="marquee-track text-[10px] font-bold">
+            <div class="flex items-center gap-2"><i class="fas fa-futbol"></i> FOOTBALL</div>
+            <div class="flex items-center gap-2"><i class="fas fa-basketball-ball"></i> BASKETBALL</div>
+            <div class="flex items-center gap-2"><i class="fas fa-hockey-puck"></i> ICE HOCKEY</div>
+            <div class="flex items-center gap-2"><i class="fas fa-baseball-ball"></i> TENNIS</div>
+            <div class="flex items-center gap-2"><i class="fas fa-hand-fist"></i> BOXING</div>
+            <div class="flex items-center gap-2"><i class="fas fa-futbol"></i> FOOTBALL</div>
+            <div class="flex items-center gap-2"><i class="fas fa-basketball-ball"></i> BASKETBALL</div>
+            <div class="flex items-center gap-2"><i class="fas fa-hockey-puck"></i> ICE HOCKEY</div>
+            <div class="flex items-center gap-2"><i class="fas fa-baseball-ball"></i> TENNIS</div>
+        </div>
+    </div>
+
+    <section class="px-6 py-16 bg-[#06070a]">
+        <h2 class="text-2xl font-black mb-4 uppercase">Who We Are</h2>
+        <p class="text-sm text-gray-400 leading-relaxed mb-8">
+            <b>Competentraders</b> is a global pioneer in multi-sector finance. We combine expert human intelligence with cutting-edge AI to maximize your earning potential in every market.
+        </p>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                <h4 class="text-blue-500 font-bold text-xs mb-1 uppercase">Our Mission</h4>
+                <p class="text-[10px] text-gray-500">To build the world's most accessible wealth ecosystem.</p>
+            </div>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/5">
+                <h4 class="text-blue-500 font-bold text-xs mb-1 uppercase">Our Goal</h4>
+                <p class="text-[10px] text-gray-500">Helping 1 Million users reach financial independence by 2027.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-10 text-center border-t border-white/5 bg-black">
+        <p class="text-[10px] text-gray-600 uppercase tracking-widest">© 2026 COMPETENTRADERS GLOBAL ENTERPRISE</p>
+    </footer>
+
+</body>
+</html>

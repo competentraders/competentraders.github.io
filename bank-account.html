@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal Settings | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        .form-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 24px; padding: 24px; }
+        input, select { background: #131722 !important; border: 1px solid #2d3343 !important; color: white !important; }
+        input:focus, select:focus { border-color: #3b82f6 !important; outline: none; }
+        .tab-btn.active { background: #3b82f6; color: white; }
+    </style>
+</head>
+<body class="p-4 pb-12">
+
+    <div class="flex items-center gap-4 mb-8">
+        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="text-xl font-black uppercase italic">Payment <span class="text-blue-500">Details</span></h1>
+    </div>
+
+    <div class="flex bg-[#131722] p-1 rounded-2xl mb-6">
+        <button onclick="switchTab('bank')" id="tab-bank" class="tab-btn active flex-1 py-3 rounded-xl font-bold text-sm transition">BANK ACCOUNT</button>
+        <button onclick="switchTab('sport')" id="tab-sport" class="tab-btn flex-1 py-3 rounded-xl font-bold text-sm text-gray-500 transition">SPORTS BETTING</button>
+    </div>
+
+    <div id="bank-section" class="form-card shadow-2xl">
+        <form id="bankForm" class="space-y-5">
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Account Name</label>
+                <input type="text" id="accName" placeholder="Full name on account" class="w-full p-4 rounded-xl font-semibold" required>
+            </div>
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Account Number</label>
+                <input type="number" id="accNum" placeholder="0000000000" class="w-full p-4 rounded-xl font-semibold" required>
+            </div>
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Select Bank</label>
+                <select id="bankName" class="w-full p-4 rounded-xl font-semibold">
+                    <option value="GTBank">GTBank</option>
+                    <option value="Zenith Bank">Zenith Bank</option>
+                    <option value="Access Bank">Access Bank</option>
+                    <option value="Kuda Bank">Kuda MFB</option>
+                    <option value="OPay">OPay</option>
+                    <option value="Palmpay">Palmpay</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Account Type</label>
+                <select id="accType" class="w-full p-4 rounded-xl font-semibold">
+                    <option value="Savings">Savings Account</option>
+                    <option value="Current">Current Account</option>
+                </select>
+            </div>
+            <button type="submit" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-500/20 active:scale-95 transition">Save Bank Details</button>
+        </form>
+    </div>
+
+    <div id="sport-section" class="form-card shadow-2xl hidden">
+        <form id="sportForm" class="space-y-5">
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">Betting Platform</label>
+                <select id="sportPlatform" class="w-full p-4 rounded-xl font-semibold">
+                    <option value="SportyBet">SportyBet</option>
+                    <option value="Bet9ja">Bet9ja</option>
+                    <option value="1xBet">1xBet</option>
+                    <option value="BetKing">BetKing</option>
+                </select>
+            </div>
+            <div>
+                <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2 block">User ID / Username</label>
+                <input type="text" id="sportUser" placeholder="Your betting ID" class="w-full p-4 rounded-xl font-semibold" required>
+            </div>
+            <button type="submit" class="w-full py-4 bg-green-600 rounded-2xl font-black text-sm uppercase shadow-lg shadow-green-500/20 active:scale-95 transition">Save Betting Details</button>
+        </form>
+    </div>
+
+    <div id="saveToast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-8 py-3 rounded-full font-bold shadow-2xl">Details Saved Locally!</div>
+
+    <script>
+        function switchTab(type) {
+            const bankSec = document.getElementById('bank-section');
+            const sportSec = document.getElementById('sport-section');
+            const bankTab = document.getElementById('tab-bank');
+            const sportTab = document.getElementById('tab-sport');
+
+            if(type === 'bank') {
+                bankSec.classList.remove('hidden'); sportSec.classList.add('hidden');
+                bankTab.classList.add('active'); sportTab.classList.remove('active');
+                sportTab.classList.add('text-gray-500'); bankTab.classList.remove('text-gray-500');
+            } else {
+                bankSec.classList.add('hidden'); sportSec.classList.remove('hidden');
+                sportTab.classList.add('active'); bankTab.classList.remove('active');
+                bankTab.classList.add('text-gray-500'); sportTab.classList.remove('text-gray-500');
+            }
+        }
+
+        window.onload = () => {
+            const savedBank = JSON.parse(localStorage.getItem('userBankDetails'));
+            if(savedBank) {
+                document.getElementById('accName').value = savedBank.name;
+                document.getElementById('accNum').value = savedBank.num;
+                document.getElementById('bankName').value = savedBank.bank;
+                document.getElementById('accType').value = savedBank.type;
+            }
+            const savedSport = JSON.parse(localStorage.getItem('userSportDetails'));
+            if(savedSport) {
+                document.getElementById('sportPlatform').value = savedSport.platform;
+                document.getElementById('sportUser').value = savedSport.user;
+            }
+        };
+
+        document.getElementById('bankForm').onsubmit = (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('accName').value,
+                num: document.getElementById('accNum').value,
+                bank: document.getElementById('bankName').value,
+                type: document.getElementById('accType').value
+            };
+            localStorage.setItem('userBankDetails', JSON.stringify(data));
+            showToast();
+        };
+
+        document.getElementById('sportForm').onsubmit = (e) => {
+            e.preventDefault();
+            const data = {
+                platform: document.getElementById('sportPlatform').value,
+                user: document.getElementById('sportUser').value
+            };
+            localStorage.setItem('userSportDetails', JSON.stringify(data));
+            showToast();
+        };
+
+        function showToast() {
+            const toast = document.getElementById('saveToast');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+    </script>
+</body>
+</html>

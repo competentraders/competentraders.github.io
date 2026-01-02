@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Competentraders Security</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #06070a; color: white; }
+        
+        .glass-panel { 
+            background: rgba(15, 18, 24, 0.8); 
+            backdrop-filter: blur(12px); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+
+        .input-group {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .input-group:focus-within {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+            border-color: #ef4444 !important;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <div class="w-full max-w-md">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-2 mb-4">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                    <i class="fas fa-shield-halved text-white text-lg"></i>
+                </div>
+                <span class="text-2xl font-black uppercase tracking-tighter">Competent<span class="text-blue-500">raders</span></span>
+            </div>
+            <h2 class="text-xl font-bold">Secure Gateway</h2>
+            <p class="text-gray-500 text-xs mt-1 uppercase tracking-widest">Authorized Access Only</p>
+        </div>
+
+        <div id="login-container" class="glass-panel p-8 rounded-[32px] relative overflow-hidden">
+            <div id="error-msg" class="hidden mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-500 text-xs font-bold">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>Authentication Failed: Please try again.</span>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-6">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Username</label>
+                    <div class="input-group flex items-center px-4 py-3.5 rounded-xl">
+                        <i class="fas fa-user text-gray-600 mr-3 text-sm"></i>
+                        <input type="text" id="login_user" required class="bg-transparent outline-none w-full text-sm" placeholder="Enter username">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Password</label>
+                    <div class="input-group flex items-center px-4 py-3.5 rounded-xl">
+                        <i class="fas fa-lock text-gray-600 mr-3 text-sm"></i>
+                        <input type="password" id="login_pass" required class="bg-transparent outline-none w-full text-sm" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center px-1">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" class="w-4 h-4 rounded border-gray-800 bg-gray-900 checked:bg-blue-600">
+                        <span class="text-[10px] text-gray-500 font-bold uppercase">Remember me</span>
+                    </label>
+                    <a href="forgot-password.html" class="text-[10px] text-blue-500 font-bold uppercase">Forgot Key?</a>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm tracking-widest shadow-xl shadow-blue-600/20 transition-all uppercase">
+                    Verify & Login
+                </button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <p class="text-[10px] text-gray-600 uppercase font-bold tracking-widest">
+                    Don't have a secure account? <br>
+                    <a href="register.html" class="text-blue-500 hover:underline mt-2 inline-block">Create One Now</a>
+                </p>
+            </div>
+        </div>
+
+        <p class="mt-10 text-center text-[10px] text-gray-700 uppercase tracking-[0.4em]">
+            AES-256 Bit Encryption Active
+        </p>
+    </div>
+
+    <script>
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const user = document.getElementById('login_user').value;
+            const pass = document.getElementById('login_pass').value;
+            const container = document.getElementById('login-container');
+            const errorBox = document.getElementById('error-msg');
+
+            // --- SECURITY CHECK LOGIC ---
+            // On a real site, this checks a database.
+            // For your static site, we check if user exists in LocalStorage from the register page.
+            
+            const savedUser = localStorage.getItem('competent_username') || "admin"; // default for testing
+            const savedPass = localStorage.getItem('competent_password') || "password123";
+
+            if (user === savedUser && pass === savedPass) {
+                // SUCCESS
+                errorBox.classList.add('hidden');
+                container.style.opacity = "0.5";
+                container.style.pointerEvents = "none";
+                
+                // Show a fake "Verifying" state for realism
+                setTimeout(() => {
+                    window.location.href = "user-dashboard.html";
+                }, 1000);
+            } else {
+                // FAILURE
+                errorBox.classList.remove('hidden');
+                container.classList.add('error-shake');
+                
+                // Remove shake effect after animation so it can trigger again
+                setTimeout(() => {
+                    container.classList.remove('error-shake');
+                }, 400);
+
+                // Clear password for security
+                document.getElementById('login_pass').value = "";
+            }
+        }
+    </script>
+
+</body>
+</html>

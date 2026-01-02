@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega FAQ | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; scroll-behavior: smooth; }
+        .faq-item { background: #0f111a; border: 1px solid #1e293b; border-radius: 18px; margin-bottom: 10px; }
+        .faq-question { padding: 18px; display: flex; justify-content: space-between; items-center; cursor: pointer; }
+        .faq-answer { padding: 0 18px 18px 18px; color: #94a3b8; font-size: 13px; display: none; line-height: 1.5; }
+        .faq-item.active .faq-answer { display: block; }
+        .faq-item.active .chevron { transform: rotate(180deg); color: #3b82f6; }
+        .section-tag { font-size: 11px; color: #3b82f6; font-weight: 900; margin: 25px 0 10px 5px; text-transform: uppercase; letter-spacing: 2px; }
+    </style>
+</head>
+<body class="p-4 pb-20">
+
+    <div class="flex items-center gap-4 mb-6">
+        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="text-xl font-black uppercase italic">Help <span class="text-blue-500">Center</span></h1>
+    </div>
+
+    <div class="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
+        <a href="#acc" class="whitespace-nowrap px-4 py-2 bg-[#131722] rounded-full text-[10px] font-bold border border-gray-800">ACCOUNTS</a>
+        <a href="#inv" class="whitespace-nowrap px-4 py-2 bg-[#131722] rounded-full text-[10px] font-bold border border-gray-800">INVESTING</a>
+        <a href="#mon" class="whitespace-nowrap px-4 py-2 bg-[#131722] rounded-full text-[10px] font-bold border border-gray-800">MONEY</a>
+        <a href="#sec" class="whitespace-nowrap px-4 py-2 bg-[#131722] rounded-full text-[10px] font-bold border border-gray-800">SECURITY</a>
+    </div>
+
+    <p id="acc" class="section-tag">Login & Registration</p>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">How do I register?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">Click "Register" on the login page. Enter your details and set a strong password. Note that your data is saved locally on this device for your privacy.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">I forgot my login password?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">Since we use local storage for security, if you forget your password, you may need to clear your browser cache and register again. Contact support for recovery assistance.</div>
+    </div>
+
+    <p id="mon" class="section-tag">Money & Transactions</p>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">How do I deposit money?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">Go to the Deposit page, copy the Opay account details, make the transfer from your bank app, and click "I Have Paid." Send your receipt to competentraders@gmail.com.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">When will I receive my withdrawal?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">Withdrawal requests are reviewed and processed within 24 to 48 hours. Ensure your bank details are correctly saved in the "Bank Account" section.</div>
+    </div>
+
+    <p class="section-tag">User Profile</p>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">Can I change my profile name?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">Yes, go to the "User Profile" page in the menu. Update your name and hit save; it will instantly update across the dashboard and referral pages.</div>
+    </div>
+
+    <p id="inv" class="section-tag">Investment Plans</p>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">How do the Sports Plans work?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">When you buy a Sports Plan, our experts trade for you using professional sports betting strategies. Your returns are added to your balance at the end of the duration.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">Can I cancel an active plan?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">Active investment plans cannot be canceled once started as the funds are already committed to live trades/strategies.</div>
+    </div>
+
+    <p id="sec" class="section-tag">More & Security</p>
+    <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+            <span class="font-bold text-sm">Is my balance safe?</span>
+            <i class="fas fa-chevron-down chevron"></i>
+        </div>
+        <div class="faq-answer">Your balance is stored on your device's secure local storage. To keep it 100% safe, do not share your phone or login details with anyone.</div>
+    </div>
+
+    <div class="mt-10 p-6 bg-blue-600 rounded-3xl text-center shadow-xl shadow-blue-500/20">
+        <h3 class="font-black text-lg mb-1">Still confused?</h3>
+        <p class="text-xs text-blue-100 mb-4">Our agents are ready to help you.</p>
+        <a href="customer-service.html" class="inline-block bg-white text-blue-600 px-8 py-3 rounded-xl font-black text-xs uppercase">Chat With Us</a>
+    </div>
+
+    <script>
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            // Close other items if you want (optional)
+            /* document.querySelectorAll('.faq-item').forEach(el => {
+                if(el !== item) el.classList.remove('active');
+            }); */
+            item.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral System | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; overflow-x: hidden; }
+        .referral-card { background: linear-gradient(145deg, #131722, #0b0d12); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .id-box { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="flex items-center gap-4 mb-8">
+        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="text-xl font-black uppercase italic">Referral <span class="text-blue-500">System</span></h1>
+    </div>
+
+    <div class="mb-8 text-center">
+        <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Welcome Back</p>
+        <h2 class="text-3xl font-black" id="userNameDisplay">Trader</h2>
+    </div>
+
+    <div class="referral-card p-8 rounded-[2rem] shadow-2xl relative overflow-hidden mb-8">
+        <div class="absolute top-0 right-0 p-4 opacity-10">
+            <i class="fas fa-users text-8xl"></i>
+        </div>
+
+        <div class="relative z-10">
+            <h3 class="text-lg font-bold mb-2">Your Referral ID</h3>
+            <p class="text-gray-400 text-sm mb-6">Share this ID with your friends to earn 10% commission on every deposit they make.</p>
+            
+            <div class="id-box p-5 rounded-2xl flex justify-between items-center mb-6">
+                <span class="text-2xl font-black tracking-widest text-blue-500" id="referralID">...</span>
+                <button onclick="copyID()" class="text-gray-400 hover:text-white transition">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+
+            <button onclick="shareReferral()" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-500/30 active:scale-95 transition">
+                Invite Friends Now
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mb-8">
+        <div class="bg-[#131722] p-6 rounded-3xl border border-gray-800">
+            <p class="text-gray-500 text-[10px] font-bold uppercase">Total Referrals</p>
+            <p class="text-2xl font-black">0</p>
+        </div>
+        <div class="bg-[#131722] p-6 rounded-3xl border border-gray-800">
+            <p class="text-gray-500 text-[10px] font-bold uppercase">Earned</p>
+            <p class="text-2xl font-black text-green-500">$0.00</p>
+        </div>
+    </div>
+
+    <div id="copyAlert" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-2xl transition-all">
+        ID Copied to Clipboard!
+    </div>
+
+    <script>
+        // 1. Pull Name from Profile Storage
+        window.onload = () => {
+            const savedData = JSON.parse(localStorage.getItem('userProfile'));
+            if (savedData && savedData.fullName) {
+                document.getElementById('userNameDisplay').innerText = savedData.fullName;
+            }
+
+            // 2. Generate or Load Referral ID
+            let refID = localStorage.getItem('userReferralID');
+            if (!refID) {
+                // Generates a random number like CPT-4921
+                refID = "CPT-" + Math.floor(1000 + Math.random() * 9000);
+                localStorage.setItem('userReferralID', refID);
+            }
+            document.getElementById('referralID').innerText = refID;
+        };
+
+        // 3. Copy Function
+        function copyID() {
+            const idText = document.getElementById('referralID').innerText;
+            navigator.clipboard.writeText(idText);
+            
+            const alert = document.getElementById('copyAlert');
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 2000);
+        }
+
+        // 4. Share Function
+        function shareReferral() {
+            const id = document.getElementById('referralID').innerText;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join Competentraders',
+                    text: `Join me on Competentraders! Use my Referral ID: ${id}`,
+                    url: window.location.href
+                });
+            } else {
+                copyID();
+            }
+        }
+    </script>
+</body>
+</html>

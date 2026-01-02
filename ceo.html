@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEO Profile | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        .ceo-card { background: linear-gradient(145deg, #0f111a, #0b0d12); border: 1px solid rgba(255,255,255,0.05); }
+        .stat-box { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .profile-ring { padding: 4px; background: linear-gradient(45deg, #3b82f6, #06070a, #3b82f6); border-radius: 50%; }
+    </style>
+</head>
+<body class="p-4 pb-12">
+
+    <div class="flex items-center gap-4 mb-8">
+        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h1 class="text-xl font-black uppercase italic">Executive <span class="text-blue-500">Office</span></h1>
+    </div>
+
+    <div class="flex flex-col items-center mb-8">
+        <div class="profile-ring mb-4 shadow-2xl shadow-blue-500/20">
+            <div class="w-32 h-32 bg-gray-900 rounded-full flex items-center justify-center overflow-hidden border-4 border-[#06070a]">
+                <i class="fas fa-user-tie text-6xl text-gray-700"></i>
+            </div>
+        </div>
+        <div class="text-center">
+            <h2 class="text-2xl font-black flex items-center justify-center gap-2">
+                Godswill <i class="fas fa-check-circle text-blue-500 text-lg"></i>
+            </h2>
+            <p class="text-blue-500 font-bold text-xs uppercase tracking-widest">Founder & Chief Executive Officer</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3 mb-8">
+        <div class="stat-box p-3 rounded-2xl text-center">
+            <p class="text-[10px] text-gray-500 font-bold uppercase">Experience</p>
+            <p class="font-black text-blue-500">8+ Yrs</p>
+        </div>
+        <div class="stat-box p-3 rounded-2xl text-center">
+            <p class="text-[10px] text-gray-500 font-bold uppercase">Accuracy</p>
+            <p class="font-black text-blue-500">94%</p>
+        </div>
+        <div class="stat-box p-3 rounded-2xl text-center">
+            <p class="text-[10px] text-gray-500 font-bold uppercase">Investors</p>
+            <p class="font-black text-blue-500">12k+</p>
+        </div>
+    </div>
+
+    <div class="ceo-card p-6 rounded-[2.5rem] relative overflow-hidden mb-6">
+        <i class="fas fa-quote-left absolute top-6 left-6 text-blue-500/10 text-6xl"></i>
+        <div class="relative z-10">
+            <h3 class="text-lg font-black mb-4 italic">"Financial freedom is not a dream, it's a calculated decision."</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">
+                Welcome to Competentraders. My mission is to bridge the gap between complex financial markets and everyday investors. Whether it's through our sports strategies or forex algorithms, we prioritize risk management and consistent growth above all else.
+            </p>
+            <p class="text-gray-400 text-sm mt-4 leading-relaxed">
+                Our team is dedicated to ensuring your capital is handled with the highest level of professional competence. Together, we build wealth that lasts.
+            </p>
+        </div>
+    </div>
+
+    <div class="space-y-4">
+        <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-2">Official Channels</p>
+        
+        <a href="https://t.me/competentraders" class="flex items-center justify-between p-5 bg-[#131722] border border-gray-800 rounded-2xl">
+            <div class="flex items-center gap-4">
+                <i class="fab fa-telegram text-2xl text-[#229ED9]"></i>
+                <span class="font-bold">Telegram Channel</span>
+            </div>
+            <i class="fas fa-external-link-alt text-gray-600 text-xs"></i>
+        </a>
+
+        <a href="mailto:ceo@competentraders.com" class="flex items-center justify-between p-5 bg-[#131722] border border-gray-800 rounded-2xl">
+            <div class="flex items-center gap-4">
+                <i class="fas fa-envelope-open-text text-2xl text-blue-500"></i>
+                <span class="font-bold">Direct Office Mail</span>
+            </div>
+            <i class="fas fa-arrow-right text-gray-600 text-xs"></i>
+        </a>
+    </div>
+
+    <div class="mt-10 text-center opacity-30">
+        <i class="fas fa-shield-halved text-4xl mb-2"></i>
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em]">Competentraders Verified Executive</p>
+    </div>
+
+</body>
+</html>
