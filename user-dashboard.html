@@ -157,3 +157,178 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+<style>
+    #kyc-document-portal {
+        position: fixed; inset: 0; background: #06070a; z-index: 9999;
+        display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif;
+        padding: 20px;
+    }
+    .kyc-doc-card {
+        background: #0f111a; border: 1px solid #1e293b; width: 100%; max-width: 420px;
+        padding: 30px; border-radius: 35px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.1);
+    }
+    .doc-input-group { margin-bottom: 20px; text-align: left; }
+    .doc-label { font-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block; }
+    .doc-field {
+        width: 100%; background: #131722; border: 1px solid #1e293b; color: white;
+        padding: 15px; border-radius: 15px; font-size: 14px; outline: none; transition: 0.3s;
+    }
+    .doc-field:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+    .doc-btn {
+        width: 100%; padding: 18px; background: #3b82f6; color: white; border: none;
+        border-radius: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer;
+    }
+    .doc-btn:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
+    .upload-box {
+        border: 2px dashed #1e293b; padding: 15px; border-radius: 20px;
+        text-align: center; margin-bottom: 15px; transition: 0.3s;
+    }
+    .upload-box:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+    .kyc-hidden { display: none; }
+    .error-text { color: #ef4444; font-size: 10px; margin-top: 5px; font-weight: bold; display: none; }
+</style>
+
+<div id="kyc-document-portal">
+    <div class="kyc-doc-card" id="kyc-main-content">
+        
+        <div id="kyc-doc-step-1">
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-black text-white uppercase italic">KYC <span class="text-blue-500">Security</span></h2>
+                <p class="text-[10px] text-gray-500 uppercase mt-1">Identity Verification Required</p>
+            </div>
+
+            <div class="doc-input-group">
+                <label class="doc-label">Choose ID Type</label>
+                <select id="doc-type-select" class="doc-field" onchange="updateDocValidation()">
+                    <option value="NIN">National ID (NIN)</option>
+                    <option value="PVC">Permanent Voters Card (PVC)</option>
+                    <option value="DL">Drivers License</option>
+                    <option value="IP">International Passport</option>
+                </select>
+            </div>
+
+            <div class="doc-input-group">
+                <label class="doc-label" id="id-number-label">Enter 11-Digit NIN Number</label>
+                <input type="number" id="id-number-input" class="doc-field" placeholder="00000000000" oninput="validateNumber()">
+                <p id="number-error" class="error-text">Number must be exactly 11 digits</p>
+            </div>
+
+            <button id="next-to-upload" disabled onclick="toggleKycSteps(2)" class="doc-btn">Continue to Upload</button>
+        </div>
+
+        <div id="kyc-doc-step-2" class="kyc-hidden">
+            <h2 class="text-lg font-black text-white uppercase mb-2">Upload Documents</h2>
+            <p class="text-[10px] text-gray-500 mb-6 uppercase">Send clear photos to team.competentraders@gmail.com</p>
+
+            <a href="mailto:team.competentraders@gmail.com?subject=KYC Document Submission&body=Please attach front and back photos of my ID." class="upload-box block">
+                <i class="fas fa-camera text-blue-500 mb-2"></i>
+                <p class="text-[11px] font-bold text-white uppercase">Attach Front of ID</p>
+                <p class="text-[9px] text-gray-500">Click to open mail app</p>
+            </a>
+
+            <a href="mailto:team.competentraders@gmail.com?subject=KYC Document Submission&body=Please attach front and back photos of my ID." class="upload-box block">
+                <i class="fas fa-camera text-blue-500 mb-2"></i>
+                <p class="text-[11px] font-bold text-white uppercase">Attach Back of ID</p>
+                <p class="text-[9px] text-gray-500">Click to open mail app</p>
+            </div>
+
+            <button onclick="submitFinalKyc()" class="doc-btn" style="background: #22c55e;">Final Submission</button>
+        </div>
+
+        <div id="kyc-doc-step-3" class="kyc-hidden text-center">
+            <i class="fas fa-check-circle text-7xl text-green-500 mb-6"></i>
+            <h2 class="text-2xl font-black text-white uppercase">Fully Verified</h2>
+            <p class="text-xs text-gray-400 mt-2 px-6 leading-relaxed">Your data has been encrypted and secured. Welcome to the elite platform.</p>
+            <button onclick="closeKycPortal()" class="doc-btn mt-8">Launch Dashboard</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 1. Device recognition: Check if user has already passed
+    if(localStorage.getItem('competent_kyc_passed') === 'true') {
+        document.getElementById('kyc-document-portal').style.display = 'none';
+    }
+
+    // 2. Dynamic Label Update based on selection
+    function updateDocValidation() {
+        const type = document.getElementById('doc-type-select').value;
+        const label = document.getElementById('id-number-label');
+        const input = document.getElementById('id-number-input');
+        
+        input.value = ""; // Clear input on change
+        document.getElementById('number-error').style.display = 'none';
+
+        if(type === 'NIN') label.innerText = "Enter 11-Digit NIN Number";
+        else if(type === 'PVC') label.innerText = "Enter 19-Digit Voter Card Number";
+        else label.innerText = "Enter Document Number";
+        
+        validateNumber();
+    }
+
+    // 3. Security check for number length
+    function validateNumber() {
+        const type = document.getElementById('doc-type-select').value;
+        const val = document.getElementById('id-number-input').value;
+        const btn = document.getElementById('next-to-upload');
+        const error = document.getElementById('number-error');
+        
+        let isValid = false;
+
+        if(type === 'NIN') {
+            isValid = (val.length === 11);
+            error.innerText = "NIN must be exactly 11 digits";
+        } else if(type === 'PVC') {
+            isValid = (val.length >= 10); // PVCs can vary slightly
+            error.innerText = "Invalid Voter ID format";
+        } else {
+            isValid = (val.length >= 8);
+            error.innerText = "ID number too short";
+        }
+
+        if(isValid) {
+            btn.disabled = false;
+            error.style.display = 'none';
+        } else {
+            btn.disabled = true;
+            if(val.length > 0) error.style.display = 'block';
+        }
+    }
+
+    // 4. Navigation
+    function toggleKycSteps(step) {
+        document.getElementById('kyc-doc-step-1').classList.add('kyc-hidden');
+        document.getElementById('kyc-doc-step-2').classList.add('kyc-hidden');
+        document.getElementById(`kyc-doc-step-${step}`).classList.remove('kyc-hidden');
+    }
+
+    // 5. Final Submission Logic
+    function submitFinalKyc() {
+        // Show loading state for realism
+        const card = document.getElementById('kyc-main-content');
+        card.style.opacity = '0.5';
+        
+        setTimeout(() => {
+            card.style.opacity = '1';
+            toggleKycSteps(3);
+        }, 1500);
+    }
+
+    // 6. Close Portal and Save to LocalStorage
+    function closeKycPortal() {
+        localStorage.setItem('competent_kyc_passed', 'true');
+        document.getElementById('kyc-document-portal').style.display = 'none';
+    }
+</script>
+
+
+
+
+
+
