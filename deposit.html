@@ -3,132 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Checkout | Opay Gateway</title>
+    <title>Secure Checkout | OPay Gateway</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f4f7f9; color: #1a1a1a; }
-        .checkout-box { background: white; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
-        .timer-progress { height: 100%; background: #00d38d; width: 100%; transition: width 1s linear; }
-        .copy-btn { color: #0066ff; font-weight: 700; font-size: 0.75rem; border: 1px solid #eef2f6; padding: 4px 10px; border-radius: 6px; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        .gateway-card { background: #ffffff; color: #1a1a1a; border-radius: 24px; }
+        .input-box { background: #f8fafc; border: 2px solid #e2e8f0; color: #1a1a1a !important; }
         .opay-green { color: #00d38d; }
+        .opay-bg-green { background-color: #00d38d; }
+        .timer-progress { height: 100%; background: #00d38d; width: 100%; transition: width 1s linear; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="p-4 flex items-center justify-center min-h-screen">
 
-    <div class="w-full max-w-md checkout-box overflow-hidden">
+    <div class="w-full max-w-md gateway-card overflow-hidden shadow-2xl">
         <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-white">
-            <div>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Amount to Pay</p>
-                <h2 class="text-2xl font-black text-gray-800" id="displayAmount">₦5,000.00</h2>
-            </div>
-            <div class="text-right flex flex-col items-end">
-                <div class="flex items-center gap-1">
-                    <div class="w-6 h-6 bg-[#00d38d] rounded-full flex items-center justify-center">
-                        <i class="fas fa-bolt text-white text-[10px]"></i>
-                    </div>
-                    <span class="font-black text-xl tracking-tighter italic">OPay</span>
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 opay-bg-green rounded-full flex items-center justify-center">
+                    <i class="fas fa-bolt text-white text-sm"></i>
                 </div>
-                <span class="text-[9px] font-bold text-gray-300 uppercase">Gateway Payment</span>
+                <span class="font-black text-2xl tracking-tighter italic opay-green">OPay</span>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Gateway Payment</p>
             </div>
         </div>
 
-        <div class="px-6 py-4 bg-gray-50 flex flex-col gap-2">
-            <div class="flex justify-between items-center">
-                <span class="text-[11px] font-bold text-gray-500 uppercase">Payment Window Expires in:</span>
-                <span class="font-mono font-bold text-red-500" id="countdown">60:00</span>
+        <div class="p-6 bg-gray-50 border-b border-gray-100">
+            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Enter Deposit Amount (NGN)</label>
+            <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 font-black text-gray-400 text-xl">₦</span>
+                <input type="number" id="depositAmount" placeholder="Min: 5,000" 
+                    class="w-full pl-10 pr-4 py-4 input-box rounded-2xl font-black text-2xl focus:outline-none focus:border-[#00d38d] transition">
             </div>
-            <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                <div id="progress" class="timer-progress"></div>
-            </div>
+            <p class="text-[10px] mt-2 text-gray-400 font-bold italic">* Minimum deposit of ₦5,000 required.</p>
         </div>
 
-        <div class="p-8">
-            <div class="space-y-6">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-gray-400 uppercase">Bank</span>
-                    <span class="font-bold text-gray-800 text-right">OPay / Digital Bank</span>
-                </div>
-
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-gray-400 uppercase">Account Number</span>
-                    <div class="text-right">
-                        <span class="block font-black text-2xl text-gray-900 tracking-tight" id="accNum">6119316029</span>
-                        <button onclick="copyText('6119316029')" class="copy-btn mt-1 hover:bg-blue-50 transition">COPY NUMBER</button>
-                    </div>
-                </div>
-
-                <div class="flex justify-between items-start">
-                    <span class="text-xs font-semibold text-gray-400 uppercase">Beneficiary</span>
-                    <span class="font-bold text-gray-800 text-right">Godswill Business Account</span>
-                </div>
-
-                <div class="bg-blue-50 p-4 rounded-xl flex justify-between items-center border border-blue-100">
-                    <div>
-                        <p class="text-[10px] text-blue-400 font-bold uppercase">Transaction Narration</p>
-                        <p class="font-mono font-black text-blue-700" id="refCode">TRX-7821</p>
-                    </div>
-                    <button onclick="copyText(document.getElementById('refCode').innerText)" class="text-blue-600 text-xs font-bold underline">Copy</button>
-                </div>
-            </div>
-
-            <div class="mt-8">
-                <button onclick="confirmPayment(this)" class="w-full py-4 bg-[#1a1a1a] text-white rounded-xl font-bold text-sm shadow-xl hover:bg-black transition active:scale-95 flex items-center justify-center gap-3">
-                    I HAVE SENT THE MONEY
-                </button>
-                <p class="text-center mt-4 text-[10px] text-gray-400 font-medium">
-                    Please ensure you use the narration code above to avoid delays.
+        <div class="p-6 space-y-5">
+            <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-xl flex gap-3">
+                <i class="fas fa-circle-exclamation text-yellow-600 mt-1"></i>
+                <p class="text-[11px] text-yellow-800 font-bold leading-tight">
+                    PLEASE NOTE: Open your bank app and complete the transfer to the account below BEFORE clicking the confirm button.
                 </p>
             </div>
+
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-gray-400">BANK NAME</span>
+                    <span class="font-black text-sm text-gray-800 uppercase tracking-tighter">Opay Digital Bank</span>
+                </div>
+                
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-gray-400 uppercase">Account Number</span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-black text-xl text-gray-900" id="accNum">6119316029</span>
+                        <button onclick="copyText('6119316029')" class="text-blue-600 text-[10px] font-black underline uppercase">Copy</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-gray-400 uppercase">Account Name</span>
+                    <span class="font-black text-[13px] text-gray-800 uppercase">Godswill Business Account</span>
+                </div>
+
+                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-dashed border-gray-200">
+                    <span class="text-xs font-bold text-gray-400 uppercase">Narration</span>
+                    <span class="font-black text-sm text-[#00d38d]" id="refCode">PAY-7821</span>
+                </div>
+            </div>
+
+            <div class="w-full bg-gray-100 h-1 rounded-full overflow-hidden mt-4">
+                <div id="progress" class="timer-progress"></div>
+            </div>
+            <p class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest">Session expires in <span id="timer">60:00</span></p>
+
+            <button onclick="processDeposit()" class="w-full py-5 opay-bg-green text-white rounded-2xl font-black text-sm uppercase shadow-lg shadow-green-200 active:scale-95 transition mt-2">
+                I Have Sent The Money
+            </button>
         </div>
 
-        <div class="p-4 bg-white border-t border-gray-50 flex justify-center items-center gap-2">
-            <i class="fas fa-shield-alt text-gray-300 text-xs"></i>
-            <span class="text-[9px] text-gray-400 uppercase font-black tracking-widest">Secured by OPay Infrastructure</span>
+        <div class="p-4 text-center">
+            <a href="user-dashboard.html" class="text-[10px] font-black text-gray-300 uppercase hover:text-red-500 transition">Cancel Transaction</a>
+        </div>
+    </div>
+
+    <div id="toast" class="hidden fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-6 text-center">
+        <div class="bg-white p-8 rounded-3xl max-w-xs w-full">
+            <div class="w-20 h-20 opay-bg-green rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl">
+                <i class="fas fa-check text-white text-3xl"></i>
+            </div>
+            <h3 class="text-gray-900 font-black text-xl mb-2 uppercase">Payment Sent!</h3>
+            <p class="text-gray-500 text-xs font-bold leading-relaxed mb-6">Your balance has been updated. Please wait while we redirect you to your dashboard.</p>
+            <div class="flex justify-center">
+                <i class="fas fa-circle-notch fa-spin text-[#00d38d]"></i>
+            </div>
         </div>
     </div>
 
     <script>
-        // Set Amount
-        const depositAmt = localStorage.getItem('lastDepositAmount') || "5,000";
-        document.getElementById('displayAmount').innerText = "₦" + depositAmt;
-
-        // Random Reference
-        const ref = "CT" + Math.floor(1000 + Math.random() * 9000);
+        // Generate Reference
+        const ref = "PAY-" + Math.floor(1000 + Math.random() * 9000);
         document.getElementById('refCode').innerText = ref;
 
         // Timer Logic
         let timeLeft = 3600; 
-        const countdownElem = document.getElementById('countdown');
+        const timerElem = document.getElementById('timer');
         const progressElem = document.getElementById('progress');
 
-        const timer = setInterval(() => {
-            let minutes = Math.floor(timeLeft / 60);
-            let seconds = timeLeft % 60;
-            countdownElem.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            let percentage = (timeLeft / 3600) * 100;
-            progressElem.style.width = percentage + "%";
-            if (timeLeft <= 0) { clearInterval(timer); window.location.href = "user-dashboard.html"; }
+        setInterval(() => {
+            if (timeLeft <= 0) return;
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            timerElem.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            progressElem.style.width = (timeLeft / 3600) * 100 + "%";
             timeLeft--;
         }, 1000);
 
         function copyText(text) {
             navigator.clipboard.writeText(text);
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = "COPIED!";
-            setTimeout(() => btn.innerText = originalText, 2000);
+            alert("Account Details Copied!");
         }
 
-        function confirmPayment(btn) {
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> VERIFYING...';
-            btn.disabled = true;
+        function processDeposit() {
+            const amountInput = document.getElementById('depositAmount');
+            const amount = parseFloat(amountInput.value);
 
+            if (!amount || amount < 5000) {
+                alert("Please enter an amount from ₦5,000 and above.");
+                return;
+            }
+
+            // 1. UPDATE LOCAL STORAGE IMMEDIATELY (As requested)
+            let currentBalance = parseFloat(localStorage.getItem('accountBalance')) || 0.00;
+            let newBalance = currentBalance + amount;
+            localStorage.setItem('accountBalance', newBalance);
+
+            // 2. SHOW SUCCESS OVERLAY
+            document.getElementById('toast').classList.remove('hidden');
+
+            // 3. REDIRECT TO EMAIL THEN DASHBOARD
             setTimeout(() => {
-                alert("Thank you! Our finance team is verifying your transfer (" + ref + "). Your wallet will be updated within 5-10 minutes.");
-                window.location.href = "user-dashboard.html";
-            }, 3000);
+                const subject = encodeURIComponent("Deposit Confirmation - Competentraders");
+                const body = encodeURIComponent(`Hello Admin,\n\nI have just deposited ₦${amount.toLocaleString()} into the Opay account.\n\nTransaction Reference: ${ref}\n\nPlease confirm my transaction.`);
+                window.location.href = `mailto:competentraders@gmail.com?subject=${subject}&body=${body}`;
+                
+                setTimeout(() => {
+                    window.location.href = "user-dashboard.html";
+                }, 1500);
+            }, 2500);
         }
     </script>
 </body>
