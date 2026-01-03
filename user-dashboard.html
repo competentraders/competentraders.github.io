@@ -30,9 +30,38 @@
         .section-tag { font-size: 10px; color: #475569; padding: 18px 25px 5px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; }
 
         .chart-section { height: 45vh; width: 100%; position: relative; border-bottom: 2px solid #1e222d; }
-        .plan-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 20px; padding: 20px; margin-bottom: 15px; }
+        .plan-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
         
         .ticker-bar { position: fixed; bottom: 0; width: 100%; height: 46px; background: #131722; z-index: 1000; border-top: 1px solid #2d3343; }
+
+        /* KYC STYLES */
+        #kyc-document-portal {
+            position: fixed; inset: 0; background: #06070a; z-index: 9999;
+            display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .kyc-doc-card {
+            background: #0f111a; border: 1px solid #1e293b; width: 100%; max-width: 420px;
+            padding: 30px; border-radius: 35px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.1);
+        }
+        .doc-input-group { margin-bottom: 20px; text-align: left; }
+        .doc-label { font-size: 10px; font-weight: bold; color: #475569; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; display: block; }
+        .doc-field {
+            width: 100%; background: #131722; border: 1px solid #1e293b; color: white;
+            padding: 15px; border-radius: 15px; font-size: 14px; outline: none; transition: 0.3s;
+        }
+        .doc-field:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
+        .doc-btn {
+            width: 100%; padding: 18px; background: #3b82f6; color: white; border: none;
+            border-radius: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer;
+        }
+        .doc-btn:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
+        .upload-box {
+            border: 2px dashed #1e293b; padding: 15px; border-radius: 20px;
+            text-align: center; margin-bottom: 15px; transition: 0.3s;
+        }
+        .upload-box:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        .kyc-hidden { display: none; }
+        .error-text { color: #ef4444; font-size: 10px; margin-top: 5px; font-weight: bold; display: none; }
     </style>
 </head>
 <body class="pb-20">
@@ -58,25 +87,8 @@
         <a href="deposit.html" class="nav-link"><i class="fas fa-wallet text-green-500"></i> Deposit Funds</a>
         <a href="withdraw.html" class="nav-link"><i class="fas fa-money-bill-transfer text-orange-500"></i> Withdrawal</a>
 
-
-
-
-
-
-<a href="football-predictions.html" class="flex items-center gap-4 p-4 hover:bg-blue-600/10 transition-all rounded-2xl group">
-    <div class="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center text-green-500 group-hover:bg-green-500 group-hover:text-white transition-all">
-        <i class="fas fa-futbol"></i>
-    </div>
-    <span class="font-bold text-sm uppercase tracking-widest">Football Predictions</span>
-</a>
-
-<a href="cryptocurrency.html" class="flex items-center gap-4 p-4 hover:bg-blue-600/10 transition-all rounded-2xl group">
-    <div class="w-10 h-10 bg-orange-500/20 rounded-xl flex items-center justify-center text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all">
-        <i class="fab fa-bitcoin"></i>
-    </div>
-    <span class="font-bold text-sm uppercase tracking-widest">Cryptocurrency</span>
-</a>
-
+        <a href="football-predictions.html" class="nav-link"><i class="fas fa-futbol text-green-500"></i> Football Predictions</a>
+        <a href="cryptocurrency.html" class="nav-link"><i class="fab fa-bitcoin text-orange-500"></i> Cryptocurrency</a>
 
         <p class="section-tag">Account & Settings</p>
         <a href="profile.html" class="nav-link"><i class="fas fa-user-circle text-blue-400"></i> User Profile</a>
@@ -95,111 +107,70 @@
         </div>
     </div>
 
-
-
-
     <div class="chart-section">
         <div id="tradingview_live" style="height: 100%; width: 100%;"></div>
     </div>
 
-<br><br>
-
-
-
-
-<div class="p-2">
-    <p class="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-3 ml-1">
-        Want to trade and make money on your own? Click the link below.
-    </p>
-    <a href="trading.html" class="flex items-center gap-4 p-4 hover:bg-blue-600/10 transition-all rounded-2xl group border border-blue-500/20 bg-[#0f111a] shadow-lg shadow-blue-900/10">
-        <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-all shadow-lg shadow-blue-500/40">
-            <i class="fas fa-chart-line"></i>
-        </div>
-        <div class="flex flex-col">
-            <span class="font-black text-sm uppercase tracking-widest text-white">Live Trading Terminal</span>
-            <span class="text-[9px] text-blue-400 font-black uppercase tracking-tighter">Access Professional Markets</span>
-        </div>
-        <div class="ml-auto text-gray-600 group-hover:text-blue-500 transition-colors">
-            <i class="fas fa-chevron-right"></i>
-        </div>
-    </a>
-</div>
-
-<br><br>
-
-
-
-
-
-
-
+    <div class="p-4 mt-6">
+        <p class="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-3 ml-1">
+            Want to trade and make money on your own? Click the link below.
+        </p>
+        <a href="trading.html" class="flex items-center gap-4 p-4 hover:bg-blue-600/10 transition-all rounded-2xl group border border-blue-500/20 bg-[#0f111a] shadow-lg shadow-blue-900/10">
+            <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white group-hover:scale-110 transition-all shadow-lg shadow-blue-500/40">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="font-black text-sm uppercase tracking-widest text-white">Live Trading Terminal</span>
+                <span class="text-[9px] text-blue-400 font-black uppercase tracking-tighter">Access Professional Markets</span>
+            </div>
+            <div class="ml-auto text-gray-600 group-hover:text-blue-500 transition-colors">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </a>
+    </div>
 
     <div class="p-4 bg-[#06070a]">
         
-        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-4"><i class="fas fa-futbol"></i> SPORTS INVESTMENT</h2>
-
-
-
-
-
-
-
-
-
-
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8 uppercase"><i class="fas fa-futbol"></i> Sports Investment</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div class="plan-card">
                 <p class="text-xs font-bold text-gray-500">DAILY</p>
                 <h3 class="text-2xl font-black">N1,000</h3>
-                <p class="text-green-500 text-sm mb-4">Return: 2,500</p>
+                <p class="text-green-500 text-sm mb-4">Return: N2,500</p>
                 <button onclick="buyPlan(1000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
             </div>
-
-
             <div class="plan-card">
                 <p class="text-xs font-bold text-gray-500">WEEKLY</p>
                 <h3 class="text-2xl font-black">N5,000</h3>
                 <p class="text-green-500 text-sm mb-4">Return: N15,000</p>
                 <button onclick="buyPlan(5000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
             </div>
-        </div>
-
-
-
-<div class="plan-card">
-                <p class="text-xs font-bold text-gray-500">3WEEKS</p>
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500">3 WEEKS</p>
                 <h3 class="text-2xl font-black">N55,000</h3>
                 <p class="text-green-500 text-sm mb-4">Return: N175,000</p>
-                <button onclick="buyPlan(5000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
+                <button onclick="buyPlan(55000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
             </div>
-        </div>
-
-
-
-
-<div class="plan-card">
-                <p class="text-xs font-bold text-gray-500">1MONTH 2 WEEKS</p>
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500">1 MONTH 2 WEEKS</p>
                 <h3 class="text-2xl font-black">N255,000</h3>
                 <p class="text-green-500 text-sm mb-4">Return: N495,000</p>
-                <button onclick="buyPlan(5000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
+                <button onclick="buyPlan(255000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
             </div>
         </div>
 
-
-
-        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8"><i class="fas fa-chart-line"></i> FOREX TRADING</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8 uppercase"><i class="fas fa-chart-line"></i> Forex Trading</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div class="plan-card">
                 <p class="text-xs font-bold text-gray-500">WEEKLY</p>
                 <h3 class="text-2xl font-black">N50,000</h3>
                 <p class="text-green-500 text-sm mb-4">Return: N100,000</p>
-                <button onclick="buyPlan(50,000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
+                <button onclick="buyPlan(50000)" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs">BUY SUBSCRIPTION</button>
             </div>
         </div>
 
-        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8"><i class="fas fa-vault"></i> CPT INVEST 4 ME</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8 uppercase"><i class="fas fa-vault"></i> CPT Invest 4 Me</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div class="plan-card border-blue-500/30">
                 <p class="text-xs font-bold text-gray-500">MONTHLY</p>
                 <h3 class="text-2xl font-black">N20,000</h3>
@@ -208,6 +179,59 @@
             </div>
         </div>
 
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8 uppercase"><i class="fas fa-building"></i> Real Estate Assets</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500 uppercase">Quarterly Yield</p>
+                <h3 class="text-2xl font-black text-white">N150,000</h3>
+                <p class="text-green-500 text-sm mb-4">Projected Return: N245,000</p>
+                <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase">Buy Subscription</a>
+            </div>
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500 uppercase">Quarterly Yield</p>
+                <h3 class="text-2xl font-black text-white">N250,000</h3>
+                <p class="text-green-500 text-sm mb-4">Projected Return: N410,000</p>
+                <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase">Buy Subscription</a>
+            </div>
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500 uppercase">Quarterly Yield</p>
+                <h3 class="text-2xl font-black text-white">N550,000</h3>
+                <p class="text-green-500 text-sm mb-4">Projected Return: N920,000</p>
+                <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase">Buy Subscription</a>
+            </div>
+            <div class="plan-card">
+                <p class="text-xs font-bold text-gray-500 uppercase">Annual Growth</p>
+                <h3 class="text-2xl font-black text-white">N1,550,000</h3>
+                <p class="text-green-500 text-sm mb-4">Projected Return: N3,200,000</p>
+                <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase">Buy Subscription</a>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8 uppercase"><i class="fas fa-seedling"></i> Agro-Tech Fund</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="plan-card border-green-500/20">
+                <p class="text-xs font-bold text-gray-500 uppercase">6 Months Cycle</p>
+                <h3 class="text-2xl font-black text-white">N35,000</h3>
+                <p class="text-green-500 text-sm mb-4">Return: N65,000</p>
+                <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase">Buy Subscription</a>
+            </div>
+            <div class="plan-card border-green-500/20">
+                <p class="text-xs font-bold text-gray-500 uppercase">Harvest Plan</p>
+                <h3 class="text-2xl font-black text-white">N100,000</h3>
+                <p class="text-green-500 text-sm mb-4">Return: N190,000</p>
+                <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase">Buy Subscription</a>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8 uppercase"><i class="fas fa-rocket"></i> Venture Capital</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="plan-card border-purple-500/20">
+                <p class="text-xs font-bold text-gray-500 uppercase">Seed Level</p>
+                <h3 class="text-2xl font-black text-white">N250,000</h3>
+                <p class="text-green-500 text-sm mb-4">Equity Return: N550,000</p>
+                <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase">Buy Subscription</a>
+            </div>
+        </div>
     </div>
 
     <div class="ticker-bar">
@@ -218,9 +242,112 @@
         </div>
     </div>
 
+    <div id="kyc-document-portal">
+        <div class="kyc-doc-card" id="kyc-main-content">
+            <div id="kyc-doc-step-1">
+                <div class="text-center mb-6">
+                    <h2 class="text-xl font-black text-white uppercase italic">KYC <span class="text-blue-500">Security</span></h2>
+                    <p class="text-[10px] text-gray-500 uppercase mt-1">Identity Verification Required</p>
+                </div>
+                <div class="doc-input-group">
+                    <label class="doc-label">Choose ID Type</label>
+                    <select id="doc-type-select" class="doc-field" onchange="updateDocValidation()">
+                        <option value="NIN">National ID (NIN)</option>
+                        <option value="PVC">Permanent Voters Card (PVC)</option>
+                        <option value="DL">Drivers License</option>
+                        <option value="IP">International Passport</option>
+                    </select>
+                </div>
+                <div class="doc-input-group">
+                    <label class="doc-label" id="id-number-label">Enter 11-Digit NIN Number</label>
+                    <input type="number" id="id-number-input" class="doc-field" placeholder="00000000000" oninput="validateNumber()">
+                    <p id="number-error" class="error-text">Number must be exactly 11 digits</p>
+                </div>
+                <button id="next-to-upload" disabled onclick="toggleKycSteps(2)" class="doc-btn">Continue to Upload</button>
+            </div>
+
+            <div id="kyc-doc-step-2" class="kyc-hidden">
+                <h2 class="text-lg font-black text-white uppercase mb-2">Upload Documents</h2>
+                <p class="text-[10px] text-gray-500 mb-6 uppercase">Send clear photos to team.competentraders@gmail.com</p>
+                <a href="mailto:team.competentraders@gmail.com?subject=KYC Document Submission" class="upload-box block">
+                    <i class="fas fa-camera text-blue-500 mb-2"></i>
+                    <p class="text-[11px] font-bold text-white uppercase">Attach Front of ID</p>
+                </a>
+                <a href="mailto:team.competentraders@gmail.com?subject=KYC Document Submission" class="upload-box block">
+                    <i class="fas fa-camera text-blue-500 mb-2"></i>
+                    <p class="text-[11px] font-bold text-white uppercase">Attach Back of ID</p>
+                </a>
+                <button onclick="submitFinalKyc()" class="doc-btn" style="background: #22c55e;">Final Submission</button>
+            </div>
+
+            <div id="kyc-doc-step-3" class="kyc-hidden text-center">
+                <i class="fas fa-check-circle text-7xl text-green-500 mb-6"></i>
+                <h2 class="text-2xl font-black text-white uppercase">Fully Verified</h2>
+                <p class="text-xs text-gray-400 mt-2 px-6 leading-relaxed">Your data has been secured. Welcome to the elite platform.</p>
+                <button onclick="closeKycPortal()" class="doc-btn mt-8">Launch Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-[#0b0d12] border-t border-white/5 pt-12 pb-24 px-6 mt-20">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div class="col-span-1">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="font-[900] italic text-white uppercase text-lg tracking-tighter">Competent<span class="text-blue-500">raders</span></span>
+                    </div>
+                    <p class="text-gray-500 text-xs leading-relaxed font-bold uppercase tracking-wider">
+                        The world's most advanced secure gateway for high-frequency trading and precision sports analytics.
+                    </p>
+                    <div class="flex gap-4 mt-6">
+                        <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors"><i class="fab fa-telegram fa-lg"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors"><i class="fab fa-whatsapp fa-lg"></i></a>
+                        <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors"><i class="fab fa-twitter fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-[10px] font-black text-white uppercase tracking-[3px] mb-6">Navigation</h4>
+                    <ul class="space-y-3">
+                        <li><a href="user-dashboard.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Terminal Home</a></li>
+                        <li><a href="cryptocurrency.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Live Markets</a></li>
+                        <li><a href="football-predictions.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Sports Analysis</a></li>
+                        <li><a href="referral.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Affiliate Program</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-[10px] font-black text-white uppercase tracking-[3px] mb-6">Support</h4>
+                    <ul class="space-y-3">
+                        <li><a href="faq.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Technical FAQ</a></li>
+                        <li><a href="terms.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Terms of Service</a></li>
+                        <li><a href="help.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Knowledge Base</a></li>
+                        <li><a href="customer-service.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Contact Desk</a></li>
+                    </ul>
+                </div>
+
+                <div class="bg-white/5 p-6 rounded-3xl border border-white/5 text-center">
+                    <i class="fas fa-shield-halved text-blue-500 text-3xl mb-3"></i>
+                    <h4 class="text-[10px] font-black text-white uppercase mb-2">Military Grade Security</h4>
+                    <p class="text-[9px] text-gray-500 font-bold uppercase">All transactions are encrypted with 256-bit SSL protocols.</p>
+                </div>
+            </div>
+
+            <hr class="border-white/5 mb-8">
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-[10px] text-gray-600 font-black uppercase tracking-widest">&copy; 2026 Competentraders Ltd.</p>
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-[9px] text-gray-500 font-black uppercase tracking-widest">Global Server Status: Operational</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
-        // Load Balance logic
+        // Balance logic
         let balance = parseFloat(localStorage.getItem('accountBalance')) || 0.00;
         function updateUI() {
             document.getElementById('menuBalance').innerText = "₦" + balance.toLocaleString(undefined, {minimumFractionDigits: 2});
@@ -245,332 +372,50 @@
             "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1S",
             "theme": "dark", "container_id": "tradingview_live", "preset": "mobile"
         });
+
+        // KYC LOGIC
+        if(localStorage.getItem('competent_kyc_passed') === 'true') {
+            document.getElementById('kyc-document-portal').style.display = 'none';
+        }
+
+        function updateDocValidation() {
+            const type = document.getElementById('doc-type-select').value;
+            const label = document.getElementById('id-number-label');
+            const input = document.getElementById('id-number-input');
+            input.value = ""; 
+            document.getElementById('number-error').style.display = 'none';
+            if(type === 'NIN') label.innerText = "Enter 11-Digit NIN Number";
+            else if(type === 'PVC') label.innerText = "Enter 19-Digit Voter Card Number";
+            else label.innerText = "Enter Document Number";
+            validateNumber();
+        }
+
+        function validateNumber() {
+            const type = document.getElementById('doc-type-select').value;
+            const val = document.getElementById('id-number-input').value;
+            const btn = document.getElementById('next-to-upload');
+            const error = document.getElementById('number-error');
+            let isValid = (type === 'NIN' ? val.length === 11 : val.length >= 8);
+            btn.disabled = !isValid;
+            error.style.display = (val.length > 0 && !isValid) ? 'block' : 'none';
+        }
+
+        function toggleKycSteps(step) {
+            document.getElementById('kyc-doc-step-1').classList.add('kyc-hidden');
+            document.getElementById('kyc-doc-step-2').classList.add('kyc-hidden');
+            document.getElementById(`kyc-doc-step-${step}`).classList.remove('kyc-hidden');
+        }
+
+        function submitFinalKyc() {
+            const card = document.getElementById('kyc-main-content');
+            card.style.opacity = '0.5';
+            setTimeout(() => { card.style.opacity = '1'; toggleKycSteps(3); }, 1500);
+        }
+
+        function closeKycPortal() {
+            localStorage.setItem('competent_kyc_passed', 'true');
+            document.getElementById('kyc-document-portal').style.display = 'none';
+        }
     </script>
 </body>
 </html>
-
-
-
-
-
-<style>
-    #kyc-document-portal {
-        position: fixed; inset: 0; background: #06070a; z-index: 9999;
-        display: flex; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif;
-        padding: 20px;
-    }
-    .kyc-doc-card {
-        background: #0f111a; border: 1px solid #1e293b; width: 100%; max-width: 420px;
-        padding: 30px; border-radius: 35px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.1);
-    }
-    .doc-input-group { margin-bottom: 20px; text-align: left; }
-    .doc-label { font-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block; }
-    .doc-field {
-        width: 100%; background: #131722; border: 1px solid #1e293b; color: white;
-        padding: 15px; border-radius: 15px; font-size: 14px; outline: none; transition: 0.3s;
-    }
-    .doc-field:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); }
-    .doc-btn {
-        width: 100%; padding: 18px; background: #3b82f6; color: white; border: none;
-        border-radius: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer;
-    }
-    .doc-btn:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
-    .upload-box {
-        border: 2px dashed #1e293b; padding: 15px; border-radius: 20px;
-        text-align: center; margin-bottom: 15px; transition: 0.3s;
-    }
-    .upload-box:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
-    .kyc-hidden { display: none; }
-    .error-text { color: #ef4444; font-size: 10px; margin-top: 5px; font-weight: bold; display: none; }
-</style>
-
-<div id="kyc-document-portal">
-    <div class="kyc-doc-card" id="kyc-main-content">
-        
-        <div id="kyc-doc-step-1">
-            <div class="text-center mb-6">
-                <h2 class="text-xl font-black text-white uppercase italic">KYC <span class="text-blue-500">Security</span></h2>
-                <p class="text-[10px] text-gray-500 uppercase mt-1">Identity Verification Required</p>
-            </div>
-
-            <div class="doc-input-group">
-                <label class="doc-label">Choose ID Type</label>
-                <select id="doc-type-select" class="doc-field" onchange="updateDocValidation()">
-                    <option value="NIN">National ID (NIN)</option>
-                    <option value="PVC">Permanent Voters Card (PVC)</option>
-                    <option value="DL">Drivers License</option>
-                    <option value="IP">International Passport</option>
-                </select>
-            </div>
-
-            <div class="doc-input-group">
-                <label class="doc-label" id="id-number-label">Enter 11-Digit NIN Number</label>
-                <input type="number" id="id-number-input" class="doc-field" placeholder="00000000000" oninput="validateNumber()">
-                <p id="number-error" class="error-text">Number must be exactly 11 digits</p>
-            </div>
-
-            <button id="next-to-upload" disabled onclick="toggleKycSteps(2)" class="doc-btn">Continue to Upload</button>
-        </div>
-
-        <div id="kyc-doc-step-2" class="kyc-hidden">
-            <h2 class="text-lg font-black text-white uppercase mb-2">Upload Documents</h2>
-            <p class="text-[10px] text-gray-500 mb-6 uppercase">Send clear photos to team.competentraders@gmail.com</p>
-
-            <a href="mailto:team.competentraders@gmail.com?subject=KYC Document Submission&body=Please attach front and back photos of my ID." class="upload-box block">
-                <i class="fas fa-camera text-blue-500 mb-2"></i>
-                <p class="text-[11px] font-bold text-white uppercase">Attach Front of ID</p>
-                <p class="text-[9px] text-gray-500">Click to open mail app</p>
-            </a>
-
-            <a href="mailto:team.competentraders@gmail.com?subject=KYC Document Submission&body=Please attach front and back photos of my ID." class="upload-box block">
-                <i class="fas fa-camera text-blue-500 mb-2"></i>
-                <p class="text-[11px] font-bold text-white uppercase">Attach Back of ID</p>
-                <p class="text-[9px] text-gray-500">Click to open mail app</p>
-            </div>
-
-            <button onclick="submitFinalKyc()" class="doc-btn" style="background: #22c55e;">Final Submission</button>
-        </div>
-
-        <div id="kyc-doc-step-3" class="kyc-hidden text-center">
-            <i class="fas fa-check-circle text-7xl text-green-500 mb-6"></i>
-            <h2 class="text-2xl font-black text-white uppercase">Fully Verified</h2>
-            <p class="text-xs text-gray-400 mt-2 px-6 leading-relaxed">Your data has been encrypted and secured. Welcome to the elite platform.</p>
-            <button onclick="closeKycPortal()" class="doc-btn mt-8">Launch Dashboard</button>
-        </div>
-
-    </div>
-</div>
-
-<script>
-    // 1. Device recognition: Check if user has already passed
-    if(localStorage.getItem('competent_kyc_passed') === 'true') {
-        document.getElementById('kyc-document-portal').style.display = 'none';
-    }
-
-    // 2. Dynamic Label Update based on selection
-    function updateDocValidation() {
-        const type = document.getElementById('doc-type-select').value;
-        const label = document.getElementById('id-number-label');
-        const input = document.getElementById('id-number-input');
-        
-        input.value = ""; // Clear input on change
-        document.getElementById('number-error').style.display = 'none';
-
-        if(type === 'NIN') label.innerText = "Enter 11-Digit NIN Number";
-        else if(type === 'PVC') label.innerText = "Enter 19-Digit Voter Card Number";
-        else label.innerText = "Enter Document Number";
-        
-        validateNumber();
-    }
-
-    // 3. Security check for number length
-    function validateNumber() {
-        const type = document.getElementById('doc-type-select').value;
-        const val = document.getElementById('id-number-input').value;
-        const btn = document.getElementById('next-to-upload');
-        const error = document.getElementById('number-error');
-        
-        let isValid = false;
-
-        if(type === 'NIN') {
-            isValid = (val.length === 11);
-            error.innerText = "NIN must be exactly 11 digits";
-        } else if(type === 'PVC') {
-            isValid = (val.length >= 10); // PVCs can vary slightly
-            error.innerText = "Invalid Voter ID format";
-        } else {
-            isValid = (val.length >= 8);
-            error.innerText = "ID number too short";
-        }
-
-        if(isValid) {
-            btn.disabled = false;
-            error.style.display = 'none';
-        } else {
-            btn.disabled = true;
-            if(val.length > 0) error.style.display = 'block';
-        }
-    }
-
-    // 4. Navigation
-    function toggleKycSteps(step) {
-        document.getElementById('kyc-doc-step-1').classList.add('kyc-hidden');
-        document.getElementById('kyc-doc-step-2').classList.add('kyc-hidden');
-        document.getElementById(`kyc-doc-step-${step}`).classList.remove('kyc-hidden');
-    }
-
-    // 5. Final Submission Logic
-    function submitFinalKyc() {
-        // Show loading state for realism
-        const card = document.getElementById('kyc-main-content');
-        card.style.opacity = '0.5';
-        
-        setTimeout(() => {
-            card.style.opacity = '1';
-            toggleKycSteps(3);
-        }, 1500);
-    }
-
-    // 6. Close Portal and Save to LocalStorage
-    function closeKycPortal() {
-        localStorage.setItem('competent_kyc_passed', 'true');
-        document.getElementById('kyc-document-portal').style.display = 'none';
-    }
-</script>
-
-
-
-<div class="p-4 bg-[#06070a]">
-    
-    <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8">
-        <i class="fas fa-building"></i> REAL ESTATE ASSETS
-    </h2>
-
-
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="plan-card">
-            <p class="text-xs font-bold text-gray-500 uppercase">Quarterly Yield</p>
-            <h3 class="text-2xl font-black text-white">N150,000</h3>
-
-
-
-
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="plan-card">
-            <p class="text-xs font-bold text-gray-500 uppercase">Quarterly Yield</p>
-            <h3 class="text-2xl font-black text-white">N250,000</h3>
-
-
-
-
-
-
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="plan-card">
-            <p class="text-xs font-bold text-gray-500 uppercase">Quarterly Yield</p>
-            <h3 class="text-2xl font-black text-white">N550,000</h3>
-
-
-
-
-
-
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="plan-card">
-            <p class="text-xs font-bold text-gray-500 uppercase">Quarterly Yield</p>
-            <h3 class="text-2xl font-black text-white">N1,550,000</h3>
-
-
-
-
-            <p class="text-green-500 text-sm mb-4">Projected Return: N245,000</p>
-            <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-[1.02] transition-transform">Buy Subscription</a>
-        </div>
-        <div class="plan-card">
-            <p class="text-xs font-bold text-gray-500 uppercase">Annual Growth</p>
-            <h3 class="text-2xl font-black text-white">N500,000</h3>
-            <p class="text-green-500 text-sm mb-4">Projected Return: N1,200,000</p>
-            <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-[1.02] transition-transform">Buy Subscription</a>
-        </div>
-    </div>
-
-    <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8">
-        <i class="fas fa-seedling"></i> AGRO-TECH FUND
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="plan-card border-green-500/20">
-            <p class="text-xs font-bold text-gray-500 uppercase">6 Months Cycle</p>
-            <h3 class="text-2xl font-black text-white">N35,000</h3>
-            <p class="text-green-500 text-sm mb-4">Return: N65,000</p>
-            <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-[1.02] transition-transform">Buy Subscription</a>
-        </div>
-        <div class="plan-card border-green-500/20">
-            <p class="text-xs font-bold text-gray-500 uppercase">Harvest Plan</p>
-            <h3 class="text-2xl font-black text-white">N100,000</h3>
-            <p class="text-green-500 text-sm mb-4">Return: N190,000</p>
-            <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-[1.02] transition-transform">Buy Subscription</a>
-        </div>
-    </div>
-
-    <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 mt-8">
-        <i class="fas fa-rocket"></i> VENTURE CAPITAL
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="plan-card border-purple-500/20">
-            <p class="text-xs font-bold text-gray-500 uppercase">Seed Level</p>
-            <h3 class="text-2xl font-black text-white">N250,000</h3>
-            <p class="text-green-500 text-sm mb-4">Equity Return: N550,000</p>
-            <a href="deposit.html" class="block w-full py-3 bg-blue-600 text-center rounded-xl font-bold text-xs uppercase tracking-widest hover:scale-[1.02] transition-transform">Buy Subscription</a>
-        </div>
-    </div>
-
-</div>
-
-
-
-
-
-
-
-<footer class="bg-[#0b0d12] border-t border-white/5 pt-12 pb-24 px-6 mt-20">
-    <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-            
-            <div class="col-span-1 md:col-span-1">
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="font-[900] italic text-white uppercase text-lg tracking-tighter">Competent<span class="text-blue-500">raders</span></span>
-                </div>
-                <p class="text-gray-500 text-xs leading-relaxed font-bold uppercase tracking-wider">
-                    The world's most advanced secure gateway for high-frequency trading and precision sports analytics.
-                </p>
-                <div class="flex gap-4 mt-6">
-                    <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors"><i class="fab fa-telegram fa-lg"></i></a>
-                    <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors"><i class="fab fa-whatsapp fa-lg"></i></a>
-                    <a href="#" class="text-gray-500 hover:text-blue-500 transition-colors"><i class="fab fa-twitter fa-lg"></i></a>
-                </div>
-            </div>
-
-            <div>
-                <h4 class="text-[10px] font-black text-white uppercase tracking-[3px] mb-6">Navigation</h4>
-                <ul class="space-y-3">
-                    <li><a href="user-dashboard.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Terminal Home</a></li>
-                    <li><a href="cryptocurrency.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Live Markets</a></li>
-                    <li><a href="football-predictions.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Sports Analysis</a></li>
-                    <li><a href="referral.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Affiliate Program</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="text-[10px] font-black text-white uppercase tracking-[3px] mb-6">Support</h4>
-                <ul class="space-y-3">
-                    <li><a href="faq.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Technical FAQ</a></li>
-                    <li><a href="terms.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Terms of Service</a></li>
-                    <li><a href="help.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Knowledge Base</a></li>
-                    <li><a href="customer-service.html" class="text-gray-500 text-xs font-bold hover:text-white transition-colors uppercase">Contact Desk</a></li>
-                </ul>
-            </div>
-
-            <div class="bg-white/5 p-6 rounded-3xl border border-white/5 text-center">
-                <i class="fas fa-shield-halved text-blue-500 text-3xl mb-3"></i>
-                <h4 class="text-[10px] font-black text-white uppercase mb-2">Military Grade Security</h4>
-                <p class="text-[9px] text-gray-500 font-bold uppercase">All transactions are encrypted with 256-bit SSL protocols.</p>
-            </div>
-        </div>
-
-        <hr class="border-white/5 mb-8">
-
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p class="text-[10px] text-gray-600 font-black uppercase tracking-widest">
-                &copy; 2026 Competentraders Ltd. All Rights Reserved.
-            </p>
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span class="text-[9px] text-gray-500 font-black uppercase tracking-widest">Global Server Status: Operational</span>
-            </div>
-        </div>
-    </div>
-</footer>
