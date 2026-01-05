@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Withdraw Funds | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -23,7 +23,7 @@
         }
         .bird-box {
             background: #0b0d12; border: 2px solid #1e293b; 
-            padding: 40px 30px; rounded: 40px; text-align: center;
+            padding: 40px 30px; text-align: center;
             width: 100%; max-width: 380px; border-radius: 40px;
         }
         @keyframes flyIn {
@@ -42,10 +42,12 @@
             <p id="bird-msg" class="text-gray-500 text-[10px] font-black uppercase mb-6 tracking-widest"></p>
             
             <div id="success-action" class="hidden">
-                <a href="mailto:team.competentraders@gmail.com" class="block w-full py-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase mb-3">
-                    Email: team.competentraders@gmail.com
-                </a>
-                <button onclick="window.location.href='user-dashboard.html'" class="text-[10px] font-black uppercase text-gray-500 underline">Return to Home</button>
+                <div class="bg-blue-600/10 border border-blue-500/30 p-4 rounded-2xl mb-4">
+                    <p class="text-[9px] text-blue-400 font-black uppercase mb-1">Sending Confirmation To:</p>
+                    <p class="text-xs font-black text-white">team.competentraders@gmail.com</p>
+                </div>
+                <p class="text-[9px] text-gray-500 font-bold uppercase animate-pulse mb-4">Opening Mail App in 5s...</p>
+                <button onclick="window.location.href='user-dashboard.html'" class="text-[10px] font-black uppercase text-gray-400 underline">Skip & Return Home</button>
             </div>
 
             <button id="close-bird" onclick="closeBird()" class="hidden w-full py-4 bg-gray-800 rounded-2xl font-black text-[10px] uppercase">Try Again</button>
@@ -66,7 +68,7 @@
     </div>
 
     <div class="withdraw-card p-6 mb-6">
-        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block">Withdrawal Amount (₦)</label>
+        <label class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-3 block px-1">Withdrawal Amount (₦)</label>
         <input type="number" id="withdrawAmount" placeholder="0.00" class="w-full p-4 rounded-2xl font-black text-2xl">
     </div>
 
@@ -84,17 +86,18 @@
 
     <div class="withdraw-card p-6 mb-8">
         <div id="form-bank">
-            <div id="savedBankInfo" class="bg-[#131722] p-4 rounded-xl border border-gray-800 mb-4">
-                <p class="text-gray-500 text-xs italic">Loading saved bank details...</p>
+            <div id="savedBankInfo" class="bg-[#131722] p-4 rounded-xl border border-gray-800 mb-2">
+                <p class="text-gray-500 text-xs italic">Loading details...</p>
             </div>
+            <p class="text-[9px] text-gray-600 font-bold uppercase px-1">Ensure your bank details are correct in settings.</p>
         </div>
-        <div id="form-crypto" class="hidden space-y-4">
-            <input type="text" placeholder="Wallet Address" class="w-full p-4 rounded-xl font-semibold">
+        <div id="form-crypto" class="hidden">
+            <input type="text" id="walletAddr" placeholder="Enter USDT (TRC20) Address" class="w-full p-4 rounded-xl font-semibold text-sm">
         </div>
     </div>
 
     <button onclick="handleWithdrawal()" class="w-full py-5 bg-blue-600 rounded-3xl font-black text-sm uppercase shadow-xl shadow-blue-500/20 active:scale-95 transition">
-        Process Withdrawal
+        Confirm Withdrawal
     </button>
 
     <script>
@@ -110,7 +113,7 @@
             const savedBank = JSON.parse(localStorage.getItem('userBankDetails'));
             const container = document.getElementById('savedBankInfo');
             if (savedBank) {
-                container.innerHTML = `<p class="font-black text-white text-sm uppercase">${savedBank.bank}</p><p class="text-xs text-gray-400 font-bold">${savedBank.num}</p>`;
+                container.innerHTML = `<p class="font-black text-white text-sm uppercase">${savedBank.bank}</p><p class="text-xs text-gray-400 font-bold mt-1">${savedBank.num} — ${savedBank.name}</p>`;
             } else {
                 container.innerHTML = `<p class="text-red-400 text-[10px] font-black uppercase">No Bank Saved</p>`;
             }
@@ -124,7 +127,7 @@
             document.getElementById('form-crypto').classList.toggle('hidden', m !== 'crypto');
         }
 
-                function handleWithdrawal() {
+        function handleWithdrawal() {
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             const overlay = document.getElementById('bird-overlay');
             const icon = document.getElementById('bird-icon');
@@ -139,7 +142,7 @@
             closeBtn.classList.add('hidden');
 
             if (!amount || amount <= 0 || amount > balance) {
-                // FAILURE BIRD (OWL)
+                // FAILURE: OWL
                 icon.innerHTML = "🦉";
                 icon.className = "text-7xl mb-4 text-red-500 animate-pulse";
                 status.innerText = "INSUFFICIENT";
@@ -148,36 +151,51 @@
                 container.style.borderColor = "#ef4444";
                 closeBtn.classList.remove('hidden');
             } else {
-                // SUCCESS BIRD (DOVE)
+                // SUCCESS: DOVE
                 balance -= amount;
                 localStorage.setItem('accountBalance', balance);
                 document.getElementById('currentBalanceDisplay').innerText = "₦" + balance.toLocaleString();
 
+                const refID = "CT-" + Math.floor(1000 + Math.random() * 9000); // Generate Ref ID
                 icon.innerHTML = "🕊️";
                 icon.className = "text-7xl mb-4 text-green-500 animate-bounce";
                 status.innerText = "REQUEST SENT";
                 status.className = "text-2xl font-black italic text-green-500 mb-2";
-                msg.innerText = "Withdrawal of ₦" + amount.toLocaleString() + " placed successfully";
+                msg.innerText = "Withdrawal of ₦" + amount.toLocaleString() + " processed";
                 container.style.borderColor = "#22c55e";
                 successAction.classList.remove('hidden');
                 
-                // Save to history
+                // Save to Global History
                 let history = JSON.parse(localStorage.getItem('userHistory')) || [];
-                history.unshift({name: "Withdrawal ("+currentMethod.toUpperCase()+")", price: amount, date: new Date().toLocaleString()});
+                history.unshift({
+                    name: "Withdrawal (" + currentMethod.toUpperCase() + ")", 
+                    price: amount, 
+                    date: new Date().toLocaleString() + " [Ref: " + refID + "]"
+                });
                 localStorage.setItem('userHistory', JSON.stringify(history));
 
-                // --- NEW AUTO-EMAIL LOGIC ---
+                // AUTO-EMAIL LOGIC (5 Seconds Delay)
                 setTimeout(() => {
                     const email = "team.competentraders@gmail.com";
-                    const subject = encodeURIComponent("Withdrawal Request Confirmation");
-                    const body = encodeURIComponent("Hello Competentraders Team,\n\nI have just requested a withdrawal of ₦" + amount.toLocaleString() + " via " + currentMethod.toUpperCase() + ".\n\nPlease confirm this request and credit my account.\n\nThank you.");
-                    
-                    // This opens the user's email app automatically
+                    const subject = encodeURIComponent("Withdrawal Confirmation - " + refID);
+                    const body = encodeURIComponent(
+                        "Hello Competentraders Team,\n\n" +
+                        "I have just initiated a withdrawal request.\n\n" +
+                        "DETAILS:\n" +
+                        "- Amount: ₦" + amount.toLocaleString() + "\n" +
+                        "- Method: " + currentMethod.toUpperCase() + "\n" +
+                        "- Reference ID: " + refID + "\n\n" +
+                        "Please verify and credit my account.\n\n" +
+                        "Regards."
+                    );
                     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-                }, 5000); // 5 Seconds delay
+                }, 5000);
             }
         }
 
+        function closeBird() {
+            document.getElementById('bird-overlay').style.display = 'none';
+        }
     </script>
 </body>
 </html>
