@@ -7,6 +7,30 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+
+/* HISTORY MODAL SLIDE UP */
+#history-modal {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); 
+    z-index: 9999; display: none; align-items: flex-end; justify-content: center;
+    backdrop-blur: 5px;
+}
+.history-content {
+    background: #0b0d12; width: 100%; max-width: 500px; height: 75vh;
+    border-radius: 30px 30px 0 0; border-top: 3px solid #3b82f6;
+    padding: 25px; overflow-y: auto; box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+}
+.history-item {
+    background: #131722; padding: 15px; border-radius: 15px;
+    border: 1px solid #1e293b; margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+
+
+
+
+
+
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
         body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; overflow-x: hidden; }
 
@@ -94,6 +118,28 @@
         <a href="bank-account.html" class="nav-link"><i class="fas fa-university text-yellow-500"></i> Bank Account</a>
         <a href="deposit.html" class="nav-link"><i class="fas fa-wallet text-green-500"></i> Deposit Funds</a>
         <a href="withdraw.html" class="nav-link"><i class="fas fa-money-bill-transfer text-orange-500"></i> Withdrawal</a>
+
+
+
+
+<a onclick="openHistory()" class="nav-link">
+    <i class="fas fa-history text-blue-500"></i> User History
+</a>
+
+<div id="history-modal" onclick="closeHistory()">
+    <div class="history-content" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-black italic uppercase">Purchase <span class="text-blue-500">History</span></h2>
+            <button onclick="closeHistory()" class="text-2xl text-gray-500">&times;</button>
+        </div>
+        <div id="history-list">
+            </div>
+    </div>
+</div>
+
+
+
+
 
         <a href="football-predictions.html" class="nav-link"><i class="fas fa-futbol text-green-500"></i> Football Predictions</a>
         <a href="cryptocurrency.html" class="nav-link"><i class="fab fa-bitcoin text-orange-500"></i> Cryptocurrency</a>
@@ -319,6 +365,58 @@
             "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1S",
             "theme": "dark", "container_id": "tradingview_live", "preset": "mobile"
         });
+
+
+// 1. Initialize History from LocalStorage
+let purchaseHistory = JSON.parse(localStorage.getItem('userHistory')) || [];
+
+// 2. Function to Save a New Purchase
+function saveToHistory(planName, amount) {
+    const entry = {
+        name: planName,
+        price: amount,
+        date: new Date().toLocaleString()
+    };
+    purchaseHistory.unshift(entry); // Add to top
+    localStorage.setItem('userHistory', JSON.stringify(purchaseHistory));
+}
+
+// 3. Function to Open and Show History
+function openHistory() {
+    toggleMenu(); // Close sidebar first
+    const modal = document.getElementById('history-modal');
+    const list = document.getElementById('history-list');
+    modal.style.display = 'flex';
+
+    if (purchaseHistory.length === 0) {
+        list.innerHTML = '<p class="text-center text-gray-600 font-bold uppercase text-xs mt-20">No transactions yet</p>';
+    } else {
+        list.innerHTML = purchaseHistory.map(item => `
+            <div class="history-item">
+                <div>
+                    <p class="text-xs font-black text-white uppercase">${item.name}</p>
+                    <p class="text-[9px] text-gray-500 font-bold mt-1 uppercase">${item.date}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-black text-green-500">- ₦${item.price.toLocaleString()}</p>
+                    <p class="text-[8px] text-gray-600 uppercase font-black">Success</p>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+function closeHistory() {
+    document.getElementById('history-modal').style.display = 'none';
+}
+
+// 4. IMPORTANT: Update your existing processPurchase function
+// Inside the 'if (balance >= amount)' block, add this line:
+// saveToHistory(planName, amount);
+
+
+
+
     </script>
 </body>
 </html>
