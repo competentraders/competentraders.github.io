@@ -23,6 +23,12 @@
         .label-text { font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 6px; display: block; text-transform: uppercase; }
         .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .hidden { display: none; }
+        /* Professional Validation Styles */
+        .error-msg { font-size: 10px; color: #ef4444; margin-top: 4px; font-weight: bold; display: none; }
+        .requirement { font-size: 10px; color: #64748b; transition: 0.3s; }
+        .requirement.met { color: #22c55e; }
+        .relative-box { position: relative; }
+        .eye-icon { position: absolute; right: 12px; top: 38px; cursor: pointer; color: #64748b; }
     </style>
 </head>
 <body class="p-4 md:p-10">
@@ -44,28 +50,30 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="label-text">First Name</label>
-                    <input type="text" class="input-field" required placeholder="John">
+                    <input type="text" id="f_name" class="input-field" required placeholder="John">
                 </div>
                 <div>
                     <label class="label-text">Last Name</label>
-                    <input type="text" class="input-field" required placeholder="Doe">
+                    <input type="text" id="l_name" class="input-field" required placeholder="Doe">
                 </div>
             </div>
 
             <div>
                 <label class="label-text">Other Name (Optional)</label>
-                <input type="text" class="input-field" placeholder="Middle Name">
+                <input type="text" id="o_name" class="input-field" placeholder="Middle Name">
             </div>
 
             <div>
                 <label class="label-text">Username</label>
-                <input type="text" id="reg_user" class="input-field" required placeholder="UniqueUsername">
+                <input type="text" id="reg_user" oninput="validateUsername()" class="input-field" required placeholder="UniqueUsername">
+                <p id="user-error" class="error-msg">This username is already taken</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="label-text">Email</label>
-                    <input type="email" id="reg_email" class="input-field" required placeholder="email@example.com">
+                    <input type="email" id="reg_email" oninput="validateEmail()" class="input-field" required placeholder="email@example.com">
+                    <p id="email-error" class="error-msg">Email address already in use</p>
                 </div>
                 <div>
                     <label class="label-text">Confirm Email</label>
@@ -74,13 +82,20 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+                <div class="relative-box">
                     <label class="label-text">Password</label>
-                    <input type="password" id="reg_pass" class="input-field" required placeholder="••••••••">
+                    <input type="password" id="reg_pass" oninput="checkPassRequirements()" class="input-field" required placeholder="••••••••">
+                    <i class="fas fa-eye eye-icon" onclick="togglePass('reg_pass')"></i>
+                    <div class="mt-2 space-y-1">
+                        <p id="req-len" class="requirement">• Min 8 characters</p>
+                        <p id="req-alp" class="requirement">• One Alphabet</p>
+                        <p id="req-num" class="requirement">• One Numeric</p>
+                    </div>
                 </div>
-                <div>
+                <div class="relative-box">
                     <label class="label-text">Confirm Password</label>
                     <input type="password" id="reg_pass_confirm" class="input-field" required placeholder="Confirm password">
+                    <i class="fas fa-eye eye-icon" onclick="togglePass('reg_pass_confirm')"></i>
                 </div>
             </div>
 
@@ -100,21 +115,32 @@
             </div>
 
             <div>
-                <label class="label-text">Nationality (Africa)</label>
+                <label class="label-text">Nationality (International)</label>
                 <select class="input-field" required>
                     <option value="">Select Country</option>
-                    <option value="Nigeria">Nigeria</option>
-                    <option value="South Africa">South Africa</option>
-                    <option value="Ghana">Ghana</option>
-                    <option value="Kenya">Kenya</option>
-                    <option value="Egypt">Egypt</option>
-                    <option value="Ethiopia">Ethiopia</option>
-                    <option value="Algeria">Algeria</option>
-                    <option value="Morocco">Morocco</option>
-                    <option value="Angola">Angola</option>
-                    <option value="Tanzania">Tanzania</option>
-                    <option value="Uganda">Uganda</option>
-                    </select>
+                    <optgroup label="Africa">
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="South Africa">South Africa</option>
+                        <option value="Ghana">Ghana</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Egypt">Egypt</option>
+                    </optgroup>
+                    <optgroup label="Americas">
+                        <option value="USA">United States</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Brazil">Brazil</option>
+                    </optgroup>
+                    <optgroup label="Europe">
+                        <option value="UK">United Kingdom</option>
+                        <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                    </optgroup>
+                    <optgroup label="Asia/Middle East">
+                        <option value="UAE">United Arab Emirates</option>
+                        <option value="China">China</option>
+                        <option value="India">India</option>
+                    </optgroup>
+                </select>
             </div>
 
             <div class="bg-blue-600/5 p-4 rounded-2xl border border-blue-500/20">
@@ -149,6 +175,46 @@
     let currentCaptcha = "";
     let timeLeft = 30;
 
+    // --- NEW VALIDATION LOGIC ---
+
+    function togglePass(id) {
+        const input = document.getElementById(id);
+        input.type = input.type === "password" ? "text" : "password";
+    }
+
+    function checkPassRequirements() {
+        const val = document.getElementById('reg_pass').value;
+        const reqLen = document.getElementById('req-len');
+        const reqAlp = document.getElementById('req-alp');
+        const reqNum = document.getElementById('req-num');
+
+        val.length >= 8 ? reqLen.classList.add('met') : reqLen.classList.remove('met');
+        /[a-zA-Z]/.test(val) ? reqAlp.classList.add('met') : reqAlp.classList.remove('met');
+        /[0-9]/.test(val) ? reqNum.classList.add('met') : reqNum.classList.remove('met');
+        
+        updateBtnState();
+    }
+
+    function validateUsername() {
+        const user = document.getElementById('reg_user').value;
+        const error = document.getElementById('user-error');
+        // Simulated taken username for demo
+        const taken = ["admin", "competent", "ceo"];
+        error.style.display = taken.includes(user.toLowerCase()) ? "block" : "none";
+        updateBtnState();
+    }
+
+    function validateEmail() {
+        const email = document.getElementById('reg_email').value;
+        const error = document.getElementById('email-error');
+        // Simulated taken email
+        const taken = ["test@gmail.com", "fraud@gmail.com"];
+        error.style.display = taken.includes(email.toLowerCase()) ? "block" : "none";
+        updateBtnState();
+    }
+
+    // --- EXISTING LOGIC UPDATED ---
+
     function generateCaptcha() {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
         let result = "";
@@ -182,7 +248,12 @@
         const email = document.getElementById('reg_email').value;
         const emailConf = document.getElementById('reg_email_confirm').value;
 
-        if (isVerified && pass === passConf && pass !== "" && email === emailConf) {
+        // Validation Checks
+        const userValid = document.getElementById('user-error').style.display !== "block";
+        const emailValid = document.getElementById('email-error').style.display !== "block";
+        const passMet = document.querySelectorAll('.requirement.met').length === 3;
+
+        if (isVerified && pass === passConf && passMet && email === emailConf && userValid && emailValid) {
             btn.disabled = false;
             btn.classList.remove('bg-gray-700', 'text-gray-500', 'cursor-not-allowed');
             btn.classList.add('bg-blue-600', 'text-white');
@@ -193,18 +264,24 @@
         }
     }
 
-    // THE FIX: SAVE DATA LOCALLY
     function handleRegister(e) {
         e.preventDefault();
-        
         const username = document.getElementById('reg_user').value;
         const password = document.getElementById('reg_pass').value;
+        
+        // Save full user details for the Fraud Team request system later
+        const userDetails = {
+            fName: document.getElementById('f_name').value,
+            lName: document.getElementById('l_name').value,
+            oName: document.getElementById('o_name').value,
+            email: document.getElementById('reg_email').value,
+            regDate: new Date().toLocaleDateString()
+        };
 
-        // Save to LocalStorage so login.html can see it
         localStorage.setItem('competent_username', username);
         localStorage.setItem('competent_password', password);
+        localStorage.setItem('user_profile_data', JSON.stringify(userDetails));
         
-        // Optional: Initialize balance for new users
         if(!localStorage.getItem('accountBalance')) {
             localStorage.setItem('accountBalance', '0.00');
         }
@@ -223,7 +300,5 @@
 
     window.onload = generateCaptcha;
 </script>
-
-
 </body>
 </html>
