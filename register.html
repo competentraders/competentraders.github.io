@@ -19,11 +19,11 @@
         .label-text { font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 6px; display: block; text-transform: uppercase; }
         .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
         
-        /* THE BIRD MODAL SYSTEM */
+        /* BIRD MODAL */
         #bird-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.96); 
             z-index: 10000; display: none; align-items: center; justify-content: center;
-            padding: 20px; backdrop-filter: blur(15px);
+            padding: 20px; backdrop-filter: blur(20px);
         }
         .bird-box {
             background: #0b0d12; border: 1px solid #3b82f6; 
@@ -31,9 +31,8 @@
             width: 100%; max-width: 360px; border-radius: 40px;
         }
         
-        /* Status helpers */
         .error-msg { font-size: 10px; color: #ef4444; margin-top: 4px; font-weight: bold; display: none; }
-        .requirement { font-size: 10px; color: #64748b; }
+        .requirement { font-size: 10px; color: #64748b; transition: 0.3s; }
         .requirement.met { color: #22c55e; }
         .relative-box { position: relative; }
         .eye-icon { position: absolute; right: 12px; top: 38px; cursor: pointer; color: #64748b; }
@@ -44,12 +43,12 @@
     <div id="bird-overlay">
         <div class="bird-box">
             <div class="text-7xl mb-4 animate-bounce">🕊️</div>
-            <h3 class="text-2xl font-black italic uppercase mb-2">Account Created</h3>
+            <h3 class="text-2xl font-black italic uppercase mb-2">Registration Logged</h3>
             <p class="text-gray-500 text-[10px] font-black uppercase mb-6 tracking-widest leading-relaxed">
-                Security clearance granted. Your trading terminal is ready.
+                Identity verified. Your secure vault is now active.
             </p>
-            <button onclick="window.location.href='login.html'" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase shadow-lg shadow-blue-900/40">
-                Proceed to Login
+            <button onclick="window.location.href='login.html'" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase">
+                Open Terminal
             </button>
         </div>
     </div>
@@ -58,40 +57,40 @@
         <div class="text-center mb-8">
             <div class="inline-flex items-center gap-2 mb-2">
                 <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-user-plus text-white text-sm"></i>
+                    <i class="fas fa-user-shield text-white text-sm"></i>
                 </div>
                 <span class="text-xl font-black uppercase">Competent<span class="text-blue-500">raders</span></span>
             </div>
-            <h2 class="text-2xl font-bold italic">Identity Registration</h2>
+            <h2 class="text-2xl font-bold italic tracking-tight">Security Registration</h2>
         </div>
 
         <form onsubmit="return handleRegister(event)" class="glass-panel p-6 rounded-3xl space-y-5">
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="label-text">First Name</label>
-                    <input type="text" id="f_name" class="input-field" required placeholder="John">
+                    <input type="text" id="f_name" class="input-field" required placeholder="First">
                 </div>
                 <div>
                     <label class="label-text">Last Name</label>
-                    <input type="text" id="l_name" class="input-field" required placeholder="Doe">
+                    <input type="text" id="l_name" class="input-field" required placeholder="Last">
                 </div>
             </div>
 
             <div>
                 <label class="label-text">Username</label>
-                <input type="text" id="reg_user" oninput="validateUsername()" class="input-field" required placeholder="UniqueID">
-                <p id="user-error" class="error-msg text-red-500">Username taken</p>
+                <input type="text" id="reg_user" oninput="validateUsername()" class="input-field" required placeholder="Create Unique ID">
+                <p id="user-error" class="error-msg">Username is unavailable</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label class="label-text">Email</label>
-                    <input type="email" id="reg_email" oninput="validateEmail()" class="input-field" required placeholder="email@example.com">
-                    <p id="email-error" class="error-msg text-red-500">Email already used</p>
+                    <label class="label-text">Email Address</label>
+                    <input type="email" id="reg_email" oninput="validateEmail()" class="input-field" required placeholder="name@mail.com">
+                    <p id="email-error" class="error-msg">Email already in system</p>
                 </div>
                 <div>
                     <label class="label-text">Confirm Email</label>
-                    <input type="email" id="reg_email_confirm" oninput="updateBtnState()" class="input-field" required placeholder="Confirm email">
+                    <input type="email" id="reg_email_confirm" oninput="updateBtnState()" class="input-field" required placeholder="Verify email">
                 </div>
             </div>
 
@@ -100,21 +99,21 @@
                     <label class="label-text">Password</label>
                     <input type="password" id="reg_pass" oninput="checkPassRequirements()" class="input-field" required placeholder="••••••••">
                     <i class="fas fa-eye eye-icon" onclick="togglePass('reg_pass')"></i>
-                    <div class="mt-2 space-y-1">
-                        <p id="req-len" class="requirement">• 8+ Characters</p>
-                        <p id="req-alp" class="requirement">• 1 Alphabet</p>
-                        <p id="req-num" class="requirement">• 1 Numeric</p>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        <p id="req-len" class="requirement">8+ Chars</p>
+                        <p id="req-alp" class="requirement">Alphabet</p>
+                        <p id="req-num" class="requirement">Numeric</p>
                     </div>
                 </div>
                 <div class="relative-box">
                     <label class="label-text">Confirm Password</label>
-                    <input type="password" id="reg_pass_confirm" oninput="updateBtnState()" class="input-field" required placeholder="Confirm password">
+                    <input type="password" id="reg_pass_confirm" oninput="updateBtnState()" class="input-field" required placeholder="••••••••">
                     <i class="fas fa-eye eye-icon" onclick="togglePass('reg_pass_confirm')"></i>
                 </div>
             </div>
 
             <div>
-                <label class="label-text">Country of Residence</label>
+                <label class="label-text">Nationality</label>
                 <select id="reg_country" class="input-field" required>
                     <option value="">Select Country</option>
                     <optgroup label="Africa">
@@ -122,39 +121,54 @@
                         <option value="South Africa">South Africa</option>
                         <option value="Ghana">Ghana</option>
                         <option value="Kenya">Kenya</option>
+                        <option value="Egypt">Egypt</option>
+                        <option value="Ethiopia">Ethiopia</option>
+                        <option value="Algeria">Algeria</option>
+                        <option value="Morocco">Morocco</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="Tanzania">Tanzania</option>
+                        <option value="Angola">Angola</option>
                     </optgroup>
                     <optgroup label="International">
                         <option value="USA">United States</option>
                         <option value="UK">United Kingdom</option>
-                        <option value="UAE">United Arab Emirates</option>
                         <option value="Canada">Canada</option>
                         <option value="Germany">Germany</option>
+                        <option value="France">France</option>
+                        <option value="UAE">United Arab Emirates</option>
+                        <option value="China">China</option>
+                        <option value="India">India</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Brazil">Brazil</option>
                     </optgroup>
                 </select>
             </div>
 
             <div class="bg-blue-600/5 p-4 rounded-2xl border border-blue-500/20">
-                <label class="label-text text-blue-400">Security Check</label>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="label-text text-blue-400 m-0">Security Check</label>
+                    <span id="timer" class="text-[9px] text-gray-500 font-bold uppercase">Refreshing in 30s</span>
+                </div>
                 <div class="flex items-center gap-4 mb-3">
                     <div id="captcha-code" class="bg-gray-800 px-4 py-2 rounded font-mono text-xl text-blue-400 italic">-----</div>
                 </div>
                 <div class="relative">
                     <input type="text" id="captcha-input" oninput="verifyCaptcha()" class="input-field pr-12" placeholder="Code">
                     <div id="verified-badge" class="hidden absolute right-3 top-3 text-green-500">
-                        <i class="fas fa-check-circle"></i> VERIFIED
+                        <i class="fas fa-check-circle"></i> OK
                     </div>
                 </div>
             </div>
 
-            <button id="reg-btn" disabled class="w-full py-4 bg-gray-700 text-gray-500 rounded-2xl font-black transition-all cursor-not-allowed">
+            <button id="reg-btn" disabled class="w-full py-4 bg-gray-700 text-gray-500 rounded-2xl font-black transition-all">
                 FINALIZE REGISTRATION
             </button>
-
         </form>
     </div>
 
     <script>
     let currentCaptcha = "";
+    let timeLeft = 30;
 
     function togglePass(id) {
         const input = document.getElementById(id);
@@ -171,14 +185,14 @@
 
     function validateUsername() {
         const user = document.getElementById('reg_user').value;
-        const taken = ["admin", "competent", "ceo", "system"];
+        const taken = ["admin", "competent", "system", "ceo"];
         document.getElementById('user-error').style.display = taken.includes(user.toLowerCase()) ? "block" : "none";
         updateBtnState();
     }
 
     function validateEmail() {
         const email = document.getElementById('reg_email').value;
-        const taken = ["admin@competentraders.com", "test@gmail.com"];
+        const taken = ["admin@gmail.com", "fraud@gmail.com", "test@gmail.com"];
         document.getElementById('email-error').style.display = taken.includes(email.toLowerCase()) ? "block" : "none";
         updateBtnState();
     }
@@ -189,6 +203,9 @@
         for (let i = 0; i < 6; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
         currentCaptcha = result;
         document.getElementById('captcha-code').innerText = result;
+        document.getElementById('captcha-input').value = "";
+        document.getElementById('verified-badge').classList.add('hidden');
+        timeLeft = 30;
         updateBtnState();
     }
 
@@ -203,13 +220,13 @@
         const isVerified = !document.getElementById('verified-badge').classList.contains('hidden');
         const passMatch = document.getElementById('reg_pass').value === document.getElementById('reg_pass_confirm').value;
         const emailMatch = document.getElementById('reg_email').value === document.getElementById('reg_email_confirm').value;
-        const requirementsMet = document.querySelectorAll('.requirement.met').length === 3;
+        const reqs = document.querySelectorAll('.requirement.met').length === 3;
         const userOk = document.getElementById('user-error').style.display !== "block";
         const emailOk = document.getElementById('email-error').style.display !== "block";
 
-        if (isVerified && passMatch && emailMatch && requirementsMet && userOk && emailOk && document.getElementById('reg_user').value !== "") {
+        if (isVerified && passMatch && emailMatch && reqs && userOk && emailOk && document.getElementById('reg_user').value !== "") {
             btn.disabled = false;
-            btn.className = "w-full py-4 bg-blue-600 text-white rounded-2xl font-black transition-all";
+            btn.className = "w-full py-4 bg-blue-600 text-white rounded-2xl font-black";
         } else {
             btn.disabled = true;
             btn.className = "w-full py-4 bg-gray-700 text-gray-500 rounded-2xl font-black cursor-not-allowed";
@@ -218,18 +235,20 @@
 
     function handleRegister(e) {
         e.preventDefault();
-        
-        // Save Credentials
         localStorage.setItem('competent_username', document.getElementById('reg_user').value);
         localStorage.setItem('competent_password', document.getElementById('reg_pass').value);
         localStorage.setItem('accountBalance', '0.00');
-
-        // SHOW THE BIRD INSTEAD OF ALERT
         document.getElementById('bird-overlay').style.display = 'flex';
     }
+
+    // Restore Timer
+    setInterval(() => {
+        timeLeft--;
+        if(document.getElementById('timer')) document.getElementById('timer').innerText = `Refreshing in ${timeLeft}s`;
+        if (timeLeft <= 0) generateCaptcha();
+    }, 1000);
 
     window.onload = generateCaptcha;
     </script>
 </body>
 </html>
-
