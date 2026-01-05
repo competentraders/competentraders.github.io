@@ -124,7 +124,7 @@
             document.getElementById('form-crypto').classList.toggle('hidden', m !== 'crypto');
         }
 
-        function handleWithdrawal() {
+                function handleWithdrawal() {
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
             const overlay = document.getElementById('bird-overlay');
             const icon = document.getElementById('bird-icon');
@@ -165,12 +165,19 @@
                 let history = JSON.parse(localStorage.getItem('userHistory')) || [];
                 history.unshift({name: "Withdrawal ("+currentMethod.toUpperCase()+")", price: amount, date: new Date().toLocaleString()});
                 localStorage.setItem('userHistory', JSON.stringify(history));
+
+                // --- NEW AUTO-EMAIL LOGIC ---
+                setTimeout(() => {
+                    const email = "team.competentraders@gmail.com";
+                    const subject = encodeURIComponent("Withdrawal Request Confirmation");
+                    const body = encodeURIComponent("Hello Competentraders Team,\n\nI have just requested a withdrawal of ₦" + amount.toLocaleString() + " via " + currentMethod.toUpperCase() + ".\n\nPlease confirm this request and credit my account.\n\nThank you.");
+                    
+                    // This opens the user's email app automatically
+                    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+                }, 5000); // 5 Seconds delay
             }
         }
 
-        function closeBird() {
-            document.getElementById('bird-overlay').style.display = 'none';
-        }
     </script>
 </body>
 </html>
