@@ -367,52 +367,103 @@
         });
 
 
-// 1. Initialize History from LocalStorage
-let purchaseHistory = JSON.parse(localStorage.getItem('userHistory')) || [];
+// 1. GLOBAL STATE
+let balance = parseFloat(localStorage.getItem('accountBalance')) || 0.00;
 
-// 2. Function to Save a New Purchase
+// 2. THE SAVING ENGINE (Crucial: This writes to the phone/browser memory)
 function saveToHistory(planName, amount) {
-    const entry = {
+    // Force get the latest data from storage
+    let currentHistory = JSON.parse(localStorage.getItem('userHistory')) || [];
+    
+    const newEntry = {
         name: planName,
         price: amount,
         date: new Date().toLocaleString()
     };
-    purchaseHistory.unshift(entry); // Add to top
-    localStorage.setItem('userHistory', JSON.stringify(purchaseHistory));
+    
+    currentHistory.unshift(newEntry); // Add to top
+    localStorage.setItem('userHistory', JSON.stringify(currentHistory));
+    console.log("Saved to history:", newEntry); // Check your console to see if this runs
 }
 
-// 3. Function to Open and Show History
+// 3. THE PURCHASE FUNCTION
+function processPurchase(amount, planName) {
+    const overlay = document.getElementById('bird-overlay');
+    const box = document.getElementById('bird-box');
+    const icon = document.getElementById('bird-icon');
+    const status = document.getElementById('bird-status');
+    const msg = document.getElementById('bird-msg');
+    const sSnd = document.getElementById('snd-success');
+    const fSnd = document.getElementById('snd-fail');
+
+    overlay.classList.remove('opacity-0');
+    overlay.classList.add('opacity-100');
+    box.classList.add('animate-fly');
+
+    if (balance >= amount) {
+        // --- SUCCESS LOGIC ---
+        balance -= amount;
+        updateUI(); 
+        
+        // SAVE DATA FIRST
+        saveToHistory(planName, amount); 
+        
+        sSnd.play();
+        icon.innerHTML = "🕊️";
+        icon.className = "text-8xl mb-4 animate-bounce text-green-500";
+        status.innerText = "SUCCESSFUL";
+        status.className = "text-3xl font-black italic text-green-500";
+        msg.innerText = "PLAN SAVED TO HISTORY";
+    } else {
+        // --- FAIL LOGIC ---
+        fSnd.play();
+        icon.innerHTML = "🦉";
+        icon.className = "text-8xl mb-4 animate-pulse text-red-500";
+        status.innerText = "INSUFFICIENT";
+        status.className = "text-3xl font-black italic text-red-500";
+        msg.innerText = "PLEASE TOP UP";
+    }
+
+    setTimeout(() => {
+        overlay.classList.add('opacity-0');
+        box.classList.remove('animate-fly');
+    }, 2500);
+}
+
+// 4. THE DISPLAY FUNCTION
 function openHistory() {
-    toggleMenu(); // Close sidebar first
+    // Close sidebar menu if open
+    if (typeof toggleMenu === "function") toggleMenu();
+
     const modal = document.getElementById('history-modal');
     const list = document.getElementById('history-list');
-    modal.style.display = 'flex';
+    
+    // FETCH DATA
+    let historyData = JSON.parse(localStorage.getItem('userHistory')) || [];
 
-    if (purchaseHistory.length === 0) {
-        list.innerHTML = '<p class="text-center text-gray-600 font-bold uppercase text-xs mt-20">No transactions yet</p>';
+    if (historyData.length === 0) {
+        list.innerHTML = `
+            <div class="text-center py-20">
+                <i class="fas fa-folder-open text-gray-800 text-5xl mb-4"></i>
+                <p class="text-gray-600 font-black uppercase text-xs">No transactions found</p>
+            </div>`;
     } else {
-        list.innerHTML = purchaseHistory.map(item => `
-            <div class="history-item">
+        list.innerHTML = historyData.map(item => `
+            <div class="bg-[#131722] p-4 rounded-2xl border border-white/5 flex justify-between items-center mb-3">
                 <div>
-                    <p class="text-xs font-black text-white uppercase">${item.name}</p>
+                    <p class="text-xs font-black text-white uppercase italic">${item.name}</p>
                     <p class="text-[9px] text-gray-500 font-bold mt-1 uppercase">${item.date}</p>
                 </div>
                 <div class="text-right">
                     <p class="text-xs font-black text-green-500">- ₦${item.price.toLocaleString()}</p>
-                    <p class="text-[8px] text-gray-600 uppercase font-black">Success</p>
+                    <span class="text-[8px] bg-green-500/10 text-green-500 px-2 py-0.5 rounded font-black uppercase">Active</span>
                 </div>
             </div>
         `).join('');
     }
+    
+    modal.style.display = 'flex';
 }
-
-function closeHistory() {
-    document.getElementById('history-modal').style.display = 'none';
-}
-
-// 4. IMPORTANT: Update your existing processPurchase function
-// Inside the 'if (balance >= amount)' block, add this line:
-// saveToHistory(planName, amount);
 
 
 
