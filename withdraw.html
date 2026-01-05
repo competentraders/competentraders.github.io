@@ -8,15 +8,49 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; }
         .withdraw-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 28px; }
         input, select { background: #131722 !important; border: 1px solid #2d3343 !important; color: white !important; }
         input:focus { border-color: #3b82f6 !important; outline: none; }
         .method-card { border: 2px solid transparent; transition: 0.3s; cursor: pointer; }
         .method-card.active { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+
+        /* BIRD POPUP STYLES */
+        #bird-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
+            z-index: 9999; display: none; align-items: center; justify-content: center;
+            padding: 20px; backdrop-filter: blur(10px);
+        }
+        .bird-box {
+            background: #0b0d12; border: 2px solid #1e293b; 
+            padding: 40px 30px; rounded: 40px; text-align: center;
+            width: 100%; max-width: 380px; border-radius: 40px;
+        }
+        @keyframes flyIn {
+            0% { transform: scale(0.5) translateY(50px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-fly { animation: flyIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     </style>
 </head>
 <body class="p-4 pb-12">
+
+    <div id="bird-overlay">
+        <div class="bird-box animate-fly" id="bird-container">
+            <div id="bird-icon" class="text-7xl mb-4"></div>
+            <h3 id="bird-status" class="text-2xl font-black italic uppercase mb-2"></h3>
+            <p id="bird-msg" class="text-gray-500 text-[10px] font-black uppercase mb-6 tracking-widest"></p>
+            
+            <div id="success-action" class="hidden">
+                <a href="mailto:team.competentraders@gmail.com" class="block w-full py-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase mb-3">
+                    Email: team.competentraders@gmail.com
+                </a>
+                <button onclick="window.location.href='user-dashboard.html'" class="text-[10px] font-black uppercase text-gray-500 underline">Return to Home</button>
+            </div>
+
+            <button id="close-bird" onclick="closeBird()" class="hidden w-full py-4 bg-gray-800 rounded-2xl font-black text-[10px] uppercase">Try Again</button>
+        </div>
+    </div>
 
     <div class="flex items-center justify-between mb-8">
         <div class="flex items-center gap-4">
@@ -50,26 +84,12 @@
 
     <div class="withdraw-card p-6 mb-8">
         <div id="form-bank">
-            <p class="text-blue-500 text-[10px] font-bold uppercase mb-4">Transferring to saved account</p>
             <div id="savedBankInfo" class="bg-[#131722] p-4 rounded-xl border border-gray-800 mb-4">
                 <p class="text-gray-500 text-xs italic">Loading saved bank details...</p>
             </div>
-            <p class="text-[10px] text-gray-500">To change bank details, go to the <a href="bank-account.html" class="text-blue-500">Bank Account</a> page.</p>
         </div>
-
         <div id="form-crypto" class="hidden space-y-4">
-            <div>
-                <label class="text-[10px] font-black text-gray-500 uppercase mb-2 block">Network</label>
-                <select class="w-full p-4 rounded-xl font-bold">
-                    <option>USDT (TRC20)</option>
-                    <option>USDT (ERC20)</option>
-                    <option>Bitcoin (BTC)</option>
-                </select>
-            </div>
-            <div>
-                <label class="text-[10px] font-black text-gray-500 uppercase mb-2 block">Wallet Address</label>
-                <input type="text" placeholder="Enter your wallet address" class="w-full p-4 rounded-xl font-semibold">
-            </div>
+            <input type="text" placeholder="Wallet Address" class="w-full p-4 rounded-xl font-semibold">
         </div>
     </div>
 
@@ -81,9 +101,8 @@
         let currentMethod = 'bank';
         let balance = parseFloat(localStorage.getItem('accountBalance')) || 0.00;
 
-        // Initialize Page
         window.onload = () => {
-            document.getElementById('currentBalanceDisplay').innerText = "$" + balance.toLocaleString();
+            document.getElementById('currentBalanceDisplay').innerText = "₦" + balance.toLocaleString();
             loadBankDetails();
         };
 
@@ -91,12 +110,9 @@
             const savedBank = JSON.parse(localStorage.getItem('userBankDetails'));
             const container = document.getElementById('savedBankInfo');
             if (savedBank) {
-                container.innerHTML = `
-                    <p class="font-black text-white">${savedBank.bank}</p>
-                    <p class="text-sm text-gray-400">₦{savedBank.num} - ₦ {savedBank.name}</p>
-                `;
+                container.innerHTML = `<p class="font-black text-white text-sm uppercase">${savedBank.bank}</p><p class="text-xs text-gray-400 font-bold">${savedBank.num}</p>`;
             } else {
-                container.innerHTML = `<p class="text-red-400 text-xs">No bank account saved. Please add one in settings.</p>`;
+                container.innerHTML = `<p class="text-red-400 text-[10px] font-black uppercase">No Bank Saved</p>`;
             }
         }
 
@@ -110,23 +126,50 @@
 
         function handleWithdrawal() {
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const overlay = document.getElementById('bird-overlay');
+            const icon = document.getElementById('bird-icon');
+            const status = document.getElementById('bird-status');
+            const msg = document.getElementById('bird-msg');
+            const successAction = document.getElementById('success-action');
+            const closeBtn = document.getElementById('close-bird');
+            const container = document.getElementById('bird-container');
 
-            if (!amount || amount <= 0) {
-                alert("Please enter a valid amount.");
-                return;
+            overlay.style.display = 'flex';
+            successAction.classList.add('hidden');
+            closeBtn.classList.add('hidden');
+
+            if (!amount || amount <= 0 || amount > balance) {
+                // FAILURE BIRD (OWL)
+                icon.innerHTML = "🦉";
+                icon.className = "text-7xl mb-4 text-red-500 animate-pulse";
+                status.innerText = "INSUFFICIENT";
+                status.className = "text-2xl font-black italic text-red-500 mb-2";
+                msg.innerText = "You do not have enough funds";
+                container.style.borderColor = "#ef4444";
+                closeBtn.classList.remove('hidden');
+            } else {
+                // SUCCESS BIRD (DOVE)
+                balance -= amount;
+                localStorage.setItem('accountBalance', balance);
+                document.getElementById('currentBalanceDisplay').innerText = "₦" + balance.toLocaleString();
+
+                icon.innerHTML = "🕊️";
+                icon.className = "text-7xl mb-4 text-green-500 animate-bounce";
+                status.innerText = "REQUEST SENT";
+                status.className = "text-2xl font-black italic text-green-500 mb-2";
+                msg.innerText = "Withdrawal of ₦" + amount.toLocaleString() + " placed successfully";
+                container.style.borderColor = "#22c55e";
+                successAction.classList.remove('hidden');
+                
+                // Save to history
+                let history = JSON.parse(localStorage.getItem('userHistory')) || [];
+                history.unshift({name: "Withdrawal ("+currentMethod.toUpperCase()+")", price: amount, date: new Date().toLocaleString()});
+                localStorage.setItem('userHistory', JSON.stringify(history));
             }
+        }
 
-            if (amount > balance) {
-                alert("Insufficient Balance! You only have $" + balance);
-                return;
-            }
-
-            // DEDUCT MONEY
-            balance -= amount;
-            localStorage.setItem('accountBalance', balance);
-            
-            alert("Withdrawal Request Submitted! Your funds will be processed within 24 hours.");
-            window.location.href = "user-dashboard.html";
+        function closeBird() {
+            document.getElementById('bird-overlay').style.display = 'none';
         }
     </script>
 </body>
