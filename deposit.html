@@ -20,7 +20,7 @@
         .action-btn { background: #00d387; color: #000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .action-btn:active { transform: scale(0.95); }
 
-        /* Dead Bird Spinner */
+        /* Error Spinner for Dead Bird Screen */
         .error-spinner {
             width: 35px; height: 35px;
             border: 4px solid #1a1d23;
@@ -33,7 +33,7 @@
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <div id="mainUI" class="w-full max-w-md">
+    <div id="mainContent" class="w-full max-w-md">
         <div class="flex items-center justify-center gap-2 mb-10">
             <div class="opay-ring"><div class="opay-dash"></div></div>
             <span class="text-3xl font-extrabold tracking-tighter text-white">Pay</span>
@@ -85,7 +85,7 @@
                     Please complete the transfer in your bank app <span class="text-white">before</span> clicking the confirm button below to update your balance.
                 </p>
 
-                <button id="confirmBtn" onclick="handleDepositFlow()" class="action-btn w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-widest shadow-xl shadow-emerald-500/10">
+                <button id="confirmBtn" onclick="processPayment()" class="action-btn w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-widest shadow-xl shadow-emerald-500/10">
                     Confirm Transfer
                 </button>
             </div>
@@ -98,9 +98,9 @@
         </div>
     </div>
 
-    <div id="successModal" class="hidden fixed inset-0 bg-[#08090a] z-[60] flex items-center justify-center p-6">
-        <div class="text-center">
-            <div class="w-20 h-20 bg-[#00d387] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/40 animate-bounce">
+    <div id="successModal" class="hidden fixed inset-0 bg-[#08090a] z-50 flex items-center justify-center p-6">
+        <div class="text-center animate-bounce">
+            <div class="w-20 h-20 bg-[#00d387] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/40">
                 <i class="fas fa-check text-black text-3xl"></i>
             </div>
             <h2 class="text-2xl font-extrabold mb-2">Deposit Successful</h2>
@@ -109,11 +109,10 @@
     </div>
 
     <script>
-        // CONFIG
-        const DASHBOARD_URL = "dashboard.html"; 
-        const OPAY_ACCOUNT = "6119316029";
+        // --- LOGIC VARIABLES ---
         let startTime = 0;
-        let isMonitoring = false;
+        let isWaitingForReturn = false;
+        const REDIRECT_URL = "user-dashboard.html";
 
         // Set unique ref
         const ref = "OPY-" + Math.floor(Math.random() * 8999 + 1000);
@@ -130,11 +129,11 @@
         }, 1000);
 
         function copyAcc() {
-            navigator.clipboard.writeText(OPAY_ACCOUNT);
+            navigator.clipboard.writeText("6119316029");
             alert("Account Number Copied!");
         }
 
-        function handleDepositFlow() {
+        function processPayment() {
             const amountInput = document.getElementById('depositAmount');
             const amount = parseFloat(amountInput.value);
             
@@ -143,75 +142,78 @@
                 return;
             }
 
-            // Save deposit info and mark time
-            localStorage.setItem('pending_amt', amount);
+            // Save data for verification
+            localStorage.setItem('last_deposit_val', amount);
             startTime = Date.now();
-            isMonitoring = true;
+            isWaitingForReturn = true;
 
-            // Update button UI to show it's working
+            // Update button UI
             const btn = document.getElementById('confirmBtn');
             btn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> OPENING OPAY...';
-            btn.classList.add('opacity-50');
+            btn.style.opacity = "0.7";
 
-            // --- DEEP LINK TRIGGER ---
-            const intentLink = "intent://#Intent;scheme=opay;package=team.opay.pay;end"; // Android
-            const iosLink = "opay://"; // iOS
+            // --- HIGH FORCE APP TRIGGER ---
+            const intentLink = "intent://#Intent;scheme=opay;package=team.opay.pay;end"; 
+            const iosLink = "opay://"; 
 
-            // Try Android first
+            // Trigger for Android
             window.location.replace(intentLink);
             
-            // Try iOS fallback
+            // Trigger for iOS fallback
             setTimeout(() => {
                 window.location.href = iosLink;
             }, 600);
         }
 
-        // LISTEN FOR USER TO RETURN FROM OPAY
+        // DETECT RETURN TO BROWSER
         document.addEventListener("visibilitychange", function() {
-            if (document.visibilityState === 'visible' && isMonitoring) {
-                const timeSpentAway = (Date.now() - startTime) / 1000;
-                const amount = parseFloat(localStorage.getItem('pending_amt'));
+            if (document.visibilityState === 'visible' && isWaitingForReturn) {
+                const timeAway = (Date.now() - startTime) / 1000;
+                const amount = parseFloat(localStorage.getItem('last_deposit_val'));
 
-                // 12 seconds is the "Magic Number" for a successful transfer PIN entry
-                if (timeSpentAway > 12) {
-                    finalizeSuccess(amount);
+                // If user stayed away > 60 seconds, confirm deposit
+                if (timeAway > 60) {
+                    finalizeDeposit(amount);
                 } else {
-                    triggerDeadBird();
+                    // Show Dead Bird Error
+                    showDeadBird();
                 }
                 
-                isMonitoring = false;
+                isWaitingForReturn = false;
             }
         });
 
-        function finalizeSuccess(amount) {
+        function finalizeDeposit(amount) {
             // Update Local Storage Balance
-            let currentBal = parseFloat(localStorage.getItem('accountBalance')) || 0;
-            localStorage.setItem('accountBalance', (currentBal + amount));
+            let bal = parseFloat(localStorage.getItem('accountBalance')) || 0;
+            localStorage.setItem('accountBalance', (bal + amount));
 
-            // Show Success Modal
+            // Show Success UI
+            document.getElementById('mainContent').style.display = 'none';
             document.getElementById('successModal').classList.remove('hidden');
 
             // Final redirection
             setTimeout(() => {
-                window.location.href = DASHBOARD_URL;
+                window.location.href = REDIRECT_URL;
             }, 3000);
         }
 
-        function triggerDeadBird() {
-            // Replace page content with Dead Bird Error
+        function showDeadBird() {
+            // Replace screen with Dead Bird / Error design
             document.body.innerHTML = `
-                <div style="background:#08090a; height:100vh; width:100vw; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:'Plus Jakarta Sans', sans-serif; color:white; padding:20px;">
+                <div style="background:#08090a; height:100vh; width:100vw; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:sans-serif; color:white; padding:20px;">
                     <div style="font-size: 80px; margin-bottom: 20px;">😵</div>
-                    <h1 style="color:#ef4444; font-weight:900; font-size:28px; margin-bottom:10px; letter-spacing:-1px;">DEPOSIT ERROR</h1>
-                    <p style="color:#6b7280; font-size:14px; margin-bottom:40px; line-height:1.6; max-width:260px;">
-                        Transfer verification failed. You returned too early. Redirecting to dashboard...
+                    <h1 style="color:#ef4444; font-weight:900; font-size:28px; margin-bottom:10px;">DEPOSIT ERROR</h1>
+                    <p style="color:#6b7280; font-size:14px; margin-bottom:40px; line-height:1.6; max-width:250px;">
+                        Verification failed. You returned too early without completing payment.
                     </p>
                     <div class="error-spinner"></div>
+                    <p style="color:#374151; font-size:10px; margin-top:20px; text-transform:uppercase; letter-spacing:2px;">Redirecting to Dashboard</p>
                 </div>
             `;
 
             setTimeout(() => {
-                window.location.href = DASHBOARD_URL;
+                window.location.href = REDIRECT_URL;
             }, 4000);
         }
     </script>
