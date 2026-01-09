@@ -2,220 +2,149 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout | OPay Secure</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deposit | Lead Bank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #08090a; color: #ffffff; }
-        
-        /* EXACT LOGO RECREATION */
-        .opay-ring { width: 30px; height: 30px; border: 5.5px solid #00d387; border-radius: 50%; position: relative; }
-        .opay-dash { position: absolute; left: -8px; top: 6px; width: 10px; height: 6px; background: white; border-radius: 1px; border: 1.5px solid #08090a; }
-        
-        .premium-card { background: #121418; border: 1px solid #1f2229; border-radius: 24px; }
-        .info-pill { background: rgba(0, 211, 135, 0.1); color: #00d387; border: 1px solid rgba(0, 211, 135, 0.2); }
-        .input-gradient { background: linear-gradient(145deg, #1a1d23, #15181d); border: 1px solid #2d323a; }
-        .action-btn { background: #00d387; color: #000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
-        .action-btn:active { transform: scale(0.95); }
-
-        /* Error Spinner for Dead Bird Screen */
-        .error-spinner {
-            width: 35px; height: 35px;
-            border: 4px solid #1a1d23;
-            border-top: 4px solid #ef4444;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+        :root {
+            --lead-navy: #061227;
+            --lead-mint: #00d395;
+            --bg-gray: #f4f7f9;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-gray); max-width: 500px; margin: 0 auto; color: var(--lead-navy); }
+
+        header {
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            background: #fff; border-bottom: 1px solid #e2e8f0;
+        }
+        .back-btn { font-size: 20px; text-decoration: none; color: var(--lead-navy); }
+
+        .container { padding: 25px; }
+        .card {
+            background: #fff; padding: 25px; border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02); margin-bottom: 20px;
+        }
+
+        label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; color: #64748b; }
+        
+        .amount-input-wrapper {
+            display: flex; align-items: center; border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px; margin-bottom: 30px;
+        }
+        .currency-symbol { font-size: 32px; font-weight: 800; color: var(--lead-navy); margin-right: 10px; }
+        input#amount {
+            width: 100%; border: none; outline: none; font-size: 32px; font-weight: 800;
+            color: var(--lead-navy); background: transparent;
+        }
+
+        .method-tile {
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            border: 1.5px solid #e2e8f0; border-radius: 12px; margin-bottom: 12px;
+            cursor: pointer; transition: 0.2s;
+        }
+        .method-tile.active { border-color: var(--lead-mint); background: rgba(0, 211, 149, 0.05); }
+        .method-icon { 
+            width: 40px; height: 40px; background: var(--bg-gray); 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: var(--lead-navy);
+        }
+
+        .btn-confirm {
+            width: 100%; background: var(--lead-navy); color: white; padding: 18px;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+            margin-top: 20px; cursor: pointer;
+        }
+
+        /* Success Overlay */
+        #successOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 2000; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 20px;
+        }
+        .success-icon {
+            width: 80px; height: 80px; background: var(--lead-mint);
+            color: white; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; font-size: 40px;
+            margin-bottom: 20px; animation: scaleUp 0.4s ease-out;
+        }
+        @keyframes scaleUp { from { transform: scale(0); } to { transform: scale(1); } }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body>
 
-    <div id="mainContent" class="w-full max-w-md">
-        <div class="flex items-center justify-center gap-2 mb-10">
-            <div class="opay-ring"><div class="opay-dash"></div></div>
-            <span class="text-3xl font-extrabold tracking-tighter text-white">Pay</span>
-        </div>
-
-        <div class="premium-card overflow-hidden">
-            <div class="p-6 border-b border-[#1f2229] flex justify-between items-center">
-                <div>
-                    <span class="info-pill px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Secured Transaction</span>
-                </div>
-                <div class="text-right">
-                    <p class="text-gray-500 text-[10px] font-bold uppercase">Timer</p>
-                    <p class="font-mono text-white font-bold" id="timer">60:00</p>
-                </div>
-            </div>
-
-            <div class="p-8">
-                <div class="mb-8 text-center">
-                    <p class="text-gray-500 text-xs font-semibold uppercase mb-3">Amount to Deposit</p>
-                    <div class="relative inline-block w-full">
-                        <input type="number" id="depositAmount" placeholder="0.00" 
-                            class="bg-transparent text-white text-5xl font-extrabold text-center w-full focus:outline-none placeholder:text-gray-800">
-                    </div>
-                    <p class="text-gray-600 text-[10px] mt-2 font-bold uppercase tracking-widest italic text-emerald-500">Min: ₦5,000</p>
-                </div>
-
-                <div class="space-y-4 mb-8">
-                    <div class="input-gradient p-5 rounded-2xl relative group">
-                        <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Account Number</p>
-                        <p class="text-2xl font-extrabold tracking-wider" id="accNum">6119316029</p>
-                        <button onclick="copyAcc()" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#00d387] text-black flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="input-gradient p-4 rounded-2xl">
-                            <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Bank</p>
-                            <p class="text-xs font-bold text-gray-200">OPay Bank</p>
-                        </div>
-                        <div class="input-gradient p-4 rounded-2xl">
-                            <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Narration</p>
-                            <p class="text-xs font-bold text-blue-400" id="refID">TRX-0000</p>
-                        </div>
-                    </div>
-                </div>
-
-                <p class="text-[10px] text-gray-500 text-center mb-6 leading-relaxed">
-                    Please complete the transfer in your bank app <span class="text-white">before</span> clicking the confirm button below to update your balance.
-                </p>
-
-                <button id="confirmBtn" onclick="processPayment()" class="action-btn w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-widest shadow-xl shadow-emerald-500/10">
-                    Confirm Transfer
-                </button>
-            </div>
-        </div>
-
-        <div class="mt-8 flex justify-center items-center gap-6 opacity-30 grayscale">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="h-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="h-4">
-            <span class="text-[9px] font-black tracking-tighter">PCI-DSS</span>
-        </div>
+    <div id="successOverlay">
+        <div class="success-icon"><i class="fas fa-check"></i></div>
+        <h2 style="margin-bottom: 10px;">Deposit Successful</h2>
+        <p style="color: #64748b; margin-bottom: 30px;">Your funds have been added to your Lead Bank account balance.</p>
+        <button class="btn-confirm" onclick="window.location.href='alexmoreno.lead.bank.dashboard.html'">Back to Home</button>
     </div>
 
-    <div id="successModal" class="hidden fixed inset-0 bg-[#08090a] z-50 flex items-center justify-center p-6">
-        <div class="text-center animate-bounce">
-            <div class="w-20 h-20 bg-[#00d387] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/40">
-                <i class="fas fa-check text-black text-3xl"></i>
+    <header>
+        <a href="alexmoreno.lead.bank.dashboard.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <h3 style="font-weight: 800;">Deposit Funds</h3>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <label>Amount to Deposit</label>
+            <div class="amount-input-wrapper">
+                <span class="currency-symbol">$</span>
+                <input type="number" id="amount" placeholder="0.00" inputmode="decimal">
             </div>
-            <h2 class="text-2xl font-extrabold mb-2">Deposit Successful</h2>
-            <p class="text-gray-500 text-sm">Dashboard balance updated immediately.</p>
+
+            <label>Deposit Method</label>
+            <div class="method-tile active">
+                <div class="method-icon"><i class="fas fa-university"></i></div>
+                <div>
+                    <h4 style="font-size: 14px;">External Bank Transfer</h4>
+                    <p style="font-size: 11px; color: #64748b;">ACH/Wire - Instant Credit</p>
+                </div>
+            </div>
+            <div class="method-tile">
+                <div class="method-icon"><i class="fas fa-credit-card"></i></div>
+                <div>
+                    <h4 style="font-size: 14px;">Debit Card</h4>
+                    <p style="font-size: 11px; color: #64748b;">Linked card ending in 4492</p>
+                </div>
+            </div>
+
+            <button class="btn-confirm" onclick="processDeposit()">Confirm Deposit</button>
         </div>
     </div>
 
     <script>
-        // --- LOGIC VARIABLES ---
-        let startTime = 0;
-        let isWaitingForReturn = false;
-        const REDIRECT_URL = "user-dashboard.html";
+        function processDeposit() {
+            const amountInput = document.getElementById('amount').value;
+            const amount = parseFloat(amountInput);
 
-        // Set unique ref
-        const ref = "OPY-" + Math.floor(Math.random() * 8999 + 1000);
-        document.getElementById('refID').innerText = ref;
-
-        // Timer
-        let time = 3600;
-        setInterval(() => {
-            if(time <= 0) return;
-            const m = Math.floor(time/60);
-            const s = time%60;
-            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-            time--;
-        }, 1000);
-
-        function copyAcc() {
-            navigator.clipboard.writeText("6119316029");
-            alert("Account Number Copied!");
-        }
-
-        function processPayment() {
-            const amountInput = document.getElementById('depositAmount');
-            const amount = parseFloat(amountInput.value);
-            
-            if (!amount || amount < 5000) {
-                alert("Please enter ₦5,000 or more.");
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid amount");
                 return;
             }
 
-            // Save data for verification
-            localStorage.setItem('last_deposit_val', amount);
-            startTime = Date.now();
-            isWaitingForReturn = true;
+            // 1. Get current balance and add new amount
+            let currentBalance = parseFloat(localStorage.getItem('walletBalance') || '0');
+            let newBalance = currentBalance + amount;
 
-            // Update button UI
-            const btn = document.getElementById('confirmBtn');
-            btn.innerHTML = '<i class="fas fa-spinner animate-spin mr-2"></i> OPENING OPAY...';
-            btn.style.opacity = "0.7";
+            // 2. Save new balance
+            localStorage.setItem('walletBalance', newBalance.toString());
 
-            // --- HIGH FORCE APP TRIGGER ---
-            const intentLink = "intent://#Intent;scheme=opay;package=team.opay.pay;end"; 
-            const iosLink = "opay://"; 
+            // 3. Save to Transaction History
+            const txs = JSON.parse(localStorage.getItem('transactions') || '[]');
+            const newTx = {
+                type: 'Deposit',
+                title: 'Funds Deposit',
+                amount: amount,
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            };
+            txs.push(newTx);
+            localStorage.setItem('transactions', JSON.stringify(txs));
 
-            // Trigger for Android
-            window.location.replace(intentLink);
-            
-            // Trigger for iOS fallback
-            setTimeout(() => {
-                window.location.href = iosLink;
-            }, 600);
-        }
-
-        // DETECT RETURN TO BROWSER
-        document.addEventListener("visibilitychange", function() {
-            if (document.visibilityState === 'visible' && isWaitingForReturn) {
-                const timeAway = (Date.now() - startTime) / 1000;
-                const amount = parseFloat(localStorage.getItem('last_deposit_val'));
-
-                // If user stayed away > 60 seconds, confirm deposit
-                if (timeAway > 60) {
-                    finalizeDeposit(amount);
-                } else {
-                    // Show Dead Bird Error
-                    showDeadBird();
-                }
-                
-                isWaitingForReturn = false;
-            }
-        });
-
-        function finalizeDeposit(amount) {
-            // Update Local Storage Balance
-            let bal = parseFloat(localStorage.getItem('accountBalance')) || 0;
-            localStorage.setItem('accountBalance', (bal + amount));
-
-            // Show Success UI
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('successModal').classList.remove('hidden');
-
-            // Final redirection
-            setTimeout(() => {
-                window.location.href = REDIRECT_URL;
-            }, 3000);
-        }
-
-        function showDeadBird() {
-            // Replace screen with Dead Bird / Error design
-            document.body.innerHTML = `
-                <div style="background:#08090a; height:100vh; width:100vw; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; font-family:sans-serif; color:white; padding:20px;">
-                    <div style="font-size: 80px; margin-bottom: 20px;">😵</div>
-                    <h1 style="color:#ef4444; font-weight:900; font-size:28px; margin-bottom:10px;">DEPOSIT ERROR</h1>
-                    <p style="color:#6b7280; font-size:14px; margin-bottom:40px; line-height:1.6; max-width:250px;">
-                        failed, please make sure you complete the transfer thank you @ CPT opay payment gateway 2026.
-if sure you made the payment and still displaying,kindly send a message to our team at fraudteamcompetentraders@gmail.com
-                    </p>
-                    <div class="error-spinner"></div>
-                    <p style="color:#374151; font-size:10px; margin-top:20px; text-transform:uppercase; letter-spacing:2px;">Redirecting to Dashboard</p>
-                </div>
-            `;
-
-            setTimeout(() => {
-                window.location.href = REDIRECT_URL;
-            }, 4000);
+            // 4. Show Success
+            document.getElementById('successOverlay').style.display = 'flex';
         }
     </script>
 </body>
