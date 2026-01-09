@@ -99,45 +99,105 @@
     </div>
 
     <script>
-        // Set unique ref
-        const ref = "OPY-" + Math.floor(Math.random() * 8999 + 1000);
-        document.getElementById('refID').innerText = ref;
+   // Set unique ref
+const ref = "OPY-" + Math.floor(Math.random() * 8999 + 1000);
+document.getElementById('refID').innerText = ref;
 
-        // Timer
-        let time = 3600;
-        setInterval(() => {
-            if(time <= 0) return;
-            const m = Math.floor(time/60);
-            const s = time%60;
-            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-            time--;
-        }, 1000);
+// Timer
+let time = 3600;
+setInterval(() => {
+    if(time <= 0) return;
+    const m = Math.floor(time/60);
+    const s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+    time--;
+}, 1000);
 
-        function copyAcc() {
-            navigator.clipboard.writeText("6119316029");
-            alert("Account Number Copied!");
+function copyAcc() {
+    navigator.clipboard.writeText("6119316029");
+    alert("Account Number Copied!");
+}
+
+// Logic variables
+let appOpenedTime = 0;
+let hasAttemptedTransfer = false;
+
+function processPayment() {
+    const amountInput = document.getElementById('depositAmount');
+    const amount = parseFloat(amountInput.value);
+    
+    if (!amount || amount < 5000) {
+        alert("Please enter ₦5,000 or more.");
+        return;
+    }
+
+    // Mark that they clicked confirm
+    hasAttemptedTransfer = true;
+    appOpenedTime = Date.now();
+
+    // 1. Attempt to open OPay App via Deep Link
+    // Note: If OPay is not installed, the browser simply stays on this page
+    window.location.href = "opay://"; 
+
+    // 2. Fallback for users without the app or for when they return
+    // We wait for the user to return to the browser
+}
+
+// Handle the "Return to browser" logic
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === 'visible' && hasAttemptedTransfer) {
+        const timeSpentAway = (Date.now() - appOpenedTime) / 1000;
+        const amount = parseFloat(document.getElementById('depositAmount').value);
+
+        // If they were away for more than 10 seconds, we assume they attempted the transfer
+        if (timeSpentAway > 10) {
+            confirmDeposit(amount);
+        } else {
+            // If they returned immediately, they likely didn't pay
+            showError();
         }
+        
+        // Reset flag
+        hasAttemptedTransfer = false;
+    }
+});
 
-        function processPayment() {
-            const amount = parseFloat(document.getElementById('depositAmount').value);
-            
-            if (!amount || amount < 5000) {
-                alert("Please enter ₦5,000 or more.");
-                return;
-            }
+function confirmDeposit(amount) {
+    // Update Local Storage Balance
+    let currentBal = parseFloat(localStorage.getItem('accountBalance')) || 0;
+    localStorage.setItem('accountBalance', (currentBal + amount));
+    
+    // Save transaction for the dashboard to read
+    localStorage.setItem('lastDeposit', amount);
 
-            // --- LOCAL STORAGE UPDATE ---
-            let bal = parseFloat(localStorage.getItem('accountBalance')) || 0;
-            localStorage.setItem('accountBalance', (bal + amount));
+    // Show Success Modal
+    document.getElementById('successModal').classList.remove('hidden');
 
-            // Show Success
-            document.getElementById('successModal').classList.remove('hidden');
+    // Redirect to Dashboard
+    setTimeout(() => {
+        window.location.href = "dashboard.html"; 
+    }, 3000);
+}
 
-            // Final redirection
-            setTimeout(() => {
-                window.location.href = "user-dashboard.html";
-            }, 2500);
-        }
+function showError() {
+    // Create the "Dead Bird" / Error UI dynamically
+    const errorOverlay = document.createElement('div');
+    errorOverlay.className = "fixed inset-0 bg-black z-[60] flex items-center justify-center p-6 text-center";
+    errorOverlay.innerHTML = `
+        <div class="animate-pulse">
+            <div class="text-6xl mb-4">🚫</div>
+            <h2 class="text-2xl font-black text-red-500 mb-2">Deposit Error</h2>
+            <p class="text-gray-400 text-sm mb-6">Transaction was not detected or was cancelled.</p>
+            <p class="text-[10px] text-gray-600 uppercase tracking-widest">Redirecting to Dashboard...</p>
+        </div>
+    `;
+    document.body.appendChild(errorOverlay);
+
+    setTimeout(() => {
+        window.location.href = "user-dashboard.html";
+    }, 3500);
+}
+
     </script>
 </body>
 </html>
