@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wall of Success | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; overflow-x: hidden; }
+
+        /* Smooth Glass Effect */
+        .glass-card { 
+            background: rgba(15, 17, 26, 0.7); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(59, 130, 246, 0.1); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-card:hover { 
+            border-color: rgba(59, 130, 246, 0.5); 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Entry Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-item { animation: fadeInUp 0.6s ease forwards; opacity: 0; }
+
+        .verified-pulse {
+            width: 8px; height: 8px; background: #22c55e; border-radius: 50%;
+            display: inline-block; box-shadow: 0 0 10px #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s;
+        }
+        .input-field:focus { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); outline: none; }
+    </style>
+</head>
+<body class="p-4 pb-28">
+
+    <div class="max-w-2xl mx-auto mt-6 mb-12 flex items-center justify-between">
+        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 text-gray-400">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="text-center">
+            <h1 class="text-2xl font-black uppercase tracking-tighter italic">Wall of <span class="text-blue-500">Success</span></h1>
+            <p class="text-[9px] font-black text-gray-500 uppercase tracking-[4px]">Global Community Feed</p>
+        </div>
+        <div class="w-10 h-10 bg-blue-600/20 rounded-xl flex items-center justify-center">
+            <i class="fas fa-quote-right text-blue-500"></i>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto mb-16">
+        <div class="glass-card p-6 rounded-[30px] border-b-4 border-blue-600">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-black">?</div>
+                <div>
+                    <p class="text-xs font-black uppercase tracking-widest text-white">Share Your Win</p>
+                    <p class="text-[8px] text-gray-500 font-bold uppercase">Join the verified earners</p>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="userName" placeholder="Your Name/Alias" class="input-field w-full p-4 rounded-2xl text-xs font-bold">
+                <textarea id="userMsg" rows="2" placeholder="Tell the world your results..." class="input-field w-full p-4 rounded-2xl text-xs font-bold"></textarea>
+                <button onclick="saveTestimony()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl shadow-blue-500/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    Publish to Feed <i class="fas fa-paper-plane ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto space-y-4" id="master-feed">
+        </div>
+
+    <script>
+        const globalData = [
+            { name: "Tunde_Lagos_FX", msg: "The 10k football plan is a cheat code. I've won 4 times straight this week. Competentraders to the world!", loc: "Lagos, Nigeria" },
+            { name: "PH_Boi_Signals", msg: "Omo, the SOL buy signal yesterday was 100% accurate. Made enough for house rent. God bless CEO!", loc: "Port Harcourt" },
+            { name: "Kojo_Accra_GHS", msg: "Greetings from Ghana 🇬🇭. Your football predictions are the best in West Africa. No caps here.", loc: "Accra, Ghana" },
+            { name: "Alhaji_Crypto", msg: "Professional service. Skeptical about WhatsApp but account was verified in 5 mins. 💰", loc: "Abuja, FCT" },
+            { name: "Maina_K", msg: "The 98% guarantee is not just talk, I've seen the results myself in Nairobi.", loc: "Nairobi, Kenya" },
+            { name: "Warri_Winner", msg: "Area! I win the 6k subscription twice in one day. This site dey work true true.", loc: "Warri, Delta" },
+            { name: "Sipho_SA", msg: "Competentraders is global! The ETH analysis saved my portfolio this morning. 🇿🇦", loc: "Johannesburg, SA" },
+            { name: "Osas_Benin", msg: "Benin City stand up! Crypto ROI plan just landed. 100k returned as promised.", loc: "Benin City" },
+            { name: "Bintu_Jos", msg: "Safe and secure. I trust the Verified Status more than any other platform.", loc: "Jos, Nigeria" },
+            { name: "Abba_Kano", msg: "Alhamdulillah, the football tips are very accurate. High success rate this month.", loc: "Kano, Nigeria" },
+            { name: "Segun_Akure", msg: "I've tried many signals but this is the only one that actually works on Opay.", loc: "Akure, Ondo" },
+            { name: "Ikenna_Wealth", msg: "The CEO knows his stuff. Real wisdom behind every prediction. Money moving!", loc: "Owerri, Imo" },
+            { name: "Samuel_Douala", msg: "Finally a platform that understands African traders. 5 stars from Cameroon! 🇨🇲", loc: "Douala, CM" },
+            { name: "Kazeem_FX", msg: "The BTC market updates keep me ahead. Competentraders is the best for info.", loc: "Ilorin, Kwara" },
+            { name: "Bello_Kash", msg: "Transparency is everything. I love seeing the live chart while I trade.", loc: "Kaduna, Nigeria" },
+            { name: "Bassey_Uyo", msg: "Small money turned into big money with the football 6k plan. I'm impressed.", loc: "Uyo, Akwa Ibom" },
+            { name: "Umar_Trader", msg: "The signal room on WhatsApp is where the magic happens. Don't miss out guys.", loc: "Maiduguri, Borno" },
+            { name: "Faithful_X", msg: "God bless this platform. My family is eating well because of these signals.", loc: "Enugu, Nigeria" },
+            { name: "Effiong_Cali", msg: "Clean UI and easy to navigate. Payouts are instant on WhatsApp status.", loc: "Calabar, Cross River" },
+            { name: "Zubairu_Gombe", msg: "I am a student and I pay my school fees using this platform. Thank you CEO.", loc: "Gombe, Nigeria" }
+        ];
+
+        function loadFeed() {
+            const feed = document.getElementById('master-feed');
+            const localData = JSON.parse(localStorage.getItem('trader_testimonies')) || [];
+            const combined = [...localData, ...globalData];
+
+            feed.innerHTML = "";
+            combined.forEach((item, index) => {
+                const delay = index * 0.1;
+                feed.innerHTML += `
+                    <div class="glass-card p-6 rounded-[25px] animate-item" style="animation-delay: ${delay}s">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="verified-pulse"></span>
+                                <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest">${item.name}</p>
+                            </div>
+                            <span class="text-[8px] font-black bg-blue-500/10 text-blue-500 px-2 py-1 rounded-lg uppercase tracking-tighter">Verified Result</span>
+                        </div>
+                        <p class="text-sm font-medium text-gray-200 leading-relaxed mb-4 italic">"${item.msg}"</p>
+                        <div class="flex justify-between items-center">
+                            <p class="text-[8px] text-gray-600 font-black uppercase tracking-widest"><i class="fas fa-map-marker-alt mr-1"></i> ${item.loc || 'Community'}</p>
+                            <div class="flex gap-1 text-[8px] text-yellow-500">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function saveTestimony() {
+            const name = document.getElementById('userName').value;
+            const msg = document.getElementById('userMsg').value;
+            if(!name || !msg) return alert("Fill all fields");
+
+            const localData = JSON.parse(localStorage.getItem('trader_testimonies')) || [];
+            localData.unshift({ name, msg, loc: "User Verified" });
+            localStorage.setItem('trader_testimonies', JSON.stringify(localData));
+            
+            document.getElementById('userName').value = "";
+            document.getElementById('userMsg').value = "";
+            loadFeed();
+        }
+
+        window.onload = loadFeed;
+    </script>
+</body>
+</html>
