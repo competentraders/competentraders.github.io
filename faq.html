@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal Support | Competentraders</title>
+    <title>Knowledge Base | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -12,137 +12,210 @@
         
         .faq-item { 
             background: rgba(15, 17, 26, 0.5); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.03); 
             border-radius: 20px; 
-            margin-bottom: 12px; 
-            transition: all 0.3s;
+            margin-bottom: 10px; 
+            transition: all 0.2s ease-in-out;
         }
-        .faq-item.active { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        .faq-item.active { border-color: #3b82f6; background: rgba(59, 130, 246, 0.08); transform: scale(1.01); }
         
-        .faq-question { padding: 20px; display: flex; justify-content: space-between; items-center; cursor: pointer; }
-        .faq-answer { padding: 0 20px 20px 20px; color: #94a3b8; font-size: 13px; display: none; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.02); padding-top: 15px; }
+        .faq-question { padding: 18px 20px; display: flex; justify-content: space-between; items-center; cursor: pointer; }
+        .faq-answer { padding: 0 20px 20px 20px; color: #94a3b8; font-size: 13px; display: none; line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 15px; }
         
         .faq-item.active .faq-answer { display: block; }
         .faq-item.active .chevron { transform: rotate(180deg); color: #3b82f6; }
         
-        .section-tag { font-size: 10px; color: #3b82f6; font-weight: 900; margin: 30px 0 12px 5px; text-transform: uppercase; letter-spacing: 3px; }
+        .section-tag { font-size: 9px; color: #3b82f6; font-weight: 900; margin: 35px 0 15px 5px; text-transform: uppercase; letter-spacing: 4px; border-left: 2px solid #3b82f6; padding-left: 10px; }
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Category Pill Styles */
+        .cat-pill { transition: all 0.3s; flex: 0 0 auto; }
+        .cat-pill:hover { background: #3b82f6; color: white; border-color: #3b82f6; }
     </style>
 </head>
 <body class="p-5 pb-24">
 
-    <div class="flex items-center gap-4 mb-8">
-        <a href="user-dashboard.html" class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-2xl text-blue-500 border border-white/10">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <div>
-            <h1 class="text-xl font-black uppercase italic tracking-tight text-white">Help <span class="text-blue-500">Center</span></h1>
-            <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Knowledge Base v2.0</p>
+    <div class="max-w-2xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <a href="user-dashboard.html" class="w-12 h-12 flex items-center justify-center bg-white/5 rounded-2xl text-blue-500 border border-white/10">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="text-right">
+                <h1 class="text-xl font-black uppercase italic tracking-tighter">Support <span class="text-blue-500">Terminal</span></h1>
+                <p class="text-[8px] text-gray-600 font-bold uppercase tracking-[3px]">System Documentation</p>
+            </div>
         </div>
-    </div>
 
-    <div class="flex gap-2 overflow-x-auto pb-6 no-scrollbar">
-        <a href="#mon" class="whitespace-nowrap px-5 py-2.5 bg-blue-600/10 rounded-xl text-[10px] font-black border border-blue-600/20 text-blue-500 uppercase">Payments</a>
-        <a href="#vip" class="whitespace-nowrap px-5 py-2.5 bg-white/5 rounded-xl text-[10px] font-black border border-white/10 text-gray-400 uppercase">VIP Room</a>
-        <a href="#sec" class="whitespace-nowrap px-5 py-2.5 bg-white/5 rounded-xl text-[10px] font-black border border-white/10 text-gray-400 uppercase">Security</a>
-        <a href="#test" class="whitespace-nowrap px-5 py-2.5 bg-white/5 rounded-xl text-[10px] font-black border border-white/10 text-gray-400 uppercase">Trust</a>
-    </div>
+        <div class="relative mb-8">
+            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-gray-600 text-sm"></i>
+            <input type="text" placeholder="Search system protocols..." class="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-5 text-sm focus:outline-none focus:border-blue-500/50">
+        </div>
 
-    <p id="mon" class="section-tag">Finance & Settlements</p>
-    
-    <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-            <span class="font-bold text-sm">When do I get my money? (Payout Policy)</span>
-            <i class="fas fa-chevron-down chevron transition-all"></i>
+        <div class="flex gap-2 overflow-x-auto pb-6 no-scrollbar">
+            <a href="#mon" class="cat-pill whitespace-nowrap px-5 py-2.5 bg-blue-600/10 rounded-xl text-[10px] font-black border border-blue-600/20 text-blue-500 uppercase">Cash Flow</a>
+            <a href="#vip" class="cat-pill whitespace-nowrap px-5 py-2.5 bg-white/5 rounded-xl text-[10px] font-black border border-white/10 text-gray-400 uppercase">VIP Room</a>
+            <a href="#acc" class="cat-pill whitespace-nowrap px-5 py-2.5 bg-white/5 rounded-xl text-[10px] font-black border border-white/10 text-gray-400 uppercase">Access</a>
+            <a href="#aff" class="cat-pill whitespace-nowrap px-5 py-2.5 bg-white/5 rounded-xl text-[10px] font-black border border-white/10 text-gray-400 uppercase">Affiliates</a>
         </div>
-        <div class="faq-answer">
-            To ensure platform stability, all withdrawals are processed <b>Every Monday between 8:00 AM and 6:00 PM</b>. 
-            Once you request a withdrawal, it will appear as "Awaiting Monday" in your Ledger until the next payout cycle.
-        </div>
-    </div>
 
-    <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-            <span class="font-bold text-sm">How do I verify my deposit?</span>
-            <i class="fas fa-chevron-down chevron transition-all"></i>
-        </div>
-        <div class="faq-answer">
-            After transferring to the Opay account provided on the Deposit page, you must click <b>"I Have Paid"</b>. 
-            This will redirect you to the CEO's WhatsApp. Send your receipt there for instant node activation.
-        </div>
-    </div>
-
-    <p id="vip" class="section-tag">Premium Access</p>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-            <span class="font-bold text-sm">What is the VIP Signal Room?</span>
-            <i class="fas fa-chevron-down chevron transition-all"></i>
-        </div>
-        <div class="faq-answer">
-            The VIP Signal Room is an exclusive inner circle for high-net-worth traders. Members receive 99% accurate sniper entries for Forex and weekend fixed matches. Entry is by <b>Invitation Only</b> via the VIP section.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-            <span class="font-bold text-sm">How do "Predictions" work?</span>
-            <i class="fas fa-chevron-down chevron transition-all"></i>
-        </div>
-        <div class="faq-answer">
-            Our algorithmic system analyzes daily market trends. Predictions are updated every 24 hours. Follow these signals at your own pace, or join the VIP room for automated execution assistance.
-        </div>
-    </div>
-
-    <p id="test" class="section-tag">Transparency & Proof</p>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-            <span class="font-bold text-sm">Is the Transaction History real?</span>
-            <i class="fas fa-chevron-down chevron transition-all"></i>
-        </div>
-        <div class="faq-answer">
-            Yes. The <b>Activity Ledger</b> shows live settlement batches from our global trading node. It updates every Monday to reflect the latest payouts sent to our community across Africa.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-            <span class="font-bold text-sm">Where can I see Testimonies?</span>
-            <i class="fas fa-chevron-down chevron transition-all"></i>
-        </div>
-        <div class="faq-answer">
-            Visit the <b>Testimony Section</b> from your dashboard. We feature over 20+ verified success stories from users in Nigeria, Ghana, and beyond who have achieved financial autonomy through Competentraders.
-        </div>
-    </div>
-
-    <p id="sec" class="section-tag">System Security</p>
-
-    <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-            <span class="font-bold text-sm">How is my account secured?</span>
-            <i class="fas fa-chevron-down chevron transition-all"></i>
-        </div>
-        <div class="faq-answer">
-            We use <b>Edge Storage</b>. Your balance and credentials are encrypted directly on your device. This means no hacker can steal your data from a central server—it is 100% under your physical control.
-        </div>
-    </div>
-
-    <div class="mt-12 p-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-[35px] text-center shadow-2xl shadow-blue-500/20 relative overflow-hidden">
-        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <p id="acc" class="section-tag">Account Architecture</p>
         
-        <h3 class="font-black text-xl mb-2 italic">Still need a Patch?</h3>
-        <p class="text-xs text-blue-100 mb-6 font-medium leading-relaxed">Our executive support desk is available <br>for 1-on-1 resolution.</p>
-        
-        <a href="https://wa.me/2349153258628?text=Hello%20Support%2C%20I%20have%20a%20question%20about%20my%20account." 
-           class="inline-block bg-white text-blue-700 px-10 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-transform shadow-lg">
-            Talk to CEO Office
-        </a>
-    </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">What is Edge Storage Security?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">Competentraders utilizes Edge Storage, meaning your sensitive data is encrypted and saved locally on your device. This eliminates central server hacks and ensures you are the only one with access to your private terminal.</div>
+        </div>
 
-    <div class="mt-10 text-center opacity-20">
-        <p class="text-[8px] font-black uppercase tracking-[5px]">Competentraders • Secure Terminal</p>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Can I have multiple accounts?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">System policy allows one primary account per device. Multiple accounts may trigger a security flag in our node, leading to a temporary hold on withdrawals.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Why can't I change my email?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">For security reasons, your email is hardcoded as your unique identifier. If you must change it, you will need to undergo a full KYC verification with the CEO office.</div>
+        </div>
+
+        <p id="mon" class="section-tag">Cash Flow & Settlements</p>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Why only Monday Payouts?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">We operate on a Weekly Settlement Cycle. This allows our traders to maximize market liquidity during the week without interrupting active trade flows. Mondays are dedicated entirely to capital disbursement.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">What is the minimum withdrawal?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">The minimum threshold for withdrawal is ₦2,000. This ensures we can process batch settlements efficiently through the Opay and Kuda banking nodes.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">My deposit hasn't appeared yet?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">Deposits usually take 5-30 minutes. If you have clicked "I Have Paid" and sent your receipt to the WhatsApp desk, rest assured your node is being activated manually.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Are there any hidden withdrawal fees?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">We believe in 100% transparency. There are no hidden fees. The amount you see in your balance is exactly what will be sent to your bank, minus standard bank transfer charges (₦10-₦50).</div>
+        </div>
+
+        <p id="vip" class="section-tag">VIP Signal Room</p>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">How accurate are VIP Signals?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">Our VIP Signals are generated by the IAM OREVA algorithm and have a verified historical accuracy of 99%. These are "Sniper" entries designed for maximum ROI with minimal drawdown.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">What is included in the VIP Life Plan?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">VIP members get: Daily Crypto/Forex signals, Weekend Fixed Matches, Account Management services, and direct 1-on-1 mentorship from the CEO.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Can I upgrade from basic to VIP later?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">Yes, you can upgrade at any time by visiting the VIP Signal Room section and requesting an invitation. Your previous basic plan will stay active alongside your VIP benefits.</div>
+        </div>
+
+        <p id="aff" class="section-tag">Referral Ecosystem</p>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">How much do I earn from referrals?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">We offer a highly competitive referral commission. When your downline activates a trading plan, you receive an instant percentage credited to your "Affiliate Balance."</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Where is my referral link?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">Your unique link is located on the main Dashboard and your Referral page. Copy and share it to start building your network.</div>
+        </div>
+
+        <p id="sec" class="section-tag">Risk Management</p>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">What happens if a trade is lost?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">Our systems use "Stop-Loss" protocols. While trading carries risk, our algorithm is designed to protect your initial capital first before seeking profit.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Is my bank information safe?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">We never store your full bank login details. We only require your Account Number and Bank Name for the sole purpose of sending you your profits.</div>
+        </div>
+
+        <p class="section-tag">System Maintenance</p>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">Why does my balance show ₦0 after refresh?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">Ensure you are using the same browser and device. Since data is saved locally, clearing your cache or using "Incognito Mode" will hide your balance. Log in again to restore view.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span class="font-bold text-sm">The site is loading slowly?</span>
+                <i class="fas fa-chevron-down chevron transition-all"></i>
+            </div>
+            <div class="faq-answer">This usually occurs during "Monday Payouts" due to high traffic on our node. Refresh the page or check your internet connection for optimal terminal performance.</div>
+        </div>
+
+        <div class="mt-16 mb-12">
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-900 p-8 rounded-[40px] shadow-2xl relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+                <h3 class="text-2xl font-black mb-2 italic">Need Direct Support?</h3>
+                <p class="text-xs text-blue-100 mb-6 font-medium">If your query isn't answered here, contact the Executive Desk directly for a resolution within 1 hour.</p>
+                
+                <a href="https://wa.me/2349153258628?text=Hello%20CEO%2C%20I%20have%20reviewed%20the%20FAQ%20but%20still%20need%20help%20with..." 
+                   class="inline-block w-full py-5 bg-white text-blue-700 font-black uppercase text-xs tracking-widest rounded-2xl text-center shadow-lg hover:bg-gray-100 transition-all">
+                    Open Support Ticket
+                </a>
+            </div>
+        </div>
+
+        <div class="text-center opacity-30">
+            <i class="fas fa-shield-halved text-4xl mb-3"></i>
+            <p class="text-[8px] font-black uppercase tracking-[5px]">Competentraders Engineered Solutions</p>
+        </div>
     </div>
 
     <script>
@@ -150,12 +223,9 @@
             const item = element.parentElement;
             const isActive = item.classList.contains('active');
             
-            // Close all items
-            document.querySelectorAll('.faq-item').forEach(el => {
-                el.classList.remove('active');
-            });
+            // Auto-close others
+            document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
 
-            // Open the clicked one if it wasn't already active
             if (!isActive) {
                 item.classList.add('active');
             }
