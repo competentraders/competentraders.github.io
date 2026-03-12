@@ -12,35 +12,37 @@
         .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         
         /* Fluctuation Flash Effects */
-        .price-up { color: #22c55e !important; transition: color 0.3s ease; }
-        .price-down { color: #ef4444 !important; transition: color 0.3s ease; }
-        .normal { color: white; transition: color 1s ease; }
+        .price-up { color: #22c55e !important; }
+        .price-down { color: #ef4444 !important; }
 
         .crypto-row { border-bottom: 1px solid rgba(255,255,255,0.02); transition: all 0.2s; }
         .crypto-row:hover { background: rgba(59, 130, 246, 0.03); }
+        
+        /* Hide scrollbar for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-8 pb-24">
 
     <div class="max-w-6xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center gap-6">
         <div>
             <div class="inline-flex items-center gap-2 mb-2">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-chart-line text-white"></i></div>
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-microchip text-white text-xs"></i></div>
                 <span class="text-xl font-black uppercase tracking-tighter">Competent<span class="text-blue-500">raders</span></span>
             </div>
-            <h2 class="text-3xl font-black uppercase tracking-tight">Live Terminal</h2>
-            <p class="text-gray-500 text-xs font-bold uppercase tracking-[0.3em]">Direct Market Execution • No BTC</p>
+            <h2 class="text-3xl font-black uppercase tracking-tight">Crypto Terminal</h2>
+            <p class="text-gray-500 text-[10px] font-black uppercase tracking-[0.3em]">Institutional Liquidity • Secure Execution</p>
         </div>
         <div class="flex gap-4">
-            <a href="user-dashboard.html" class="px-6 py-3 glass-panel rounded-xl text-xs font-bold uppercase">Back</a>
-            <div class="px-4 py-3 bg-green-500/10 border border-green-500/20 rounded-xl text-[10px] font-black uppercase text-green-500">
-                <i class="fas fa-circle animate-pulse mr-2"></i> Live Feed
+            <a href="user-dashboard.html" class="px-6 py-3 glass-panel rounded-xl text-xs font-bold uppercase hover:bg-white/5 transition-all">Dashboard</a>
+            <div class="px-4 py-3 bg-blue-500/10 border border-blue-500/20 rounded-xl text-[10px] font-black uppercase text-blue-400">
+                <i class="fas fa-bolt animate-pulse mr-2"></i> Real-Time
             </div>
         </div>
     </div>
 
     <div class="max-w-6xl mx-auto glass-panel rounded-[32px] overflow-hidden">
-        <div class="grid grid-cols-4 md:grid-cols-5 p-6 bg-white/5 text-[10px] font-black uppercase tracking-widest text-gray-500 border-b border-white/5">
+        <div class="grid grid-cols-4 md:grid-cols-5 p-6 bg-white/5 text-[9px] font-black uppercase tracking-widest text-gray-500 border-b border-white/5">
             <div>Asset</div>
             <div class="text-right">Price (USD)</div>
             <div class="text-right hidden md:block">24h Change</div>
@@ -48,44 +50,46 @@
             <div class="text-right">Sell Rate</div>
         </div>
 
-        <div id="market-list" class="divide-y divide-white/5">
-            </div>
+        <div id="market-list" class="divide-y divide-white/5"></div>
     </div>
 
     <script>
-        // Curated list of 40+ startup/high-growth coins (No Bitcoin)
+        // High-Growth Assets (No BTC as requested)
         const assets = [
             { s: 'ETHUSDT', name: 'Ethereum' }, { s: 'SOLUSDT', name: 'Solana' }, { s: 'BNBUSDT', name: 'Binance' },
-            { s: 'ADAUSDT', name: 'Cardano' }, { s: 'AVAXUSDT', name: 'Avalanche' }, { s: 'DOTUSDT', name: 'Polkadot' },
-            { s: 'MATICUSDT', name: 'Polygon' }, { s: 'LINKUSDT', name: 'Chainlink' }, { s: 'NEARUSDT', name: 'Near' },
-            { s: 'ATOMUSDT', name: 'Cosmos' }, { s: 'FILUSDT', name: 'Filecoin' }, { s: 'LDOUSDT', name: 'Lido' },
-            { s: 'APTUSDT', name: 'Aptos' }, { s: 'ARBUSDT', name: 'Arbitrum' }, { s: 'OPUSDT', name: 'Optimism' },
-            { s: 'SUIUSDT', name: 'Sui' }, { s: 'GRTUSDT', name: 'The Graph' }, { s: 'RNDRUSDT', name: 'Render' },
-            { s: 'INJUSDT', name: 'Injective' }, { s: 'FETUSDT', name: 'Fetch.ai' }, { s: 'STXUSDT', name: 'Stacks' },
-            { s: 'IMXUSDT', name: 'Immutable' }, { s: 'KASUSDT', name: 'Kaspa' }, { s: 'TIAUSDT', name: 'Celestia' }
+            { s: 'AVAXUSDT', name: 'Avalanche' }, { s: 'LINKUSDT', name: 'Chainlink' }, { s: 'MATICUSDT', name: 'Polygon' },
+            { s: 'NEARUSDT', name: 'Near Protocol' }, { s: 'APTUSDT', name: 'Aptos' }, { s: 'OPUSDT', name: 'Optimism' },
+            { s: 'SUIUSDT', name: 'Sui' }, { s: 'INJUSDT', name: 'Injective' }, { s: 'TIAUSDT', name: 'Celestia' }
         ];
 
         const marketList = document.getElementById('market-list');
         const prevPrices = {};
 
-        // 1. Create the rows immediately
+        // Inject rows with WhatsApp Links
         assets.forEach(asset => {
             const cleanS = asset.s.replace('USDT', '');
             marketList.innerHTML += `
                 <div id="row-${asset.s}" class="crypto-row grid grid-cols-4 md:grid-cols-5 p-5 items-center">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 bg-blue-500/10 rounded-lg flex items-center justify-center text-[10px] font-black text-blue-500">${cleanS}</div>
-                        <div><p class="text-xs font-black uppercase">${cleanS}</p><p class="text-[9px] text-gray-600 font-bold uppercase">${asset.name}</p></div>
+                        <div class="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center text-[11px] font-black text-blue-500 border border-blue-500/20">${cleanS}</div>
+                        <div>
+                            <p class="text-xs font-black uppercase">${cleanS}</p>
+                            <p class="text-[8px] text-gray-600 font-bold uppercase tracking-tighter">${asset.name}</p>
+                        </div>
                     </div>
-                    <div id="price-${asset.s}" class="text-right font-mono text-sm font-bold normal">Connecting...</div>
+                    <div id="price-${asset.s}" class="text-right font-mono text-sm font-bold">---</div>
                     <div id="change-${asset.s}" class="text-right hidden md:block text-[10px] font-black">--</div>
-                    <div class="text-right"><a href="deposit.html" class="px-4 py-2 bg-blue-600 rounded-lg text-[9px] font-black uppercase">Buy</a></div>
-                    <div id="sell-${asset.s}" class="text-right text-[10px] font-black text-green-500">--</div>
+                    
+                    <div class="text-right">
+                        <a href="https://wa.me/2349153258628?text=Hello%20Competentraders%2C%20I%20want%20to%20open%20a%20BUY%20position%20for%20${cleanS}." 
+                           class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-[9px] font-black uppercase transition-all inline-block">Buy</a>
+                    </div>
+
+                    <div id="sell-${asset.s}" class="text-right text-[10px] font-black text-emerald-500">--</div>
                 </div>
             `;
         });
 
-        // 2. Connect Live WebSocket
         function startLiveStream() {
             const streams = assets.map(a => a.s.toLowerCase() + '@ticker').join('/');
             const socket = new WebSocket(`wss://stream.binance.com:9443/ws/${streams}`);
@@ -101,24 +105,21 @@
                 const sellEl = document.getElementById(`sell-${sym}`);
 
                 if (priceEl) {
-                    // Visual Fluctuation Logic
                     if (prevPrices[sym] < price) {
-                        priceEl.classList.add('price-up');
-                        priceEl.classList.remove('price-down');
+                        priceEl.className = 'text-right font-mono text-sm font-bold price-up';
                     } else if (prevPrices[sym] > price) {
-                        priceEl.classList.add('price-down');
-                        priceEl.classList.remove('price-up');
+                        priceEl.className = 'text-right font-mono text-sm font-bold price-down';
                     }
                     
-                    // Reset color after short flash
-                    setTimeout(() => { priceEl.classList.remove('price-up', 'price-down'); }, 500);
+                    // Reset to white after flicker
+                    setTimeout(() => { priceEl.className = 'text-right font-mono text-sm font-bold text-white'; }, 400);
 
-                    priceEl.innerText = `$${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}`;
-                    changeEl.innerText = `${change}%`;
+                    priceEl.innerText = `$${price.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                    changeEl.innerText = `${parseFloat(change) > 0 ? '+' : ''}${change}%`;
                     changeEl.style.color = parseFloat(change) >= 0 ? '#22c55e' : '#ef4444';
                     
                     // Sell Rate (Calculated at 98.2% of market value)
-                    sellEl.innerText = `$${(price * 0.982).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 4})}`;
+                    sellEl.innerText = `$${(price * 0.982).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
                 }
                 prevPrices[sym] = price;
             };
@@ -128,6 +129,10 @@
 
         startLiveStream();
     </script>
+
+    <p class="mt-10 text-center text-[9px] text-gray-700 uppercase tracking-[0.4em] font-black">
+        Global Liquidity Provided by Binance Cloud • Encryption Active
+    </p>
 
 </body>
 </html>
