@@ -3,211 +3,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Competentraders Security</title>
+    <title>Register | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #06070a; color: white; margin: 0; }
+        
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --input-bg: #f1f5f9;
+        }
+
+        .dark-mode {
+            --bg-body: #06070a;
+            --bg-card: #0f1218;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.05);
+            --input-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-body); color: var(--text-main); transition: 0.3s; }
+        
+        .glass-panel { background: var(--bg-card); border: 1px solid var(--border); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
         
         .input-field { 
-            background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: white; width: 100%; padding: 14px;
-            border-radius: 16px; font-size: 14px; outline: none; transition: 0.3s;
+            background: var(--input-bg); border: 1px solid var(--border);
+            color: var(--text-main); width: 100%; padding: 12px 16px;
+            border-radius: 12px; font-size: 14px; outline: none; transition: 0.3s;
         }
-        .input-field:focus { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
-        .label-text { font-size: 10px; font-weight: 800; color: #475569; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 1px; }
-        .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .input-field:focus { border-color: #3b82f6; }
+
+        .label-text { font-size: 10px; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; display: block; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* VERIFICATION OVERLAY */
         #verify-overlay {
-            position: fixed; inset: 0; background: rgba(6, 7, 10, 0.98); 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
             z-index: 10000; display: none; align-items: center; justify-content: center;
-            padding: 20px; backdrop-filter: blur(15px);
-        }
-        .verify-box {
-            background: #0f1218; border: 1px solid rgba(59, 130, 246, 0.3); 
-            padding: 40px 30px; text-align: center;
-            width: 100%; max-width: 400px; border-radius: 32px;
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.1);
+            backdrop-filter: blur(10px); padding: 20px;
         }
 
-        .step-inactive { opacity: 0.3; filter: grayscale(1); }
-        .error-msg { font-size: 10px; color: #ef4444; margin-top: 6px; font-weight: 800; text-transform: uppercase; display: none; }
+        .eye-btn { position: absolute; right: 15px; top: 38px; color: var(--text-muted); cursor: pointer; }
     </style>
 </head>
-<body class="p-6 md:p-12">
+<body class="p-4 md:p-10">
+
+    <div class="max-w-3xl mx-auto flex justify-end mb-6">
+        <button onclick="toggleTheme()" class="p-3 rounded-full bg-blue-600 text-white shadow-lg">
+            <i id="theme-icon" class="fas fa-moon"></i>
+        </button>
+    </div>
 
     <div id="verify-overlay">
-        <div class="verify-box">
-            <div class="w-20 h-20 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fas fa-envelope-open-text text-3xl text-blue-500 animate-pulse"></i>
-            </div>
-            <h3 class="text-2xl font-black uppercase mb-2">Check Your Gmail</h3>
-            <p id="sent-to-email" class="text-blue-400 text-[11px] font-bold mb-6 tracking-widest uppercase">---</p>
-            <p class="text-gray-500 text-xs leading-relaxed mb-8">
-                A secure activation link has been sent. You must click the link to verify your identity before the <span class="text-white">Competentraders Terminal</span> will grant access.
-            </p>
-            <div class="space-y-3">
-                <button onclick="location.reload()" class="w-full py-4 border border-white/10 rounded-2xl font-black text-[10px] uppercase hover:bg-white/5 transition">Change Email</button>
-                <p class="text-[9px] text-gray-600 uppercase font-bold">Check your Spam folder if not seen in 60s</p>
-            </div>
+        <div class="bg-[#0f1218] border border-blue-500/30 p-8 text-center rounded-[2rem] max-w-sm w-full">
+            <i class="fas fa-paper-plane text-4xl text-blue-500 mb-4 animate-bounce"></i>
+            <h3 class="text-white text-xl font-black uppercase mb-2">Check Your Gmail</h3>
+            <p id="sent-to-email" class="text-blue-400 text-[10px] font-bold mb-6 italic">---</p>
+            <p class="text-gray-400 text-xs mb-8">We sent a secure activation link. Click it to confirm your identity and unlock your dashboard.</p>
+            <button onclick="location.reload()" class="w-full py-3 bg-white/5 text-white rounded-xl text-[10px] font-bold uppercase border border-white/10">Try Different Email</button>
         </div>
     </div>
 
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-3xl mx-auto">
         <div class="text-center mb-10">
-            <div class="inline-flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20">
-                    <i class="fas fa-shield-halved text-white text-lg"></i>
-                </div>
-                <span class="text-2xl font-black uppercase tracking-tighter">Competent<span class="text-blue-500">raders</span></span>
+            <div class="inline-flex items-center gap-2 mb-2">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center"><i class="fas fa-shield-alt text-white text-sm"></i></div>
+                <span class="text-xl font-black uppercase">Competent<span class="text-blue-500">raders</span></span>
             </div>
-            <h2 class="text-3xl font-black italic uppercase tracking-tight">Access Registration</h2>
-            <p class="text-gray-500 text-xs mt-2 uppercase font-bold tracking-widest">Global Enterprise Node Activation</p>
+            <h2 class="text-2xl font-black uppercase tracking-tight">Security Node Creation</h2>
         </div>
 
-        <form id="regForm" onsubmit="handleRegister(event)" class="glass-panel p-8 rounded-[2.5rem] space-y-6">
+        <form onsubmit="handleRegister(event)" class="glass-panel p-6 md:p-10 rounded-[2.5rem] space-y-6">
             
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="label-text">First Name</label>
-                    <input type="text" id="f_name" class="input-field" required placeholder="Legal First Name">
-                </div>
-                <div>
-                    <label class="label-text">Last Name</label>
-                    <input type="text" id="l_name" class="input-field" required placeholder="Surname">
-                </div>
-            </div>
-
-            <div>
-                <label class="label-text">Official Email (Verification Required)</label>
-                <input type="email" id="reg_email" class="input-field" required placeholder="active-gmail@example.com">
-                <p id="email-error" class="error-msg"><i class="fas fa-exclamation-triangle mr-1"></i> Invalid or restricted domain</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div><label class="label-text">First Name</label><input type="text" id="f_name" class="input-field" required></div>
+                <div><label class="label-text">Last Name</label><input type="text" id="l_name" class="input-field" required></div>
+                <div><label class="label-text">Other Name</label><input type="text" id="o_name" class="input-field"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div style="position: relative;">
-                    <label class="label-text">Security Password</label>
-                    <input type="password" id="reg_pass" oninput="checkPassRequirements()" class="input-field" required placeholder="Min 8 Characters">
-                    <div class="mt-3 flex gap-3">
-                        <span id="req-len" class="text-[9px] font-bold text-gray-600 uppercase"> 8+ Chars</span>
-                        <span id="req-num" class="text-[9px] font-bold text-gray-600 uppercase"> Numeric</span>
-                    </div>
+                <div>
+                    <label class="label-text">Username</label>
+                    <input type="text" id="reg_user" class="input-field" required placeholder="@username">
                 </div>
                 <div>
-                    <label class="label-text">Confirm Security Code</label>
-                    <input type="password" id="reg_pass_confirm" class="input-field" required placeholder="Repeat Password">
-                </div>
-            </div>
-
-            <div>
-                <label class="label-text">Country of Residence</label>
-                <select id="reg_country" class="input-field" required style="appearance: none;">
-                    <option value="">Select Territory</option>
-                    <option value="Nigeria">Nigeria</option>
-                    <option value="South Africa">South Africa</option>
-                    <option value="Ghana">Ghana</option>
-                    <option value="USA">United States</option>
-                    <option value="UK">United Kingdom</option>
+                    <label class="label-text">Gender</label>
+                    <select id="reg_gender" class="input-field" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Prefer not to say</option>
                     </select>
+                </div>
             </div>
 
-            <div class="bg-blue-600/5 p-5 rounded-2xl border border-blue-500/10">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-[10px] font-black text-blue-500 uppercase tracking-widest">Anti-Bot Validation</span>
-                    <span id="timer" class="text-[9px] text-gray-600 font-bold">---</span>
-                </div>
-                <div class="flex items-center gap-4 mb-3">
-                    <div id="captcha-code" class="bg-black/40 px-6 py-3 rounded-xl font-mono text-2xl text-blue-400 italic tracking-widest border border-white/5">-----</div>
-                    <button type="button" onclick="generateCaptcha()" class="text-gray-600 hover:text-white transition"><i class="fas fa-sync-alt"></i></button>
-                </div>
-                <input type="text" id="captcha-input" oninput="verifyCaptcha()" class="input-field" placeholder="Enter characters above">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><label class="label-text">Email Address</label><input type="email" id="reg_email" class="input-field" required></div>
+                <div><label class="label-text">Confirm Email</label><input type="email" id="confirm_email" class="input-field" required></div>
             </div>
 
-            <button id="reg-btn" disabled class="w-full py-5 bg-gray-800 text-gray-600 rounded-2xl font-black uppercase tracking-widest text-xs cursor-not-allowed transition-all">
-                Send Activation Link
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="relative"><label class="label-text">Security Password</label>
+                    <input type="password" id="reg_pass" class="input-field" required>
+                    <i class="fas fa-eye eye-btn" onclick="togglePass('reg_pass')"></i>
+                </div>
+                <div class="relative"><label class="label-text">Confirm Password</label>
+                    <input type="password" id="confirm_pass" class="input-field" required>
+                    <i class="fas fa-eye eye-btn" onclick="togglePass('confirm_pass')"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><label class="label-text">Date of Birth</label><input type="date" id="reg_dob" class="input-field" required></div>
+                <div>
+                    <label class="label-text">Nationality (African Region)</label>
+                    <select id="reg_country" class="input-field" required>
+                        <option value="">Select Country</option>
+                        <option value="Nigeria">Nigeria</option><option value="Ghana">Ghana</option>
+                        <option value="South Africa">South Africa</option><option value="Kenya">Kenya</option>
+                        <option value="Egypt">Egypt</option><option value="Ethiopia">Ethiopia</option>
+                        <option value="Uganda">Uganda</option><option value="Tanzania">Tanzania</option>
+                        <option value="Algeria">Algeria</option><option value="Morocco">Morocco</option>
+                        <option value="Angola">Angola</option><option value="Ivory Coast">Ivory Coast</option>
+                        <option value="Cameroon">Cameroon</option><option value="Senegal">Senegal</option>
+                        <option value="Zimbabwe">Zimbabwe</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" id="reg-btn" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20">
+                Finalize & Send Activation Link
             </button>
-            
-            <p class="text-center text-[10px] text-gray-600 font-bold uppercase">
-                Already registered? <a href="login.html" class="text-blue-500">Access Terminal</a>
-            </p>
         </form>
     </div>
 
     <script type="module">
-        // Once we set up your Firebase Console, we will put your keys here.
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.handleRegister = async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('reg_email').value;
+            const confirmEmail = document.getElementById('confirm_email').value;
+            const pass = document.getElementById('reg_pass').value;
+            const confirmPass = document.getElementById('confirm_pass').value;
+
+            if(email !== confirmEmail) { alert("Emails do not match!"); return; }
+            if(pass !== confirmPass) { alert("Passwords do not match!"); return; }
+            if(pass.length < 8) { alert("Security level too low. Use 8+ characters."); return; }
+
+            const actionCodeSettings = {
+                url: 'https://competentraders-2efdc.firebaseapp.com/finish-reg.html',
+                handleCodeInApp: true,
+            };
+
+            try {
+                await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+                
+                // Store all data for the next page
+                window.localStorage.setItem('emailForSignIn', email);
+                window.localStorage.setItem('draft_f_name', document.getElementById('f_name').value);
+                window.localStorage.setItem('draft_l_name', document.getElementById('l_name').value);
+                window.localStorage.setItem('draft_user', document.getElementById('reg_user').value);
+
+                document.getElementById('sent-to-email').innerText = email;
+                document.getElementById('verify-overlay').style.display = 'flex';
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        };
     </script>
 
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('theme-icon');
+            if(document.body.classList.contains('dark-mode')) {
+                icon.className = "fas fa-sun";
+            } else {
+                icon.className = "fas fa-moon";
+            }
+        }
 
-
-
-
-
-    <script type="module">
-  // 1. Import Firebase SDKs
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import { getAuth, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-  // 2. Your Config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
-    authDomain: "competentraders-2efdc.firebaseapp.com",
-    projectId: "competentraders-2efdc",
-    storageBucket: "competentraders-2efdc.firebasestorage.app",
-    messagingSenderId: "150379227882",
-    appId: "1:150379227882:web:19d9c19805ef68b016c593"
-  };
-
-  // 3. Initialize Services
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // 4. Verification Logic
-  window.handleRegister = async function(e) {
-      e.preventDefault();
-      
-      const email = document.getElementById('reg_email').value;
-      const firstName = document.getElementById('f_name').value;
-      const lastName = document.getElementById('l_name').value;
-      const username = document.getElementById('reg_user').value;
-
-      // Settings for the email link
-      const actionCodeSettings = {
-          // This is where the user goes AFTER clicking the link in Gmail
-          url: 'https://competentraders-2efdc.firebaseapp.com/finish-reg.html', 
-          handleCodeInApp: true,
-      };
-
-      try {
-          // Send the link to Gmail
-          await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-          
-          // Save the user's intended data locally so we can finish registration later
-          window.localStorage.setItem('emailForSignIn', email);
-          window.localStorage.setItem('draft_firstName', firstName);
-          window.localStorage.setItem('draft_lastName', lastName);
-          window.localStorage.setItem('draft_username', username);
-
-          // Show your "Check Gmail" Modal
-          document.getElementById('sent-to-email').innerText = email;
-          document.getElementById('verify-overlay').style.display = 'flex';
-
-      } catch (error) {
-          console.error("Firebase Error:", error.code, error.message);
-          alert("Security Block: " + error.message);
-      }
-  };
-</script>
-
-
-
-
-
-
-
+        function togglePass(id) {
+            const el = document.getElementById(id);
+            el.type = el.type === 'password' ? 'text' : 'password';
+        }
+    </script>
 </body>
 </html>
