@@ -149,7 +149,7 @@
             authDomain: "competentraders-2efdc.firebaseapp.com",
             projectId: "competentraders-2efdc",
             storageBucket: "competentraders-2efdc.firebasestorage.app",
-            messagingSenderId: "150379227882",
+            messagingSenderId: "competentraders",
             appId: "1:150379227882:web:19d9c19805ef68b016c593"
         };
 
@@ -168,10 +168,15 @@
             if(pass !== confirmPass) { alert("Passwords do not match!"); return; }
             if(pass.length < 8) { alert("Security level too low. Use 8+ characters."); return; }
 
+
             const actionCodeSettings = {
-                url: 'https://competentraders-2efdc.firebaseapp.com/finish-reg.html',
-                handleCodeInApp: true,
-            };
+    // Make sure this matches the EXACT name of your file
+    url: 'https://competentraders-2efdc.firebaseapp.com/finish-reg.html', 
+    handleCodeInApp: true,
+};
+
+
+
 
             try {
                 await sendSignInLinkToEmail(auth, email, actionCodeSettings);
@@ -182,7 +187,8 @@
                 window.localStorage.setItem('draft_l_name', document.getElementById('l_name').value);
                 window.localStorage.setItem('draft_user', document.getElementById('reg_user').value);
 
-                document.getElementById('sent-to-email').innerText = email;
+                document.getElementById('sent-to-email').innerText 
+= email;
                 document.getElementById('verify-overlay').style.display = 'flex';
             } catch (error) {
                 alert("Error: " + error.message);
