@@ -20,71 +20,77 @@
         <p id="status-text" class="text-gray-500 text-xs uppercase font-bold tracking-widest">Securing your node connection</p>
     </div>
 
+
+
+
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, isSignInWithEmailLink, signInWithEmailLink } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, isSignInWithEmailLink, signInWithEmailLink, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
-            authDomain: "competentraders-2efdc.firebaseapp.com",
-            projectId: "competentraders-2efdc",
-            storageBucket: "competentraders-2efdc.firebasestorage.app",
-            messagingSenderId: "competentraders",
-            appId: "1:150379227882:web:19d9c19805ef68b016c593"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        async function completeRegistration() {
-            if (isSignInWithEmailLink(auth, window.location.href)) {
-                let email = window.localStorage.getItem('emailForSignIn');
+    async function completeRegistration() {
+        if (isSignInWithEmailLink(auth, window.location.href)) {
+            let email = window.localStorage.getItem('emailForSignIn');
+            if (!email) {
+                email = window.prompt('Please confirm your email:');
+            }
+
+            try {
+                // 1. Verify the link
+                await signInWithEmailLink(auth, email, window.location.href);
                 
-                // If the user opened the link on a different device, ask for email again
-                if (!email) {
-                    email = window.prompt('Please provide your email for confirmation');
-                }
+                // 2. Now create the actual password-based account using the stored password
+                const password = window.localStorage.getItem('draft_pass');
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-                try {
-                    const result = await signInWithEmailLink(auth, email, window.location.href);
-                    
-                    // Link is valid! Now save the rest of the user's data to Firestore
-                    const user = result.user;
-                    const draftData = {
-                        firstName: window.localStorage.getItem('draft_firstName'),
-                        lastName: window.localStorage.getItem('draft_lastName'),
-                        username: window.localStorage.getItem('draft_username'),
-                        email: email,
-                        uid: user.uid,
-                        balance: 0,
-                        joinedDate: new Date().toISOString()
-                    };
+                // 3. Save everything to Firestore
+                await setDoc(doc(db, "users", user.uid), {
+                    firstName: window.localStorage.getItem('draft_f_name'),
+                    lastName: window.localStorage.getItem('draft_l_name'),
+                    username: window.localStorage.getItem('draft_user'),
+                    gender: window.localStorage.getItem('draft_gender'),
+                    dob: window.localStorage.getItem('draft_dob'),
+                    country: window.localStorage.getItem('draft_country'),
+                    email: email,
+                    uid: user.uid,
+                    balance: 0,
+                    status: "Verified",
+                    joinedDate: new Date().toISOString()
+                });
 
-                    await setDoc(doc(db, "users", user.uid), draftData);
+                document.getElementById('status-title').innerText = "Account Activated";
+                document.getElementById('loader').innerHTML = '<i class="fas fa-check-circle text-5xl text-green-500"></i>';
+                
+                window.localStorage.clear();
+                setTimeout(() => { window.location.href = 'user-dashboard.html'; }, 2000);
 
-                    // Success UI
-                    document.getElementById('status-title').innerText = "Access Granted";
-                    document.getElementById('status-text').innerText = "Identity Confirmed. Redirecting...";
-                    document.getElementById('loader').innerHTML = '<i class="fas fa-check-circle text-5xl text-green-500"></i>';
-                    
-                    // Clear local storage
-                    window.localStorage.clear();
-                    
-                    // Send to Dashboard after 2 seconds
-                    setTimeout(() => { window.location.href = 'user-dashboard.html'; }, 2000);
-
-                } catch (error) {
-                    document.getElementById('status-title').innerText = "Link Expired";
-                    document.getElementById('status-text').innerText = "Security token invalid. Please restart.";
-                    document.getElementById('loader').innerHTML = '<i class="fas fa-times-circle text-5xl text-red-500"></i>';
-                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('status-title').innerText = "Verification Failed";
+                document.getElementById('status-text').innerText = error.message;
             }
         }
+    }
+    window.onload = completeRegistration;
+</script>
 
-        window.onload = completeRegistration;
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+
 </body>
 </html>

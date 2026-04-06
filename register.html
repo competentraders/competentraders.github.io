@@ -80,71 +80,66 @@
         </form>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
-            authDomain: "competentraders-2efdc.firebaseapp.com",
-            projectId: "competentraders-2efdc",
-            storageBucket: "competentraders-2efdc.firebasestorage.app",
-            messagingSenderId: "Competentraders",
-            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+
+
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('mainRegForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('submitBtn');
+        const email = document.getElementById('reg_email').value;
+
+        // Security check
+        if(email !== document.getElementById('confirm_email').value) {
+            alert("Emails do not match."); return;
+        }
+
+        btn.innerText = "SENDING SECURE LINK...";
+        btn.disabled = true;
+
+        // CRUCIAL: This URL must be the exact page where your finish-reg.html is hosted
+        const actionCodeSettings = {
+            url: window.location.origin + '/finish-reg.html', 
+            handleCodeInApp: true,
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        try {
+            await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+            
+            // Save data locally so the finish page can pick it up
+            window.localStorage.setItem('emailForSignIn', email);
+            window.localStorage.setItem('draft_f_name', document.getElementById('f_name').value);
+            window.localStorage.setItem('draft_l_name', document.getElementById('l_name').value);
+            window.localStorage.setItem('draft_user', document.getElementById('reg_user').value);
+            window.localStorage.setItem('draft_gender', document.getElementById('reg_gender').value);
+            window.localStorage.setItem('draft_dob', document.getElementById('reg_dob').value);
+            window.localStorage.setItem('draft_country', document.getElementById('reg_country').value);
+            window.localStorage.setItem('draft_pass', document.getElementById('reg_pass').value);
 
-        document.getElementById('mainRegForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.innerText = "PROCESSING...";
-            btn.disabled = true;
-
-            const email = document.getElementById('reg_email').value;
-            const pass = document.getElementById('reg_pass').value;
-
-            if(email !== document.getElementById('confirm_email').value || pass !== document.getElementById('confirm_pass').value) {
-                alert("Match Error: Email or Password do not match.");
-                btn.innerText = "CREATE ACCOUNT"; btn.disabled = false; return;
-            }
-
-            try {
-                // 1. Create the Auth User
-                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                const user = userCredential.user;
-
-                // 2. Save detailed data to Firestore Database
-                await setDoc(doc(db, "users", user.uid), {
-                    firstName: document.getElementById('f_name').value,
-                    lastName: document.getElementById('l_name').value,
-                    otherName: document.getElementById('o_name').value,
-                    username: document.getElementById('reg_user').value,
-                    gender: document.getElementById('reg_gender').value,
-                    dob: document.getElementById('reg_dob').value,
-                    country: document.getElementById('reg_country').value,
-                    email: email,
-                    balance: 0,
-                    createdAt: new Date().toISOString()
-                });
-
-                // 3. Direct access to dashboard
-                window.location.href = 'user-dashboard.html';
-
-            } catch (error) {
-                alert(error.message);
-                btn.innerText = "CREATE ACCOUNT"; btn.disabled = false;
-            }
-        });
-    </script>
-    <script>
-        function toggleView(id) {
-            const x = document.getElementById(id);
-            x.type = x.type === "password" ? "text" : "password";
+            alert("Security Link Sent! Check your Gmail (and Spam folder).");
+            // Optional: Show your paper-plane overlay here
+        } catch (error) {
+            alert("Security Block: " + error.message);
+            btn.innerText = "CREATE ACCOUNT"; btn.disabled = false;
         }
-    </script>
+    });
+</script>
+
 </body>
 </html>
