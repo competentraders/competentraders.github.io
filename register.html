@@ -82,7 +82,6 @@
 
 
 
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -92,7 +91,7 @@
         authDomain: "competentraders-2efdc.firebaseapp.com",
         projectId: "competentraders-2efdc",
         storageBucket: "competentraders-2efdc.firebasestorage.app",
-        messagingSenderId: "150379227882", // Fixed back to the ID number
+        messagingSenderId: "150379227882",
         appId: "1:150379227882:web:19d9c19805ef68b016c593"
     };
 
@@ -107,7 +106,7 @@
         btn.innerText = "SENDING SECURE LINK...";
         btn.disabled = true;
 
-        // FORCE THE URL TO VERCEL
+        // FORCE THE LINK TO GO TO VERCEL
         const actionCodeSettings = {
             url: 'https://competentraders.vercel.app/finish-reg.html', 
             handleCodeInApp: true,
@@ -116,10 +115,11 @@
         try {
             await sendSignInLinkToEmail(auth, email, actionCodeSettings);
             
-            // Save all profile data to LocalStorage
+            // Store all user data locally so finish-reg.html can read it
             window.localStorage.setItem('emailForSignIn', email);
             window.localStorage.setItem('draft_f_name', document.getElementById('f_name').value);
             window.localStorage.setItem('draft_l_name', document.getElementById('l_name').value);
+            window.localStorage.setItem('draft_o_name', document.getElementById('o_name').value);
             window.localStorage.setItem('draft_user', document.getElementById('reg_user').value);
             window.localStorage.setItem('draft_gender', document.getElementById('reg_gender').value);
             window.localStorage.setItem('draft_dob', document.getElementById('reg_dob').value);
@@ -127,13 +127,13 @@
             window.localStorage.setItem('draft_pass', document.getElementById('reg_pass').value);
 
             alert("Activation Link Sent! Check your Gmail.");
-            // Show your Paper Plane overlay here
         } catch (error) {
-            alert("Security Error: " + error.message);
+            alert("Firebase Error: " + error.message);
             btn.innerText = "CREATE ACCOUNT"; btn.disabled = false;
         }
     });
 </script>
+
 
 
 </body>
