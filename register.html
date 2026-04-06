@@ -83,8 +83,7 @@
 
 
 
-
-    <script type="module">
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, sendSignInLinkToEmail } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
@@ -93,7 +92,7 @@
         authDomain: "competentraders-2efdc.firebaseapp.com",
         projectId: "competentraders-2efdc",
         storageBucket: "competentraders-2efdc.firebasestorage.app",
-        messagingSenderId: "150379227882",
+        messagingSenderId: "150379227882", // Fixed back to the ID number
         appId: "1:150379227882:web:19d9c19805ef68b016c593"
     };
 
@@ -105,24 +104,19 @@
         const btn = document.getElementById('submitBtn');
         const email = document.getElementById('reg_email').value;
 
-        // Security check
-        if(email !== document.getElementById('confirm_email').value) {
-            alert("Emails do not match."); return;
-        }
-
         btn.innerText = "SENDING SECURE LINK...";
         btn.disabled = true;
 
-        // CRUCIAL: This URL must be the exact page where your finish-reg.html is hosted
+        // FORCE THE URL TO VERCEL
         const actionCodeSettings = {
-            url: window.location.origin + '/finish-reg.html', 
+            url: 'https://competentraders.vercel.app/finish-reg.html', 
             handleCodeInApp: true,
         };
 
         try {
             await sendSignInLinkToEmail(auth, email, actionCodeSettings);
             
-            // Save data locally so the finish page can pick it up
+            // Save all profile data to LocalStorage
             window.localStorage.setItem('emailForSignIn', email);
             window.localStorage.setItem('draft_f_name', document.getElementById('f_name').value);
             window.localStorage.setItem('draft_l_name', document.getElementById('l_name').value);
@@ -132,14 +126,15 @@
             window.localStorage.setItem('draft_country', document.getElementById('reg_country').value);
             window.localStorage.setItem('draft_pass', document.getElementById('reg_pass').value);
 
-            alert("Security Link Sent! Check your Gmail (and Spam folder).");
-            // Optional: Show your paper-plane overlay here
+            alert("Activation Link Sent! Check your Gmail.");
+            // Show your Paper Plane overlay here
         } catch (error) {
-            alert("Security Block: " + error.message);
+            alert("Security Error: " + error.message);
             btn.innerText = "CREATE ACCOUNT"; btn.disabled = false;
         }
     });
 </script>
+
 
 </body>
 </html>
