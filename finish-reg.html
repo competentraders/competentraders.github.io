@@ -23,10 +23,9 @@
 
 
 
-
-   <script type="module">
+<script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, isSignInWithEmailLink, signInWithEmailLink, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getAuth, isSignInWithEmailLink, signInWithEmailLink, updatePassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -47,19 +46,21 @@
             let email = window.localStorage.getItem('emailForSignIn');
             
             if (!email) {
-                email = window.prompt('Please provide your email for confirmation');
+                email = window.prompt('Please confirm your email:');
             }
 
             try {
-                // 1. Confirm the email link
-                await signInWithEmailLink(auth, email, window.location.href);
-                
-                // 2. Create the password account
-                const password = window.localStorage.getItem('draft_pass');
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                // 1. Sign in with the link first (This creates the Auth session)
+                const result = await signInWithEmailLink(auth, email, window.location.href);
+                const user = result.user;
 
-                // 3. Save ALL data to Firestore
+                // 2. Set the password the user chose on the register page
+                const password = window.localStorage.getItem('draft_pass');
+                if (password) {
+                    await updatePassword(user, password);
+                }
+
+                // 3. Save all the profile data to Firestore
                 await setDoc(doc(db, "users", user.uid), {
                     firstName: window.localStorage.getItem('draft_f_name'),
                     lastName: window.localStorage.getItem('draft_l_name'),
@@ -75,20 +76,31 @@
                     joinedDate: new Date().toISOString()
                 });
 
-                document.getElementById('status-title').innerText = "Access Granted";
+                // SUCCESS UI
+                document.getElementById('status-title').innerText = "Node Activated";
+                document.getElementById('status-text').innerText = "Identity Confirmed. Loading Terminal...";
                 document.getElementById('loader').innerHTML = '<i class="fas fa-check-circle text-5xl text-green-500"></i>';
                 
                 window.localStorage.clear();
+                
+                // Redirect to Dashboard
                 setTimeout(() => { window.location.href = 'user-dashboard.html'; }, 2000);
 
             } catch (error) {
-                document.getElementById('status-title').innerText = "Error Occurred";
-                document.getElementById('status-text').innerText = error.message;
+                console.error(error);
+                // If account exists, just send them to dashboard
+                if (error.code === 'auth/email-already-in-use') {
+                    window.location.href = 'user-dashboard.html';
+                } else {
+                    document.getElementById('status-title').innerText = "Verification Error";
+                    document.getElementById('status-text').innerText = error.message;
+                }
             }
         }
     }
     window.onload = completeRegistration;
 </script>
+
 
 
 
