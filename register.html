@@ -16,78 +16,94 @@
         .dark-mode .input-field { background: rgba(255,255,255,0.03); }
         .label-text { font-size: 10px; font-weight: 800; color: #64748b; margin-bottom: 5px; text-transform: uppercase; display: block; tracking-widest; }
         
-        /* Toast Notification Styling */
-        #toast { position: fixed; top: 20px; right: -400px; padding: 16px 24px; border-radius: 16px; background: #0f172a; color: white; display: flex; align-items: center; gap: 12px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); }
+        /* Professional Toast Styling */
+        #toast { position: fixed; top: 20px; right: -450px; padding: 16px 24px; border-radius: 16px; background: #0f172a; color: white; display: flex; align-items: center; gap: 12px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); min-width: 300px; }
         #toast.show { right: 20px; }
 
-        /* Fullscreen Overlay */
-        #overlay { display: none; position: fixed; inset: 0; background: rgba(6, 7, 10, 0.95); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: white; backdrop-filter: blur(10px); }
+        /* Fullscreen Security Overlay */
+        #overlay { display: none; position: fixed; inset: 0; background: rgba(6, 7, 10, 0.98); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: white; backdrop-filter: blur(15px); }
+        
+        /* Custom Loader */
+        .loader-ring { width: 50px; height: 50px; border: 3px solid rgba(37, 99, 235, 0.2); border-radius: 50%; border-top-color: #2563eb; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="p-4 md:p-10 dark-mode">
 
     <div id="toast">
-        <i id="toast-icon" class="fas fa-info-circle text-blue-500"></i>
-        <span id="toast-msg" class="text-sm font-bold uppercase tracking-tight"></span>
+        <i id="toast-icon" class="fas fa-exclamation-circle text-red-500"></i>
+        <span id="toast-msg" class="text-xs font-bold uppercase tracking-tight"></span>
     </div>
 
     <div id="overlay">
         <div class="mb-6 relative">
-            <i class="fas fa-paper-plane text-6xl text-blue-600 animate-bounce"></i>
+            <i class="fas fa-paper-plane text-6xl text-blue-600 animate-pulse"></i>
             <div class="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
         </div>
-        <h2 class="text-2xl font-black uppercase tracking-tighter italic">Secure Link Dispatched</h2>
-        <p class="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-2 max-w-xs">Identity node created. Check your Gmail inbox to activate trading credentials.</p>
-        <button onclick="location.reload()" class="mt-8 px-6 py-2 border border-white/10 rounded-full text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Close Terminal</button>
+        <h2 class="text-3xl font-black uppercase tracking-tighter italic">Security Link Dispatched</h2>
+        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-4 max-w-xs leading-relaxed">
+            Your identity node is pending activation. Please check your Gmail to verify your credentials and begin trading.
+        </p>
+        <button onclick="window.location.href='login.html'" class="mt-10 px-8 py-3 bg-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
+            Proceed to Terminal
+        </button>
     </div>
 
     <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-black uppercase italic tracking-tighter">Competent<span class="text-blue-600">raders</span></h2>
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Enterprise Registration Node</p>
+        <div class="text-center mb-10">
+            <h2 class="text-4xl font-black uppercase italic tracking-tighter">Competent<span class="text-blue-600">raders</span></h2>
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] mt-2">Enterprise Registration Node</p>
         </div>
 
-        <form id="mainRegForm" class="glass-panel p-6 md:p-10 rounded-[2.5rem] space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div><label class="label-text">First Name</label><input type="text" id="f_name" class="input-field" required></div>
-                <div><label class="label-text">Last Name</label><input type="text" id="l_name" class="input-field" required></div>
-                <div><label class="label-text">Other Name</label><input type="text" id="o_name" class="input-field"></div>
+        <form id="mainRegForm" class="glass-panel p-8 md:p-12 rounded-[3rem] space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div><label class="label-text">First Name</label><input type="text" id="f_name" class="input-field" placeholder="Ugbesia" required></div>
+                <div><label class="label-text">Last Name</label><input type="text" id="l_name" class="input-field" placeholder="Godswill" required></div>
+                <div><label class="label-text">Other Name</label><input type="text" id="o_name" class="input-field" placeholder="..."></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><label class="label-text">Username</label><input type="text" id="reg_user" class="input-field" required></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div><label class="label-text">Username</label><input type="text" id="reg_user" class="input-field" placeholder="Trader_ID" required></div>
                 <div>
                     <label class="label-text">Gender</label>
                     <select id="reg_gender" class="input-field" required>
-                        <option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option>
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                     </select>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div><label class="label-text">Email Address</label><input type="email" id="reg_email" class="input-field" required></div>
-                <div><label class="label-text">Verify Email</label><input type="email" id="confirm_email" class="input-field" required></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div><label class="label-text">Email Address</label><input type="email" id="reg_email" class="input-field" placeholder="name@gmail.com" required></div>
+                <div><label class="label-text">Verify Email</label><input type="email" id="confirm_email" class="input-field" placeholder="Confirm" required></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="relative"><label class="label-text">Access Password</label><input type="password" id="reg_pass" class="input-field" required></div>
-                <div class="relative"><label class="label-text">Verify Password</label><input type="password" id="confirm_pass" class="input-field" required></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div><label class="label-text">Access Password</label><input type="password" id="reg_pass" class="input-field" placeholder="••••••••" required></div>
+                <div><label class="label-text">Verify Password</label><input type="password" id="confirm_pass" class="input-field" placeholder="••••••••" required></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div><label class="label-text">Date of Birth</label><input type="date" id="reg_dob" class="input-field" required></div>
                 <div>
                     <label class="label-text">Nationality</label>
                     <select id="reg_country" class="input-field" required>
-                        <option value="Nigeria">Nigeria</option><option value="Ghana">Ghana</option><option value="South Africa">South Africa</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Ghana">Ghana</option>
+                        <option value="South Africa">South Africa</option>
                     </select>
                 </div>
             </div>
 
-            <button type="submit" id="submitBtn" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-blue-600/40 hover:scale-[1.02] active:scale-95 transition">
+            <button type="submit" id="submitBtn" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-2xl shadow-blue-600/40 hover:bg-blue-700 hover:scale-[1.01] active:scale-95 transition-all duration-300">
                 Initialize Secure Account
             </button>
         </form>
+        
+        <p class="text-center mt-8 text-[10px] font-bold text-gray-600 uppercase tracking-widest">
+            Already have a node? <a href="login.html" class="text-blue-500 hover:underline">Connect Here</a>
+        </p>
     </div>
 
 <script type="module">
@@ -95,9 +111,10 @@
     import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+    // YOUR VERIFIED CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
-        authDomain: "competentraders.vercel",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
         projectId: "competentraders-2efdc",
         storageBucket: "competentraders-2efdc.firebasestorage.app",
         messagingSenderId: "150379227882",
@@ -108,40 +125,46 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Custom Professional Toast Function
-    function showToast(msg, type = "error") {
+    // Professional Toast Controller
+    function showToast(msg, isError = true) {
         const toast = document.getElementById('toast');
         const icon = document.getElementById('toast-icon');
-        document.getElementById('toast-msg').innerText = msg;
+        const msgSpan = document.getElementById('toast-msg');
         
-        icon.className = type === "error" ? "fas fa-exclamation-triangle text-red-500" : "fas fa-check-circle text-green-500";
+        msgSpan.innerText = msg;
+        icon.className = isError ? "fas fa-exclamation-triangle text-red-500" : "fas fa-check-circle text-green-500";
+        
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 4000);
+        setTimeout(() => toast.classList.remove('show'), 5000);
     }
 
     document.getElementById('mainRegForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
+        
+        // Data Extraction
         const email = document.getElementById('reg_email').value;
         const confirmEmail = document.getElementById('confirm_email').value;
         const pass = document.getElementById('reg_pass').value;
         const confirmPass = document.getElementById('confirm_pass').value;
 
-        if (email !== confirmEmail) { showToast("Emails do not match"); return; }
-        if (pass !== confirmPass) { showToast("Passwords do not match"); return; }
+        // Validation
+        if (email !== confirmEmail) { showToast("Security Mismatch: Emails do not match."); return; }
+        if (pass !== confirmPass) { showToast("Security Mismatch: Passwords do not match."); return; }
+        if (pass.length < 6) { showToast("Weak Node Key: Minimum 6 characters required."); return; }
 
-        btn.innerText = "VERIFYING NODE...";
+        btn.innerText = "SYNCHRONIZING WITH BACKEND...";
         btn.disabled = true;
 
         try {
-            // 1. Create the Auth User (No Quota issues with this method)
+            // 1. Create Auth Account
             const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
             const user = userCredential.user;
 
-            // 2. Send the Gmail Verification link
+            // 2. Dispatch Gmail Verification
             await sendEmailVerification(user);
 
-            // 3. Save detailed profile data
+            // 3. Document Profile in Firestore
             await setDoc(doc(db, "users", user.uid), {
                 firstName: document.getElementById('f_name').value,
                 lastName: document.getElementById('l_name').value,
@@ -152,20 +175,21 @@
                 country: document.getElementById('reg_country').value,
                 email: email,
                 uid: user.uid,
-                balance: 0,
+                accountBalance: 0,
                 isVerified: false,
-                joinedDate: new Date().toISOString()
+                registrationDate: new Date().toISOString()
             });
 
-            // 4. Show the Professional Success Overlay
+            // 4. Trigger Success UI
             document.getElementById('overlay').style.display = 'flex';
 
         } catch (error) {
-            let errorMsg = "System Error: " + error.message;
-            if (error.code === 'auth/email-already-in-use') errorMsg = "Identity already exists in node.";
-            if (error.code === 'auth/weak-password') errorMsg = "Password intensity too low.";
+            console.error(error);
+            let friendlyError = "System Block: " + error.message;
+            if (error.code === 'auth/email-already-in-use') friendlyError = "Identity already exists in node database.";
+            if (error.code === 'auth/network-request-failed') friendlyError = "Connection Error: Check your internet.";
             
-            showToast(errorMsg);
+            showToast(friendlyError);
             btn.innerText = "INITIALIZE SECURE ACCOUNT";
             btn.disabled = false;
         }
