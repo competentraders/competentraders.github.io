@@ -102,39 +102,70 @@
             AES-256 Bit Encryption Active
         </p>
     </div>
+<script type="module">
+    // 1. IMPORT FIREBASE
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-    <script>
-    function handleLogin(e) {
+    // 2. YOUR CONFIG (Must match Register.html)
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 3. THE LOGIN FUNCTION
+    window.handleLogin = async function(e) {
         e.preventDefault();
         
-        const inputUser = document.getElementById('login_user').value;
-        const inputPass = document.getElementById('login_pass').value;
+        const email = document.getElementById('login_user').value; // Using Email as the identifier
+        const pass = document.getElementById('login_pass').value;
         const container = document.getElementById('login-container');
         const errorBox = document.getElementById('error-msg');
+        const btn = e.target.querySelector('button');
 
-        // GET THE DATA SAVED DURING REGISTRATION
-        const savedUser = localStorage.getItem('competent_username');
-        const savedPass = localStorage.getItem('competent_password');
+        // UI Reset
+        errorBox.classList.add('hidden');
+        btn.innerText = "AUTHENTICATING...";
+        btn.disabled = true;
 
-        // Check if the user even exists first
-        if (!savedUser) {
-            errorBox.querySelector('span').innerText = "No account found. Please register.";
-            errorBox.classList.remove('hidden');
-            return;
-        }
+        try {
+            // FIREBASE LOGIN CALL
+            const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+            const user = userCredential.user;
 
-        if (inputUser === savedUser && inputPass === savedPass) {
+            // CHECK IF EMAIL IS VERIFIED (Security Step)
+            if (!user.emailVerified) {
+                errorBox.querySelector('span').innerText = "Account not active. Check your Gmail.";
+                errorBox.classList.remove('hidden');
+                btn.innerText = "VERIFY & LOGIN";
+                btn.disabled = false;
+                return;
+            }
+
             // SUCCESS
-            errorBox.classList.add('hidden');
+            btn.innerText = "ACCESS GRANTED";
             container.style.opacity = "0.5";
-            container.style.pointerEvents = "none";
             
             setTimeout(() => {
                 window.location.href = "user-dashboard.html";
             }, 1000);
-        } else {
+
+        } catch (error) {
             // FAILURE
-            errorBox.querySelector('span').innerText = "Invalid Username or Password.";
+            console.error(error.code);
+            let message = "Invalid Credentials.";
+            if (error.code === 'auth/user-not-found') message = "Account does not exist.";
+            if (error.code === 'auth/wrong-password') message = "Incorrect Password.";
+            if (error.code === 'auth/invalid-email') message = "Please enter a valid email.";
+
+            errorBox.querySelector('span').innerText = message;
             errorBox.classList.remove('hidden');
             container.classList.add('error-shake');
             
@@ -142,10 +173,13 @@
                 container.classList.remove('error-shake');
             }, 400);
 
+            btn.innerText = "VERIFY & LOGIN";
+            btn.disabled = false;
             document.getElementById('login_pass').value = "";
         }
     }
 </script>
+
 
 
 </body>
