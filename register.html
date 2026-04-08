@@ -8,21 +8,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        :root { --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; }
-        .dark-mode { --bg: #06070a; --card: #0f1218; --text: #f8fafc; --border: rgba(255, 255, 255, 0.05); }
+        :root { --bg: #f8fafc; --card: #ffffff; --text: #0f172a; --border: #e2e8f0; --input-bg: rgba(0,0,0,0.02); }
+        .dark-mode { --bg: #06070a; --card: #0f1218; --text: #f8fafc; --border: rgba(255, 255, 255, 0.05); --input-bg: rgba(255,255,255,0.03); }
+        
         body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); transition: 0.3s; margin: 0; overflow-x: hidden; }
         .glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .input-field { background: rgba(0,0,0,0.02); border: 1px solid var(--border); color: var(--text); width: 100%; padding: 12px; border-radius: 12px; outline: none; font-weight: 600; }
-        .dark-mode .input-field { background: rgba(255,255,255,0.03); }
+        .input-field { background: var(--input-bg); border: 1px solid var(--border); color: var(--text); width: 100%; padding: 12px; border-radius: 12px; outline: none; font-weight: 600; font-size: 14px; }
         .label-text { font-size: 10px; font-weight: 800; color: #64748b; margin-bottom: 5px; text-transform: uppercase; display: block; tracking-widest; }
         
         #toast { position: fixed; top: 20px; right: -450px; padding: 16px 24px; border-radius: 16px; background: #0f172a; color: white; display: flex; align-items: center; gap: 12px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; box-shadow: 0 20px 40px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); min-width: 300px; }
         #toast.show { right: 20px; }
 
         #overlay { display: none; position: fixed; inset: 0; background: rgba(6, 7, 10, 0.98); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: white; backdrop-filter: blur(15px); }
+        .eye-icon { position: absolute; right: 15px; top: 38px; cursor: pointer; color: #64748b; }
     </style>
 </head>
-<body class="p-4 md:p-10 dark-mode">
+<body class="p-4 md:p-10 dark-mode" id="bodyTag">
 
     <div id="toast">
         <i id="toast-icon" class="fas fa-exclamation-circle text-red-500"></i>
@@ -36,28 +37,52 @@
         </div>
         <h2 class="text-3xl font-black uppercase tracking-tighter italic">Security Link Dispatched</h2>
         <p class="text-gray-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-4 max-w-xs leading-relaxed">
-            Identity node pending activation. Check your Gmail to verify credentials and return to terminal.
+            Check your Gmail to verify credentials and return to terminal.
         </p>
         <button onclick="window.location.href='login.html'" class="mt-10 px-8 py-3 bg-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
             Proceed to Login
         </button>
     </div>
 
-    <div class="max-w-3xl mx-auto">
-        <div class="text-center mb-10">
-            <h2 class="text-4xl font-black uppercase italic tracking-tighter">Competent<span class="text-blue-600">raders</span></h2>
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] mt-2">Enterprise Registration Node</p>
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter">Competent<span class="text-blue-600">raders</span></h2>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em] mt-1">Registration Node</p>
+            </div>
+            <button onclick="document.getElementById('bodyTag').classList.toggle('dark-mode')" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-blue-600">
+                <i class="fas fa-circle-half-stroke"></i>
+            </button>
         </div>
 
-        <form id="mainRegForm" class="glass-panel p-8 md:p-12 rounded-[3rem] space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <form id="mainRegForm" class="glass-panel p-6 md:p-10 rounded-[2.5rem] space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><label class="label-text">First Name</label><input type="text" id="f_name" class="input-field" required></div>
                 <div><label class="label-text">Last Name</label><input type="text" id="l_name" class="input-field" required></div>
-                <div><label class="label-text">Other Name</label><input type="text" id="o_name" class="input-field"></div>
+                <div><label class="label-text">Other Name <span class="opacity-50">(Opt)</span></label><input type="text" id="o_name" class="input-field"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div><label class="label-text">Username</label><input type="text" id="reg_user" class="input-field" required></div>
+                <div><label class="label-text">Email Address</label><input type="email" id="reg_email" class="input-field" required></div>
+                <div><label class="label-text">Phone Number</label><input type="tel" id="reg_phone" class="input-field" placeholder="+234..." required></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="relative">
+                    <label class="label-text">Password</label>
+                    <input type="password" id="reg_pass" class="input-field" required>
+                    <i class="fas fa-eye eye-icon" onclick="togglePass('reg_pass')"></i>
+                </div>
+                <div class="relative">
+                    <label class="label-text">Confirm Password</label>
+                    <input type="password" id="confirm_pass" class="input-field" required>
+                    <i class="fas fa-eye eye-icon" onclick="togglePass('confirm_pass')"></i>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><label class="label-text">Date of Birth</label><input type="date" id="reg_dob" class="input-field" required></div>
                 <div>
                     <label class="label-text">Gender</label>
                     <select id="reg_gender" class="input-field" required>
@@ -68,26 +93,39 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div><label class="label-text">Email Address</label><input type="email" id="reg_email" class="input-field" required></div>
-                <div><label class="label-text">Verify Email</label><input type="email" id="confirm_email" class="input-field" required></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div><label class="label-text">Access Password</label><input type="password" id="reg_pass" class="input-field" required></div>
-                <div><label class="label-text">Verify Password</label><input type="password" id="confirm_pass" class="input-field" required></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div><label class="label-text">Date of Birth</label><input type="date" id="reg_dob" class="input-field" required></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="label-text">Nationality</label>
                     <select id="reg_country" class="input-field" required>
-                        <option value="Nigeria">Nigeria</option>
-                        <option value="Ghana">Ghana</option>
-                        <option value="South Africa">South Africa</option>
+                        <option value="">Select Country</option>
+                        <option value="Nigeria (+234)">Nigeria</option>
+                        <option value="Ghana (+233)">Ghana</option>
+                        <option value="South Africa (+27)">South Africa</option>
+                        <option value="Kenya (+254)">Kenya</option>
+                        <option value="Egypt (+20)">Egypt</option>
+                        <option value="Ethiopia (+251)">Ethiopia</option>
+                        <option value="Tanzania (+255)">Tanzania</option>
+                        <option value="Algeria (+213)">Algeria</option>
+                        <option value="Morocco (+212)">Morocco</option>
+                        <option value="Uganda (+256)">Uganda</option>
                     </select>
                 </div>
+                <div>
+                    <label class="label-text">Trading Currency</label>
+                    <select id="reg_currency" class="input-field" required>
+                        <option value="">Select Currency</option>
+                        <option value="₦">Nigerian Naira (NGN)</option>
+                        <option value="₵">Ghanaian Cedi (GHS)</option>
+                        <option value="R">South African Rand (ZAR)</option>
+                        <option value="KSh">Kenyan Shilling (KES)</option>
+                        <option value="E£">Egyptian Pound (EGP)</option>
+                        <option value="US$">US Dollar (Global)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="text-[9px] text-gray-500 font-bold uppercase tracking-widest text-center px-4">
+                Security Policy: Password must be 8+ chars, start with Uppercase, and end with a number/symbol.
             </div>
 
             <button type="submit" id="submitBtn" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-2xl shadow-blue-600/40 hover:bg-blue-700 transition-all duration-300">
@@ -114,6 +152,12 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Helper: Toggle Password Visibility
+    window.togglePass = (id) => {
+        const input = document.getElementById(id);
+        input.type = input.type === 'password' ? 'text' : 'password';
+    };
+
     function showToast(msg) {
         const toast = document.getElementById('toast');
         document.getElementById('toast-msg').innerText = msg;
@@ -121,14 +165,27 @@
         setTimeout(() => toast.classList.remove('show'), 5000);
     }
 
+    // Password Validator Logic
+    function validatePassword(p) {
+        const hasLength = p.length >= 8;
+        const startsWithUpper = /^[A-Z]/.test(p);
+        const endsWithNumOrSym = /[0-9!@#$%^&*]$/.test(p);
+        return hasLength && startsWithUpper && endsWithNumOrSym;
+    }
+
     document.getElementById('mainRegForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         const email = document.getElementById('reg_email').value;
         const pass = document.getElementById('reg_pass').value;
+        const confirm = document.getElementById('confirm_pass').value;
 
-        if (email !== document.getElementById('confirm_email').value) { showToast("Emails do not match."); return; }
-        if (pass !== document.getElementById('confirm_pass').value) { showToast("Passwords do not match."); return; }
+        // Security Validations
+        if (pass !== confirm) { showToast("Passwords do not match."); return; }
+        if (!validatePassword(pass)) { 
+            showToast("Security Breach: Password does not meet node requirements."); 
+            return; 
+        }
 
         btn.innerText = "SYNCHRONIZING...";
         btn.disabled = true;
@@ -137,21 +194,25 @@
             const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
             const user = userCredential.user;
 
-            // --- THE KEY FIX IS HERE ---
             const actionCodeSettings = {
-                // Ensure this matches your Vercel URL exactly
                 url: 'https://competentraders.vercel.app/login.html', 
                 handleCodeInApp: true,
             };
             await sendEmailVerification(user, actionCodeSettings);
-            // ---------------------------
 
+            // SAVE ALL DATA FOR DASHBOARD
             await setDoc(doc(db, "users", user.uid), {
+                fullName: `${document.getElementById('f_name').value} ${document.getElementById('l_name').value} ${document.getElementById('o_name').value}`.trim(),
                 firstName: document.getElementById('f_name').value,
                 lastName: document.getElementById('l_name').value,
                 username: document.getElementById('reg_user').value,
+                phone: document.getElementById('reg_phone').value,
                 email: email,
                 uid: user.uid,
+                dob: document.getElementById('reg_dob').value,
+                gender: document.getElementById('reg_gender').value,
+                country: document.getElementById('reg_country').value,
+                currency: document.getElementById('reg_currency').value, // This is the symbol (₦, ₵, etc.)
                 balance: 0,
                 registrationDate: new Date().toISOString()
             });
