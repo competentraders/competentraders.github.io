@@ -10,6 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
         body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; overflow-x: hidden; }
 
+        /* HAMBURGER TRIGGER */
         .master-trigger {
             position: fixed; top: 12px; left: 12px; width: 45px; height: 45px;
             background: #3b82f6; color: white; border-radius: 10px;
@@ -17,6 +18,7 @@
             z-index: 2147483647 !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
         }
 
+        /* SIDEBAR */
         #master-sidebar {
             position: fixed; inset: 0; background: #0b0d12;
             z-index: 2147483646 !important; display: none;
@@ -24,17 +26,41 @@
         }
         #master-sidebar.active { display: flex; }
 
-        .nav-link { display: flex; align-items: center; gap: 15px; padding: 14px 25px; color: #94a3b8; font-size: 15px; font-weight: 600; border-bottom: 1px solid #1e293b; text-decoration: none; }
-        .section-tag { font-size: 10px; color: #475569; padding: 18px 25px 5px; text-transform: uppercase; font-weight: 900; letter-spacing: 1.5px; }
-
-        .chart-section { height: 45vh; width: 100%; position: relative; border-bottom: 2px solid #1e222d; }
-        .plan-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; }
-        .plan-card:hover { border-color: #3b82f6; }
+        .chart-section { height: 45vh; width: 100%; border-bottom: 2px solid #1e222d; }
         
-        .ticker-bar { position: fixed; bottom: 0; width: 100%; height: 46px; background: #131722; z-index: 1000; border-top: 1px solid #2d3343; }
+        .plan-card { 
+            background: #0f111a; border: 1px solid #1e293b; border-radius: 20px; 
+            padding: 20px; display: flex; flex-direction: column; transition: 0.3s; 
+        }
+
+        /* THE NON-STOP TICKER SYSTEM */
+        .ticker-wrapper {
+            position: fixed; bottom: 0; width: 100%; height: 50px;
+            background: #131722; z-index: 1000; border-top: 1px solid #2d3343;
+            overflow: hidden; display: flex; align-items: center;
+        }
+
+        .ticker-scroll {
+            display: flex;
+            width: 200%; /* Enough room for the loop */
+            animation: marquee-nonstop 40s linear infinite;
+        }
+
+        .ticker-item {
+            flex-shrink: 0;
+            width: 100%; /* Each set takes full width */
+        }
+
+        @keyframes marquee-nonstop {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Force Widget to stay active */
+        .tradingview-widget-container { width: 100% !important; pointer-events: none; }
     </style>
 </head>
-<body class="pb-20">
+<body class="pb-24">
 
     <button class="master-trigger" onclick="toggleMenu()">
         <i class="fas fa-bars fa-lg"></i>
@@ -42,41 +68,28 @@
 
     <div id="master-sidebar">
         <div class="p-6 bg-[#131722] border-b border-gray-800">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between items-center mb-8">
                 <span class="font-black italic text-white uppercase text-xs">Competent<span class="text-blue-500">raders</span></span>
                 <button onclick="toggleMenu()" class="text-white text-3xl">&times;</button>
             </div>
             
             <div class="bg-blue-600/10 border border-blue-500/20 p-5 rounded-[24px]">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-white" id="user-initial">C</div>
+                <div class="flex items-center gap-4 mb-5">
+                    <div id="user-initial" class="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center font-black text-xl text-white">?</div>
                     <div>
                         <p id="user-name-display" class="text-sm font-black uppercase tracking-tight text-white">Loading...</p>
                         <p id="user-email-display" class="text-[9px] text-gray-500 font-bold"></p>
                     </div>
                 </div>
-                <div class="flex items-center justify-between pt-3 border-t border-white/5">
-                    <div>
-                        <p class="text-[8px] text-gray-500 font-black uppercase tracking-widest">Node Status</p>
-                        <p class="text-[11px] font-black text-emerald-500 uppercase italic">Active & Verified</p>
-                    </div>
-                    <i class="fas fa-shield-check text-emerald-500 text-lg"></i>
+                <div class="pt-4 border-t border-white/5">
+                    <p class="text-[9px] text-gray-500 font-black uppercase tracking-widest mb-1">Balance</p>
+                    <h2 class="text-2xl font-black text-white"><span class="curr"></span><span id="user-balance">0.00</span></h2>
                 </div>
             </div>
-        </div>
 
-        <p class="section-tag">Finance (WhatsApp Secure)</p>
-        <a href="https://wa.me/2349153258628" class="nav-link wa-link"><i class="fas fa-university text-yellow-500"></i> Bank Account</a>
-        <a href="https://wa.me/2349153258628" class="nav-link wa-link"><i class="fas fa-wallet text-green-500"></i> Deposit Funds</a>
-        <a href="history.html" class="nav-link"><i class="fas fa-history text-blue-500"></i> Transaction History</a>
-        <a href="https://wa.me/2349153258628" class="nav-link wa-link"><i class="fas fa-money-bill-transfer text-orange-500"></i> Withdrawal</a>
-
-        <p class="section-tag">Account & Social</p>
-        <a href="profile.html" class="nav-link"><i class="fas fa-user-circle text-blue-400"></i> User Profile</a>
-        <a href="referral.html" class="nav-link"><i class="fas fa-users text-purple-500"></i> Referral System</a>
-
-        <div class="p-6 mt-4 pb-12">
-            <button onclick="handleLogout()" class="w-full p-4 bg-red-500/10 text-red-500 rounded-xl font-bold border border-red-500/20 uppercase tracking-widest text-xs">Terminate Session</button>
+            <div class="mt-auto p-6 pb-12">
+                <button onclick="handleLogout()" class="w-full py-4 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase text-[10px] tracking-widest border border-red-500/20">LOGOUT SESSION</button>
+            </div>
         </div>
     </div>
 
@@ -85,47 +98,59 @@
     </div>
 
     <div class="p-4 mt-6">
-        <p class="text-[10px] text-gray-500 font-black uppercase tracking-[0.2em] mb-3 ml-1">Live Trading Access</p>
-        <a href="trading.html" class="flex items-center gap-4 p-4 rounded-2xl border border-blue-500/20 bg-[#0f111a]">
-            <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white"><i class="fas fa-chart-line"></i></div>
+        <a href="trading.html" class="flex items-center gap-4 p-5 rounded-2xl border border-blue-500/20 bg-[#0f111a] shadow-xl">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-chart-line"></i></div>
             <div class="flex flex-col">
-                <span class="font-black text-sm uppercase text-white">Live Trading Terminal</span>
-                <span class="text-[9px] text-blue-400 font-black uppercase">Professional Markets</span>
+                <span class="font-black text-sm uppercase text-white">Live Terminal</span>
+                <span class="text-[9px] text-blue-400 font-black uppercase">Click to trade</span>
             </div>
         </a>
     </div>
 
-    <div class="p-4 bg-[#06070a]">
-        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 uppercase"><i class="fas fa-trophy"></i> Sports & Predictions</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <div class="p-4">
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 uppercase"><i class="fas fa-wallet"></i> Signal & ROI Plans</h2>
+        <div class="grid grid-cols-1 gap-4 mb-8">
             <div class="plan-card">
-                <p class="text-[10px] font-bold text-gray-500 uppercase">Football ⚽</p>
-                <h3 class="text-2xl font-black"><span class="curr">₦</span>50,000 <span class="text-xs text-gray-400">to win</span></h3>
-                <p class="text-blue-400 text-sm mb-4 font-bold">Guarantee: 57%</p>
-                <a href="#" class="wa-link block w-full py-3 bg-blue-600 rounded-xl font-bold text-xs uppercase text-center">Buy Subscription</a>
+                <p class="text-[10px] font-bold text-gray-500 uppercase">Universal Node</p>
+                <h3 class="text-2xl font-black text-white"><span class="curr"></span>50,000</h3>
+                <a href="#" class="wa-link block w-full py-4 bg-blue-600 rounded-xl font-black text-[10px] uppercase text-center mt-4">Initialize Access</a>
             </div>
-            <div class="plan-card">
-                <p class="text-[10px] font-bold text-gray-500 uppercase">Football ⚽</p>
-                <h3 class="text-2xl font-black"><span class="curr">₦</span>10,000 <span class="text-xs text-gray-400">to win</span></h3>
-                <p class="text-green-500 text-sm mb-4 font-bold">Guarantee: 98%</p>
-                <a href="#" class="wa-link block w-full py-3 bg-blue-600 rounded-xl font-bold text-xs uppercase text-center">Buy Subscription</a>
+            <div class="plan-card border-orange-500/20">
+                <p class="text-[10px] font-bold text-gray-500 uppercase">XAU/USD ROI</p>
+                <h3 class="text-2xl font-black text-white"><span class="curr"></span>100,000</h3>
+                <a href="#" class="wa-link block w-full py-4 bg-orange-600 rounded-xl font-black text-[10px] uppercase text-center mt-4">Start Growth</a>
             </div>
-        </div>
-
-        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-orange-500 uppercase"><i class="fab fa-bitcoin"></i> Crypto Investment</h2>
-        <div class="plan-card border-orange-500/20">
-            <p class="text-[10px] font-bold text-gray-500 uppercase">Crypto ROI Plan</p>
-            <h3 class="text-2xl font-black"><span class="curr">₦</span>100,000 <span class="text-xs text-gray-400">Return</span></h3>
-            <p class="text-[10px] text-gray-400 font-bold my-4">Guarantee: 98%</p>
-            <a href="#" class="wa-link block w-full py-3 bg-orange-600 rounded-xl font-bold text-xs uppercase text-center">Invest Now</a>
         </div>
     </div>
 
-    <div class="ticker-bar">
-        <div class="tradingview-widget-container">
-            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                {"symbols": [{"proName":"BINANCE:BTCUSDT","title":"BTC"}], "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "en"}
-            </script>
+    <div class="ticker-wrapper">
+        <div class="ticker-scroll">
+            <div class="ticker-item">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                    { "symbols": [
+                        {"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"FX_IDC:XAUUSD","title":"GOLD"},
+                        {"proName":"BINANCE:ETHUSDT","title":"ETH"},{"proName":"FX:EURUSD","title":"EUR/USD"},
+                        {"proName":"BINANCE:SOLUSDT","title":"SOL"},{"proName":"BINANCE:BNBUSDT","title":"BNB"},
+                        {"proName":"TVC:USOIL","title":"OIL"},{"proName":"BINANCE:DOGEUSDT","title":"DOGE"}
+                    ], "colorTheme": "dark", "isTransparent": true, "displayMode": "regular", "locale": "en" }
+                    </script>
+                </div>
+            </div>
+            <div class="ticker-item">
+                <div class="tradingview-widget-container">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                    { "symbols": [
+                        {"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"FX_IDC:XAUUSD","title":"GOLD"},
+                        {"proName":"BINANCE:ETHUSDT","title":"ETH"},{"proName":"FX:EURUSD","title":"EUR/USD"},
+                        {"proName":"BINANCE:SOLUSDT","title":"SOL"},{"proName":"BINANCE:BNBUSDT","title":"BNB"},
+                        {"proName":"TVC:USOIL","title":"OIL"},{"proName":"BINANCE:DOGEUSDT","title":"DOGE"}
+                    ], "colorTheme": "dark", "isTransparent": true, "displayMode": "regular", "locale": "en" }
+                    </script>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -152,43 +177,28 @@
                 const docSnap = await getDoc(doc(db, "users", user.uid));
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    
-                    // Update Sidebar Info
                     document.getElementById('user-name-display').innerText = data.fullName;
                     document.getElementById('user-email-display').innerText = data.email;
-                    document.getElementById('user-initial').innerText = data.firstName.charAt(0);
-
-                    // UPDATE CURRENCY ACROSS PAGE
-                    document.querySelectorAll('.curr').forEach(el => {
-                        el.innerText = data.currency || "₦";
-                    });
-
-                    // Update WhatsApp links to include user context
+                    document.getElementById('user-initial').innerText = data.fullName.charAt(0).toUpperCase();
+                    document.getElementById('user-balance').innerText = (data.balance || 0).toFixed(2);
+                    const userCurr = data.currency || "₦";
+                    document.querySelectorAll('.curr').forEach(el => el.innerHTML = userCurr);
                     document.querySelectorAll('.wa-link').forEach(link => {
-                        const baseUrl = "https://wa.me/2349153258628?text=";
-                        const msg = encodeURIComponent(`Hello, I am ${data.fullName} (ID: ${user.uid.slice(0,5)}). I want to make an inquiry.`);
-                        link.href = baseUrl + msg;
+                        link.href = `https://wa.me/2349153258628?text=Hello, I am ${data.fullName}. I want to subscribe.`;
                     });
                 }
-            } else {
-                window.location.href = "login.html";
-            }
+            } else { window.location.href = "login.html"; }
         });
 
-        window.handleLogout = () => {
-            signOut(auth).then(() => { window.location.href = "login.html"; });
-        };
-
-        window.toggleMenu = () => {
-            document.getElementById('master-sidebar').classList.toggle('active');
-        };
+        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
+        window.toggleMenu = () => document.getElementById('master-sidebar').classList.toggle('active');
     </script>
 
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
         new TradingView.widget({
-            "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1S",
-            "theme": "dark", "container_id": "tradingview_live", "preset": "mobile"
+            "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1",
+            "theme": "dark", "container_id": "tradingview_live"
         });
     </script>
 </body>
