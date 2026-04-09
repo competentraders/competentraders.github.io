@@ -40,6 +40,11 @@
         .animate-fly { animation: flyIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     </style>
 </head>
+
+
+
+
+
 <body class="pb-20">
 
     <button class="master-trigger" onclick="toggleMenu()">
@@ -55,11 +60,22 @@
             
             <div class="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl flex items-center justify-between">
                 <div>
-                    <p class="text-[10px] text-emerald-400 font-black uppercase tracking-widest">Account Status</p>
-                    <p class="text-xl font-black text-white flex items-center gap-2">
-                        VERIFIED <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
-                    </p>
-                </div>
+
+
+                    <div class="bg-emerald-500/10 border border-emerald-500/30 p-4 rounded-2xl flex items-center justify-between">
+    <div>
+        <p id="user-display-name" class="text-xs text-white font-black uppercase tracking-tighter mb-1">Loading...</p>
+        <p class="text-[10px] text-emerald-400 font-black uppercase tracking-widest">Account Status</p>
+        <p class="text-xl font-black text-white flex items-center gap-2">
+            VERIFIED <i class="fas fa-check-circle text-emerald-500 text-sm"></i>
+        </p>
+    </div>
+    </div>
+
+
+
+
+
                 <div class="text-right">
                     <p class="text-[8px] text-gray-500 font-bold uppercase">Identity</p>
                     <span class="text-[10px] font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg">SECURE</span>
@@ -164,14 +180,95 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script>
-        function toggleMenu() { document.getElementById('master-sidebar').classList.toggle('active'); }
-        
-        new TradingView.widget({
-            "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1S",
-            "theme": "dark", "container_id": "tradingview_live", "preset": "mobile"
+
+
+
+
+
+
+
+
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // --- SECURITY & DATA SYNC ---
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            // 1. Fetch User Data from Firestore
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                
+                // 2. Inject Real Name into Sidebar
+                document.getElementById('user-display-name').innerText = data.fullName;
+
+                // 3. Update all Currency Symbols on the page
+                const currencyElements = document.querySelectorAll('.currency-symbol');
+                currencyElements.forEach(el => {
+                    el.innerText = data.currency || "₦"; // Defaults to Naira if empty
+                });
+
+                // 4. Update the WhatsApp links to include the User's Real Name automatically
+                const waLinks = document.querySelectorAll('a[href*="wa.me"]');
+                waLinks.forEach(link => {
+                    let originalUrl = link.href;
+                    link.href = originalUrl + ` (User: ${data.fullName})`;
+                });
+
+            } else {
+                console.log("No such profile found!");
+            }
+        } else {
+            // No user is signed in, kick back to login
+            window.location.href = "login.html";
+        }
+    });
+
+    // Logout Function
+    window.handleLogout = () => {
+        signOut(auth).then(() => {
+            window.location.href = "login.html";
         });
-    </script>
+    };
+
+    // Toggle Menu Function
+    window.toggleMenu = () => {
+        document.getElementById('master-sidebar').classList.toggle('active');
+    };
+</script>
+
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script>
+    new TradingView.widget({
+        "autosize": true, 
+        "symbol": "BINANCE:BTCUSDT", 
+        "interval": "1S",
+        "theme": "dark", 
+        "container_id": "tradingview_live", 
+        "preset": "mobile"
+    });
+</script>
+
+
+
+
 </body>
 </html>
