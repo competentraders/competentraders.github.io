@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Game | Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #06070a; color: white; font-family: sans-serif; }
+        .input-field { background: #111; border: 1px solid #333; padding: 12px; border-radius: 10px; width: 100%; color: white; margin-top: 5px; }
+    </style>
+</head>
+<body class="p-6">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-xl font-bold mb-6 text-blue-500">Post New Prediction</h1>
+        
+        <div class="space-y-4">
+            <div>
+                <label class="text-xs text-gray-400">Home Team</label>
+                <select id="home-select" class="input-field">
+                    <option value="Chelsea|61">Chelsea</option>
+                    <option value="Man City|65">Man City</option>
+                    <option value="Arsenal|57">Arsenal</option>
+                    <option value="Liverpool|64">Liverpool</option>
+                    <option value="Man Utd|66">Man Utd</option>
+                    <option value="Real Madrid|86">Real Madrid</option>
+                    <option value="Barcelona|81">Barcelona</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400">Away Team</label>
+                <select id="away-select" class="input-field">
+                    <option value="Man City|65">Man City</option>
+                    <option value="Arsenal|57">Arsenal</option>
+                    <option value="Chelsea|61">Chelsea</option>
+                    <option value="Liverpool|64">Liverpool</option>
+                    <option value="Real Madrid|86">Real Madrid</option>
+                    <option value="Barcelona|81">Barcelona</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="text-xs text-gray-400">Your Prediction</label>
+                <input type="text" id="pred-val" placeholder="e.g. Over 2.5 Goals" class="input-field">
+            </div>
+
+            <button onclick="uploadGame()" id="post-btn" class="w-full bg-blue-600 py-4 rounded-xl font-bold mt-4">POST TO APP</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.uploadGame = async () => {
+            const btn = document.getElementById('post-btn');
+            const homeData = document.getElementById('home-select').value.split('|');
+            const awayData = document.getElementById('away-select').value.split('|');
+            const pred = document.getElementById('pred-val').value;
+
+            if(!pred) return alert("Enter a prediction!");
+
+            btn.innerText = "POSTING...";
+            
+            try {
+                await addDoc(collection(db, "predictions"), {
+                    homeName: homeData[0],
+                    homeLogo: `https://crests.football-data.org/${homeData[1]}.png`,
+                    awayName: awayData[0],
+                    awayLogo: `https://crests.football-data.org/${awayData[1]}.png`,
+                    mainPrediction: pred,
+                    time: "Live Now",
+                    timestamp: serverTimestamp()
+                });
+                alert("Game Live on App!");
+                location.reload();
+            } catch (e) {
+                alert("Error: " + e.message);
+            }
+        }
+    </script>
+</body>
+</html>
