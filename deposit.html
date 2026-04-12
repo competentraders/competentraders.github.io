@@ -12,16 +12,13 @@
         .glass-card { background: #181A20; border: 1px solid #2B2F36; border-radius: 24px; }
         .accent-text { color: #00D071; }
         .wa-btn { background: #25D366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); transition: all 0.3s ease; }
-        .wa-btn:active { transform: scale(0.96); }
         
-        /* Professional Toast Notification */
         #toast {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             background: #1e222d; border: 1px solid #2B2F36; color: white;
             padding: 12px 24px; border-radius: 12px; font-size: 12px; font-weight: 800;
             z-index: 9999; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            width: 80%; max-width: 300px; text-align: center; justify-content: center;
+            width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px;
         }
         #toast.show { top: 20px; }
     </style>
@@ -48,8 +45,8 @@
         </div>
 
         <div class="glass-card p-6 mb-6">
-            <div class="mb-8">
-                <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest text-center mb-4">Enter Amount to Fund</p>
+            <div class="mb-8 text-center">
+                <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-4">Enter Amount to Fund</p>
                 <div class="relative">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-600">₦</span>
                     <input type="number" id="dep-amt" placeholder="5,000" class="w-full bg-black/30 border border-white/5 p-5 pl-10 rounded-2xl text-3xl font-black outline-none focus:border-green-500 transition-all text-white">
@@ -65,29 +62,22 @@
                     <span class="text-[10px] text-gray-500 font-black uppercase">Account Number</span>
                     <div class="flex items-center gap-3">
                         <span class="text-lg font-black tracking-tighter">6119316029</span>
-                        <button onclick="copyAcc()" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center accent-text hover:bg-white/10 transition-all">
-                            <i class="fas fa-copy"></i>
-                        </button>
+                        <button onclick="copyAcc()" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center accent-text"><i class="fas fa-copy text-xs"></i></button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="space-y-4">
-            <button id="main-btn" onclick="initiateWhatsAppDeposit()" class="w-full wa-btn py-5 rounded-[22px] font-black uppercase text-xs flex items-center justify-center gap-3">
-                <i class="fab fa-whatsapp text-lg"></i> I Have Paid
-            </button>
-            <p class="text-[9px] text-gray-600 text-center font-bold uppercase leading-relaxed tracking-wider">
-                Funds will be added instantly upon receipt verification.
-            </p>
-        </div>
+        <button id="main-btn" onclick="initiateWhatsAppDeposit()" class="w-full wa-btn py-5 rounded-[22px] font-black uppercase text-xs flex items-center justify-center gap-3">
+            <i class="fab fa-whatsapp text-lg"></i> I Have Paid
+        </button>
+        <p class="text-[9px] text-gray-600 text-center font-bold uppercase mt-4 tracking-widest">Verification managed by Competentraders</p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"; // Note: Fixed imports below
-        import * as firestore from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
@@ -100,18 +90,17 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = firestore.getFirestore(app);
+        const db = getFirestore(app);
 
         let userName = "Client";
 
         onAuthStateChanged(auth, async (user) => {
             if(user) {
-                const snap = await firestore.getDoc(firestore.doc(db, "users", user.uid));
+                const snap = await getDoc(doc(db, "users", user.uid));
                 if(snap.exists()) userName = snap.data().fullName;
             }
         });
 
-        // Professional Toast Handler
         window.showToast = (msg) => {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
@@ -125,34 +114,33 @@
             
             if(!amt || amt < 1000) return showToast("Min deposit ₦1,000 required");
 
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PREPARING TICKET...`;
-
             const ticketID = "CT-" + Math.floor(1000 + Math.random() * 9000);
             const phone = "2349157023248";
             const message = `*I HAVE PAID*%0A---%0A*Ticket:* ${ticketID}%0A*Name:* ${userName}%0A*Amount:* ₦${amt}%0A---%0A_Attached is my payment proof._`;
 
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PROCESSING...`;
+
+            // FORCE REDIRECT AFTER 1.5 SECONDS NO MATTER WHAT
+            const forceTimeout = setTimeout(() => {
+                window.location.href = `https://wa.me/${phone}?text=${message}`;
+            }, 1500);
+
             try {
-                // FAIL-SAFE: Attempt database log but do not crash on failure
-                await firestore.addDoc(firestore.collection(db, "deposits"), {
-                    uid: auth.currentUser ? auth.currentUser.uid : "manual",
+                await addDoc(collection(db, "deposits"), {
+                    uid: auth.currentUser ? auth.currentUser.uid : "guest",
                     email: auth.currentUser ? auth.currentUser.email : "guest",
                     amount: Number(amt),
                     ticket: ticketID,
                     status: "pending_verification",
-                    timestamp: firestore.serverTimestamp()
+                    timestamp: serverTimestamp()
                 });
-                showToast("Verification Ticket Logged!");
-            } catch (error) {
-                console.log("DB bypassed, continuing to WhatsApp.");
-            }
-
-            // Always redirect to WhatsApp after a brief delay
-            setTimeout(() => {
+                
+                clearTimeout(forceTimeout);
                 window.location.href = `https://wa.me/${phone}?text=${message}`;
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fab fa-whatsapp text-lg"></i> I Have Paid`;
-            }, 1000);
+            } catch (e) {
+                console.log("DB Offline - Auto Redirecting...");
+            }
         }
 
         window.copyAcc = () => {
