@@ -12,83 +12,38 @@
         .input-field { background: #111; border: 1px solid #333; padding: 12px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
         .input-field:focus { border-color: #3b82f6; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        /* Smooth Toast Notification (No more "page says") */
+        #custom-toast { 
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #3b82f6; color: white; padding: 12px 30px; border-radius: 50px;
+            font-weight: 900; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4); z-index: 9999;
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        #custom-toast.show { top: 30px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
+    <div id="custom-toast">Action Successful</div>
+
     <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
         
         <div class="glass p-8 rounded-[32px] h-fit sticky top-10">
-            <h1 class="text-2xl font-black uppercase mb-2 text-blue-500 text-center lg:text-left">Post Tip</h1>
-            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-8 text-center lg:text-left">Live Admin Control</p>
+            <h1 class="text-2xl font-black uppercase mb-2 text-blue-500">Post Tip</h1>
+            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-8">Live Admin Control</p>
             
             <div class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Home Team</label>
-                        <select id="home-select" class="input-field mt-1">
-                            <optgroup label="Premier League (England)">
-                                <option value="Arsenal|2750">Arsenal</option>
-                                <option value="Aston Villa|2801">Aston Villa</option>
-                                <option value="Bournemouth|60">Bournemouth</option>
-                                <option value="Brentford|50">Brentford</option>
-                                <option value="Brighton|30">Brighton</option>
-                                <option value="Chelsea|2635">Chelsea</option>
-                                <option value="Crystal Palace|7">Crystal Palace</option>
-                                <option value="Everton|2688">Everton</option>
-                                <option value="Fulham|31">Fulham</option>
-                                <option value="Ipswich|36">Ipswich</option>
-                                <option value="Leicester|23">Leicester</option>
-                                <option value="Liverpool|2674">Liverpool</option>
-                                <option value="Man City|17">Man City</option>
-                                <option value="Man Utd|35">Man Utd</option>
-                                <option value="Newcastle|39">Newcastle</option>
-                                <option value="Nottm Forest|14">Nottm Forest</option>
-                                <option value="Southampton|26">Southampton</option>
-                                <option value="Tottenham|33">Tottenham</option>
-                                <option value="West Ham|37">West Ham</option>
-                                <option value="Wolves|3">Wolves</option>
-                            </optgroup>
-                            <optgroup label="La Liga (Spain)">
-                                <option value="Real Madrid|2829">Real Madrid</option>
-                                <option value="Barcelona|2817">Barcelona</option>
-                                <option value="Atletico Madrid|2836">Atletico Madrid</option>
-                                <option value="Girona|24264">Girona</option>
-                                <option value="Real Sociedad|2824">Real Sociedad</option>
-                                <option value="Villarreal|2819">Villarreal</option>
-                                <option value="Sevilla|2833">Sevilla</option>
-                            </optgroup>
-                            <optgroup label="Bundesliga (Germany)">
-                                <option value="Bayern Munich|2672">Bayern Munich</option>
-                                <option value="Bayer Leverkusen|2681">Bayer Leverkusen</option>
-                                <option value="Dortmund|2673">Dortmund</option>
-                                <option value="RB Leipzig|36360">RB Leipzig</option>
-                            </optgroup>
-                            <optgroup label="Serie A (Italy)">
-                                <option value="Inter Milan|2697">Inter Milan</option>
-                                <option value="AC Milan|2692">AC Milan</option>
-                                <option value="Juventus|2687">Juventus</option>
-                                <option value="Napoli|2714">Napoli</option>
-                            </optgroup>
-                            <optgroup label="Ligue 1 (France)">
-                                <option value="PSG|1644">PSG</option>
-                                <option value="Monaco|1654">Monaco</option>
-                                <option value="Marseille|1641">Marseille</option>
-                            </optgroup>
-                        </select>
+                        <select id="home-select" class="input-field mt-1 team-dropdown"></select>
                     </div>
                     <div>
                         <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Away Team</label>
-                        <select id="away-select" class="input-field mt-1">
-                            <option value="Man City|17">Man City</option>
-                            <option value="Real Madrid|2829">Real Madrid</option>
-                            <option value="Arsenal|2750">Arsenal</option>
-                            <option value="Barcelona|2817">Barcelona</option>
-                            <option value="Liverpool|2674">Liverpool</option>
-                            <option value="Bayern Munich|2672">Bayern Munich</option>
-                            <option value="PSG|1644">PSG</option>
-                        </select>
+                        <select id="away-select" class="input-field mt-1 team-dropdown"></select>
                     </div>
                 </div>
 
@@ -106,7 +61,7 @@
                 <i class="fas fa-list-ul text-blue-500"></i> Active Board
             </h2>
             <div id="admin-list" class="space-y-4 max-h-[700px] overflow-y-auto pr-2 no-scrollbar">
-                <p class="text-gray-600 text-xs italic">Syncing with database...</p>
+                <p class="text-gray-600 text-xs italic text-center">Syncing Database...</p>
             </div>
         </div>
 
@@ -128,87 +83,81 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- POST GAME ---
+        // Huge Team List Helper
+        const teams = `
+            <optgroup label="Premier League">
+                <option value="Arsenal|2750">Arsenal</option><option value="Aston Villa|2801">Aston Villa</option>
+                <option value="Bournemouth|60">Bournemouth</option><option value="Brentford|50">Brentford</option>
+                <option value="Brighton|30">Brighton</option><option value="Chelsea|2635">Chelsea</option>
+                <option value="Crystal Palace|7">Crystal Palace</option><option value="Everton|2688">Everton</option>
+                <option value="Fulham|31">Fulham</option><option value="Ipswich|36">Ipswich</option>
+                <option value="Leicester|23">Leicester</option><option value="Liverpool|2674">Liverpool</option>
+                <option value="Man City|17">Man City</option><option value="Man Utd|35">Man Utd</option>
+                <option value="Newcastle|39">Newcastle</option><option value="Nottm Forest|14">Nottm Forest</option>
+                <option value="Southampton|26">Southampton</option><option value="Tottenham|33">Tottenham</option>
+                <option value="West Ham|37">West Ham</option><option value="Wolves|3">Wolves</option>
+            </optgroup>
+            <optgroup label="Europe Giants">
+                <option value="Real Madrid|2829">Real Madrid</option><option value="Barcelona|2817">Barcelona</option>
+                <option value="Atlético|2836">Atlético Madrid</option><option value="Bayern|2672">Bayern Munich</option>
+                <option value="Dortmund|2673">Dortmund</option><option value="Leverkusen|2681">Bayer Leverkusen</option>
+                <option value="Inter Milan|2697">Inter Milan</option><option value="AC Milan|2692">AC Milan</option>
+                <option value="Juventus|2687">Juventus</option><option value="Napoli|2714">Napoli</option>
+                <option value="PSG|1644">PSG</option>
+            </optgroup>`;
+
+        document.querySelectorAll('.team-dropdown').forEach(el => el.innerHTML = teams);
+
+        function showToast(msg) {
+            const t = document.getElementById('custom-toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
         window.uploadGame = async () => {
-            const btn = document.getElementById('post-btn');
             const home = document.getElementById('home-select').value.split('|');
             const away = document.getElementById('away-select').value.split('|');
             const pred = document.getElementById('pred-val').value;
 
-            if(!pred) return alert("Please enter a prediction!");
-
-            btn.disabled = true;
-            btn.innerText = "PUBLISHING...";
+            if(!pred) return showToast("Enter a prediction!");
 
             try {
                 await addDoc(collection(db, "predictions"), {
-                    homeName: home[0],
-                    homeId: home[1],
-                    awayName: away[0],
-                    awayId: away[1],
-                    mainPrediction: pred,
-                    status: "pending", 
-                    timestamp: serverTimestamp()
+                    homeName: home[0], homeId: home[1],
+                    awayName: away[0], awayId: away[1],
+                    mainPrediction: pred, status: "pending", timestamp: serverTimestamp()
                 });
                 document.getElementById('pred-val').value = "";
-                btn.disabled = false;
-                btn.innerText = "PUBLISH LIVE TIP";
-            } catch (e) { 
-                alert("Error: " + e.message); 
-                btn.disabled = false;
-                btn.innerText = "PUBLISH LIVE TIP";
-            }
+                showToast("Game Published!");
+            } catch (e) { showToast("Error Posting"); }
         };
 
-        // --- MANAGE LIST (History & Deletion) ---
         const q = query(collection(db, "predictions"), orderBy("timestamp", "desc"));
         onSnapshot(q, (snapshot) => {
             const list = document.getElementById('admin-list');
             list.innerHTML = "";
-            
-            if (snapshot.empty) {
-                list.innerHTML = `<p class="text-gray-600 text-xs font-bold uppercase">No games currently active.</p>`;
-                return;
-            }
-
             snapshot.forEach((gameDoc) => {
                 const game = gameDoc.data();
                 const id = gameDoc.id;
-                
                 const item = document.createElement('div');
                 item.className = `p-4 bg-white/5 rounded-2xl border ${game.status === 'won' ? 'border-green-500/20' : game.status === 'lost' ? 'border-red-500/20' : 'border-white/5'} space-y-3`;
                 item.innerHTML = `
                     <div class="flex justify-between items-center">
-                        <span class="text-[9px] font-black uppercase px-2 py-1 rounded bg-white/5 ${game.status === 'won' ? 'text-green-500' : game.status === 'lost' ? 'text-red-500' : 'text-blue-500'}">
-                            ${game.status}
-                        </span>
-                        <button onclick="deleteGame('${id}')" class="text-gray-700 hover:text-red-500 transition-colors">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        <span class="text-[9px] font-black uppercase ${game.status === 'won' ? 'text-green-500' : game.status === 'lost' ? 'text-red-500' : 'text-blue-500'}">${game.status}</span>
+                        <button onclick="deleteGame('${id}')" class="text-gray-700 hover:text-red-500"><i class="fas fa-trash-alt"></i></button>
                     </div>
-                    <div>
-                        <p class="text-[11px] font-black uppercase text-white">${game.homeName} vs ${game.awayName}</p>
-                        <p class="text-[10px] font-bold text-gray-500 uppercase mt-1">Pick: ${game.mainPrediction}</p>
-                    </div>
-                    <div class="flex gap-2 pt-2">
-                        <button onclick="updateStatus('${id}', 'won')" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-[9px] font-black uppercase transition-all">Mark Won</button>
-                        <button onclick="updateStatus('${id}', 'lost')" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg text-[9px] font-black uppercase transition-all">Mark Lost</button>
-                    </div>
-                `;
+                    <p class="text-[11px] font-black uppercase">${game.homeName} vs ${game.awayName}</p>
+                    <div class="flex gap-2">
+                        <button onclick="updateStatus('${id}', 'won')" class="flex-1 bg-green-600 py-2 rounded-lg text-[9px] font-black uppercase">Mark Won</button>
+                        <button onclick="updateStatus('${id}', 'lost')" class="flex-1 bg-red-600 py-2 rounded-lg text-[9px] font-black uppercase">Mark Lost</button>
+                    </div>`;
                 list.appendChild(item);
             });
         });
 
-        // --- GLOBAL ACTIONS ---
-        window.deleteGame = async (id) => {
-            if(confirm("Permanently delete this prediction?")) {
-                await deleteDoc(doc(db, "predictions", id));
-            }
-        };
-
-        window.updateStatus = async (id, status) => {
-            await updateDoc(doc(db, "predictions", id), { status: status });
-        };
+        window.deleteGame = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "predictions", id)); showToast("Deleted"); } };
+        window.updateStatus = async (id, status) => { await updateDoc(doc(db, "predictions", id), { status }); showToast(`Updated to ${status}`); };
     </script>
 </body>
 </html>
