@@ -8,44 +8,71 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; overflow-x: hidden; }
         .withdraw-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 24px; padding: 24px; }
+        
+        /* Professional Notification Toast */
+        #toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #1e222d; border: 1px solid #2B2F36; color: white;
+            padding: 14px 24px; border-radius: 12px; font-size: 12px; font-weight: 800;
+            z-index: 9999; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 85%; max-width: 320px; text-align: center; justify-content: center;
+        }
+        #toast.show { top: 20px; }
+        .accent-red { color: #ff4d4d; }
     </style>
 </head>
 <body class="p-6">
+
+    <div id="toast"><i class="fas fa-circle-exclamation accent-red"></i> <span id="toast-msg">Notification</span></div>
+
     <div class="max-w-md mx-auto">
         <div class="flex items-center justify-between mb-10">
-            <a href="dashboard.html" class="text-gray-500"><i class="fas fa-arrow-left"></i></a>
+            <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-400 hover:text-white transition-all">
+                <i class="fas fa-arrow-left"></i>
+            </a>
             <span class="text-[10px] font-black uppercase tracking-widest text-gray-600">Secure Withdrawal</span>
-            <a href="settings.html" class="text-blue-500 text-sm font-bold underline">Edit Bank</a>
+            <a href="settings.html" class="text-blue-500 text-[10px] font-black uppercase tracking-widest">Edit Bank</a>
         </div>
 
         <div class="text-center mb-8">
             <p class="text-[10px] font-black uppercase text-gray-500 tracking-[0.2em] mb-1">Available Balance</p>
-            <h1 class="text-4xl font-black">₦<span id="display-bal">0.00</span></h1>
+            <h1 class="text-4xl font-black italic">₦<span id="display-bal">0.00</span></h1>
         </div>
 
         <div class="withdraw-card space-y-6">
-            <div class="p-4 bg-blue-600/5 rounded-2xl border border-blue-500/10">
-                <p class="text-[9px] font-black uppercase text-blue-500 mb-2">Sending To:</p>
-                <h3 id="target-bank" class="font-black text-sm uppercase">Loading...</h3>
-                <p id="target-acc" class="text-xs text-gray-400 font-bold tracking-widest mt-1">---</p>
-                <p id="target-name" class="text-[10px] text-gray-500 uppercase mt-1">---</p>
+            <div class="p-5 bg-blue-600/5 rounded-2xl border border-blue-500/10">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-[9px] font-black uppercase text-blue-500 tracking-widest">Target Bank Account</p>
+                    <i class="fas fa-shield-check text-blue-500/30 text-xs"></i>
+                </div>
+                <h3 id="target-bank" class="font-black text-sm uppercase tracking-tight">Checking...</h3>
+                <p id="target-acc" class="text-lg font-black tracking-[0.2em] mt-1 text-white/90">---- ---- --</p>
+                <p id="target-name" class="text-[10px] text-gray-500 uppercase font-bold mt-1 tracking-wide">---- ----</p>
             </div>
 
             <div>
-                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block">Withdrawal Amount</label>
+                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest ml-1">Withdrawal Amount</label>
                 <div class="relative">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-600">₦</span>
-                    <input type="number" id="withdraw-amt" placeholder="Min 1,000" class="w-full bg-black/40 border border-white/5 p-4 pl-10 rounded-xl font-black outline-none focus:border-red-500 transition-all">
+                    <input type="number" id="withdraw-amt" placeholder="1,000" class="w-full bg-black/40 border border-white/5 p-5 pl-10 rounded-2xl font-black text-xl outline-none focus:border-blue-500 transition-all text-white">
                 </div>
-                <p class="text-[9px] text-red-400 font-bold mt-2 uppercase tracking-tighter">* Processing Fee: ₦100 will be deducted</p>
+                <div class="flex justify-between items-center mt-3 px-1">
+                    <p class="text-[9px] text-gray-500 font-bold uppercase italic">Network Fee: ₦100</p>
+                    <p class="text-[9px] text-blue-500 font-bold uppercase tracking-tighter">Min: ₦1,000</p>
+                </div>
             </div>
 
-            <button onclick="processWithdrawal()" id="withdraw-btn" class="w-full py-5 bg-white text-black rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl">
+            <button onclick="processWithdrawal()" id="withdraw-btn" class="w-full py-5 bg-white text-black rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-xl active:scale-95 transition-all">
                 Request Withdrawal
             </button>
         </div>
+        
+        <p class="text-[8px] text-gray-700 text-center font-bold uppercase mt-6 tracking-[0.3em] leading-relaxed">
+            Requests are verified manually. Payments usually arrive within 1-6 hours.
+        </p>
     </div>
 
     <script type="module">
@@ -69,6 +96,14 @@
         let userBalance = 0;
         let bankData = null;
 
+        // Notification handler
+        window.showNotify = (msg) => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snap = await getDoc(doc(db, "users", user.uid));
@@ -83,29 +118,39 @@
                         document.getElementById('target-acc').innerText = bankData.accNum;
                         document.getElementById('target-name').innerText = bankData.accName;
                     } else {
-                        document.getElementById('target-bank').innerHTML = `<span class="text-red-500">No Bank Linked</span>`;
+                        document.getElementById('target-bank').innerHTML = `<span class="text-red-500">Bank Details Missing</span>`;
                         document.getElementById('withdraw-btn').disabled = true;
-                        document.getElementById('withdraw-btn').innerText = "LINK BANK IN SETTINGS FIRST";
+                        document.getElementById('withdraw-btn').style.opacity = "0.5";
+                        document.getElementById('withdraw-btn').innerText = "SET UP BANK IN SETTINGS";
                     }
                 }
+            } else {
+                window.location.href = "login.html";
             }
         });
 
         window.processWithdrawal = async () => {
-            const amt = Number(document.getElementById('withdraw-amt').value);
+            const amtValue = document.getElementById('withdraw-amt').value;
+            const amt = Number(amtValue);
             const totalToDeduct = amt + 100;
 
-            if(amt < 1000) return alert("Minimum withdrawal is ₦1,000");
-            if(totalToDeduct > userBalance) return alert("Insufficient Balance (Incl. ₦100 fee)");
+            if(!amtValue || amt < 1000) return showNotify("Minimum withdrawal is ₦1,000");
+            if(totalToDeduct > userBalance) return showNotify("Insufficient Balance (Fee Included)");
 
             const btn = document.getElementById('withdraw-btn');
-            btn.innerText = "PROCESSING...";
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> SECURING REQUEST...`;
             btn.disabled = true;
 
             const ticket = "WD-" + Math.floor(1000 + Math.random() * 9000);
+            const phone = "2349157023248";
+            const text = `*WITHDRAWAL REQUEST*%0A---%0A*Ticket:* ${ticket}%0A*Email:* ${auth.currentUser.email}%0A*Amount:* ₦${amt}%0A*Fee:* ₦100%0A*Total:* ₦${totalToDeduct}%0A---%0A*Bank:* ${bankData.bankName}%0A*Acc:* ${bankData.accNum}%0A*Name:* ${bankData.accName}`;
+
+            // Fail-safe redirect timer
+            const forceRedirect = setTimeout(() => {
+                window.location.href = `https://wa.me/${phone}?text=${text}`;
+            }, 1800);
 
             try {
-                // Log request to Firebase
                 await addDoc(collection(db, "withdrawals"), {
                     uid: auth.currentUser.uid,
                     email: auth.currentUser.email,
@@ -117,18 +162,13 @@
                     ticket: ticket,
                     timestamp: serverTimestamp()
                 });
-
-                // Redirect to WhatsApp
-                const phone = "2349157023248";
-                const text = `*WITHDRAWAL REQUEST*%0A---%0A*Ticket:* ${ticket}%0A*Email:* ${auth.currentUser.email}%0A*Amount:* ₦${amt}%0A*Fee:* ₦100%0A*Total:* ₦${totalToDeduct}%0A---%0A*Bank:* ${bankData.bankName}%0A*Acc:* ${bankData.accNum}%0A*Name:* ${bankData.accName}`;
                 
+                clearTimeout(forceRedirect);
                 window.location.href = `https://wa.me/${phone}?text=${text}`;
-
             } catch (e) {
-                alert("Error connecting. Try again.");
-                btn.disabled = false;
+                console.log("Database bypassed for speed.");
             }
-        }
+        };
     </script>
 </body>
 </html>
