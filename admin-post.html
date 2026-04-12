@@ -3,55 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Game | Admin</title>
+    <title>Competentraders | Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #06070a; color: white; font-family: sans-serif; }
-        .input-field { background: #111; border: 1px solid #333; padding: 12px; border-radius: 10px; width: 100%; color: white; margin-top: 5px; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap');
+        body { background: #06070a; color: white; font-family: 'Outfit', sans-serif; }
+        .input-field { background: #111; border: 1px solid #333; padding: 12px; border-radius: 12px; width: 100%; color: white; outline: none; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
     </style>
 </head>
-<body class="p-6">
-    <div class="max-w-md mx-auto">
-        <h1 class="text-xl font-bold mb-6 text-blue-500">Post New Prediction</h1>
+<body class="p-4 md:p-10">
+
+    <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
         
-        <div class="space-y-4">
-            <div>
-                <label class="text-xs text-gray-400">Home Team</label>
-                <select id="home-select" class="input-field">
-                    <option value="Chelsea|61">Chelsea</option>
-                    <option value="Man City|65">Man City</option>
-                    <option value="Arsenal|57">Arsenal</option>
-                    <option value="Liverpool|64">Liverpool</option>
-                    <option value="Man Utd|66">Man Utd</option>
-                    <option value="Real Madrid|86">Real Madrid</option>
-                    <option value="Barcelona|81">Barcelona</option>
-                </select>
-            </div>
+        <div class="glass p-8 rounded-[32px]">
+            <h1 class="text-2xl font-black uppercase mb-6 text-blue-500">Post New Tip</h1>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500">Home Team</label>
+                        <select id="home-select" class="input-field mt-1">
+                            <optgroup label="England">
+                                <option value="Arsenal|57">Arsenal</option>
+                                <option value="Aston Villa|64">Aston Villa</option>
+                                <option value="Chelsea|61">Chelsea</option>
+                                <option value="Liverpool|64">Liverpool</option>
+                                <option value="Man City|65">Man City</option>
+                                <option value="Man Utd|66">Man Utd</option>
+                                <option value="Tottenham|73">Tottenham</option>
+                            </optgroup>
+                            <optgroup label="Spain">
+                                <option value="Real Madrid|86">Real Madrid</option>
+                                <option value="Barcelona|81">Barcelona</option>
+                                <option value="Atletico Madrid|78">Atlético</option>
+                            </optgroup>
+                            <optgroup label="Germany">
+                                <option value="Bayern Munich|5">Bayern Munich</option>
+                                <option value="Dortmund|4">Dortmund</option>
+                                <option value="Leverkusen|3">Leverkusen</option>
+                            </optgroup>
+                            <optgroup label="Italy">
+                                <option value="Inter Milan|108">Inter Milan</option>
+                                <option value="AC Milan|98">AC Milan</option>
+                                <option value="Juventus|109">Juventus</option>
+                                <option value="Napoli|113">Napoli</option>
+                            </optgroup>
+                            <optgroup label="France">
+                                <option value="PSG|524">PSG</option>
+                                <option value="Marseille|516">Marseille</option>
+                                <option value="Monaco|548">Monaco</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500">Away Team</label>
+                        <select id="away-select" class="input-field mt-1">
+                            <option value="Man City|65">Man City</option>
+                            <option value="Real Madrid|86">Real Madrid</option>
+                            <option value="Arsenal|57">Arsenal</option>
+                            <option value="Barcelona|81">Barcelona</option>
+                            <option value="Liverpool|64">Liverpool</option>
+                            <option value="Bayern Munich|5">Bayern Munich</option>
+                            <option value="PSG|524">PSG</option>
+                        </select>
+                    </div>
+                </div>
 
-            <div>
-                <label class="text-xs text-gray-400">Away Team</label>
-                <select id="away-select" class="input-field">
-                    <option value="Man City|65">Man City</option>
-                    <option value="Arsenal|57">Arsenal</option>
-                    <option value="Chelsea|61">Chelsea</option>
-                    <option value="Liverpool|64">Liverpool</option>
-                    <option value="Real Madrid|86">Real Madrid</option>
-                    <option value="Barcelona|81">Barcelona</option>
-                </select>
-            </div>
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-500">Main Prediction</label>
+                    <input type="text" id="pred-val" placeholder="e.g. Over 2.5 Goals" class="input-field mt-1">
+                </div>
 
-            <div>
-                <label class="text-xs text-gray-400">Your Prediction</label>
-                <input type="text" id="pred-val" placeholder="e.g. Over 2.5 Goals" class="input-field">
+                <button onclick="uploadGame()" id="post-btn" class="w-full bg-blue-600 py-4 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-blue-700 transition-all">Publish Live Tip</button>
             </div>
-
-            <button onclick="uploadGame()" id="post-btn" class="w-full bg-blue-600 py-4 rounded-xl font-bold mt-4">POST TO APP</button>
         </div>
+
+        <div class="glass p-8 rounded-[32px]">
+            <h2 class="text-xl font-black uppercase mb-6">Manage Predictions</h2>
+            <div id="admin-list" class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                <p class="text-gray-600 text-xs italic">Loading live data...</p>
+            </div>
+        </div>
+
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
@@ -65,32 +105,64 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // --- POST GAME ---
         window.uploadGame = async () => {
-            const btn = document.getElementById('post-btn');
-            const homeData = document.getElementById('home-select').value.split('|');
-            const awayData = document.getElementById('away-select').value.split('|');
+            const home = document.getElementById('home-select').value.split('|');
+            const away = document.getElementById('away-select').value.split('|');
             const pred = document.getElementById('pred-val').value;
 
-            if(!pred) return alert("Enter a prediction!");
+            if(!pred) return alert("Enter a prediction");
 
-            btn.innerText = "POSTING...";
-            
             try {
                 await addDoc(collection(db, "predictions"), {
-                    homeName: homeData[0],
-                    homeLogo: `https://crests.football-data.org/${homeData[1]}.png`,
-                    awayName: awayData[0],
-                    awayLogo: `https://crests.football-data.org/${awayData[1]}.png`,
+                    homeName: home[0],
+                    homeLogo: `https://crests.football-data.org/${home[1]}.png`,
+                    awayName: away[0],
+                    awayLogo: `https://crests.football-data.org/${away[1]}.png`,
                     mainPrediction: pred,
-                    time: "Live Now",
+                    status: "pending", // Default status
                     timestamp: serverTimestamp()
                 });
-                alert("Game Live on App!");
-                location.reload();
-            } catch (e) {
-                alert("Error: " + e.message);
-            }
-        }
+                document.getElementById('pred-val').value = "";
+            } catch (e) { alert(e.message); }
+        };
+
+        // --- MANAGE LIST ---
+        const q = query(collection(db, "predictions"), orderBy("timestamp", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const list = document.getElementById('admin-list');
+            list.innerHTML = "";
+            snapshot.forEach((gameDoc) => {
+                const game = gameDoc.data();
+                const id = gameDoc.id;
+                
+                const item = document.createElement('div');
+                item.className = "p-4 bg-white/5 rounded-2xl border border-white/5 space-y-3";
+                item.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black uppercase ${game.status === 'won' ? 'text-green-500' : game.status === 'lost' ? 'text-red-500' : 'text-blue-500'}">
+                            ${game.status}
+                        </span>
+                        <button onclick="deleteGame('${id}')" class="text-gray-600 hover:text-red-500"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <p class="text-xs font-bold uppercase">${game.homeName} vs ${game.awayName}</p>
+                    <div class="flex gap-2">
+                        <button onclick="updateStatus('${id}', 'won')" class="flex-1 bg-green-600/20 text-green-500 py-2 rounded-lg text-[9px] font-black uppercase">Mark Won</button>
+                        <button onclick="updateStatus('${id}', 'lost')" class="flex-1 bg-red-600/20 text-red-500 py-2 rounded-lg text-[9px] font-black uppercase">Mark Lost</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        });
+
+        // --- ACTIONS ---
+        window.deleteGame = async (id) => {
+            if(confirm("Delete this prediction?")) await deleteDoc(doc(db, "predictions", id));
+        };
+
+        window.updateStatus = async (id, status) => {
+            await updateDoc(doc(db, "predictions", id), { status: status });
+        };
     </script>
 </body>
 </html>
