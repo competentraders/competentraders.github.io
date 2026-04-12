@@ -9,38 +9,117 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
         body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
-        .input-box { background: #0f111a; border: 1px solid #1e293b; border-radius: 15px; padding: 15px; width: 100%; outline: none; transition: 0.3s; }
-        .input-box:focus { border-color: #3b82f6; }
-        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 12px 24px; border-radius: 12px; font-size: 12px; font-weight: 800; z-index: 9999; transition: 0.5s; }
+        
+        .input-box { 
+            background: #0f111a; 
+            border: 1px solid #1e293b; 
+            border-radius: 15px; 
+            padding: 16px; 
+            width: 100%; 
+            outline: none; 
+            transition: 0.3s;
+            color: white;
+            font-size: 14px;
+        }
+        .input-box:focus { border-color: #3b82f6; background: #131624; }
+        
+        select.input-box { appearance: none; cursor: pointer; }
+
+        #toast { 
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%); 
+            background: #22c55e; color: white; padding: 14px 28px; border-radius: 16px; 
+            font-size: 13px; font-weight: 800; z-index: 9999; transition: 0.5s; 
+            box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
+            display: flex; align-items: center; gap: 10px;
+        }
         #toast.show { top: 20px; }
+
+        .form-label {
+            text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-[0.15em] ml-1;
+        }
     </style>
 </head>
 <body class="p-6">
-    <div id="toast">Details Saved Successfully!</div>
+    <div id="toast"><i class="fas fa-check-circle"></i> <span>Details Saved Successfully!</span></div>
 
     <div class="max-w-md mx-auto">
-        <div class="flex items-center gap-4 mb-8">
-            <a href="dashboard.html" class="text-gray-500 text-xl"><i class="fas fa-arrow-left"></i></a>
-            <h1 class="text-xl font-black uppercase tracking-tight">Withdrawal <span class="text-blue-500">Settings</span></h1>
+        <div class="flex items-center gap-4 mb-10">
+            <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-400 hover:text-white transition-all">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h1 class="text-xl font-black uppercase tracking-tight">Bank <span class="text-blue-500">Settings</span></h1>
+                <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Withdrawal Destination</p>
+            </div>
         </div>
 
         <div class="space-y-6">
             <div>
-                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest">Bank Name</label>
-                <input type="text" id="bank-name" placeholder="e.g. GTBank, Kuda, OPay" class="input-box text-sm">
-            </div>
-            <div>
-                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest">Account Number</label>
-                <input type="number" id="acc-num" placeholder="0123456789" class="input-box text-sm">
-            </div>
-            <div>
-                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest">Account Holder Name</label>
-                <input type="text" id="acc-name" placeholder="Full Name on Bank Account" class="input-box text-sm">
+                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest ml-1">Select Bank</label>
+                <div class="relative">
+                    <select id="bank-name" class="input-box">
+                        <option value="" disabled selected>Choose your bank...</option>
+                        <option value="Access Bank">Access Bank</option>
+                        <option value="Access Bank (Diamond)">Access Bank (Diamond)</option>
+                        <option value="Airtel Smartcash">Airtel Smartcash PSB</option>
+                        <option value="EcoBank">EcoBank Nigeria</option>
+                        <option value="Fidelity Bank">Fidelity Bank</option>
+                        <option value="First Bank">First Bank of Nigeria</option>
+                        <option value="First City Monument Bank">First City Monument Bank (FCMB)</option>
+                        <option value="GTBank">Guaranty Trust Bank (GTB)</option>
+                        <option value="Heritage Bank">Heritage Bank</option>
+                        <option value="Kuda Bank">Kuda Bank</option>
+                        <option value="Moniepoint">Moniepoint MFB</option>
+                        <option value="OPay">OPay Digital Bank (PayCom)</option>
+                        <option value="Palmpay">Palmpay</option>
+                        <option value="Stanbic IBTC">Stanbic IBTC Bank</option>
+                        <option value="Standard Chartered">Standard Chartered Bank</option>
+                        <option value="Sterling Bank">Sterling Bank</option>
+                        <option value="UBA">United Bank for Africa (UBA)</option>
+                        <option value="Union Bank">Union Bank of Nigeria</option>
+                        <option value="Unity Bank">Unity Bank</option>
+                        <option value="Wema Bank">Wema Bank</option>
+                        <option value="Zenith Bank">Zenith Bank</option>
+                        <option value="9PSB">9PSB</option>
+                        <option value="Carbon">Carbon</option>
+                        <option value="FairMoney">FairMoney MFB</option>
+                        <option value="Globus Bank">Globus Bank</option>
+                        <option value="Jaiz Bank">Jaiz Bank</option>
+                        <option value="Lotus Bank">Lotus Bank</option>
+                        <option value="MTN MoMo">MTN MoMo PSB</option>
+                        <option value="Optimus Bank">Optimus Bank</option>
+                        <option value="Parallex Bank">Parallex Bank</option>
+                        <option value="PremiumTrust Bank">PremiumTrust Bank</option>
+                        <option value="Providus Bank">Providus Bank</option>
+                        <option value="Rubies Bank">Rubies Bank</option>
+                        <option value="SunTrust Bank">SunTrust Bank</option>
+                        <option value="TAJ Bank">TAJ Bank</option>
+                        <option value="Titan Trust Bank">Titan Trust Bank</option>
+                        <option value="VFD Microfinance Bank">VFD Microfinance Bank</option>
+                    </select>
+                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-600 pointer-events-none text-xs"></i>
+                </div>
             </div>
 
-            <button onclick="saveBankDetails()" id="save-btn" class="w-full py-5 bg-blue-600 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-blue-600/20">
-                Update Bank Details
-            </button>
+            <div>
+                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest ml-1">Account Number</label>
+                <input type="number" id="acc-num" placeholder="0123456789" maxlength="10" class="input-box">
+            </div>
+
+            <div>
+                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest ml-1">Account Holder Name</label>
+                <input type="text" id="acc-name" placeholder="Name as seen on Bank App" class="input-box">
+            </div>
+
+            <div class="pt-4">
+                <button onclick="saveBankDetails()" id="save-btn" class="w-full py-5 bg-blue-600 rounded-2xl font-black uppercase text-[11px] tracking-[0.2em] shadow-lg shadow-blue-600/30 active:scale-95 transition-all">
+                    Securely Save Details
+                </button>
+            </div>
+            
+            <p class="text-[9px] text-gray-600 text-center font-bold uppercase leading-relaxed px-4">
+                Ensure these details are correct. Payments are processed to the account saved above.
+            </p>
         </div>
     </div>
 
@@ -62,6 +141,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        // Check login and Load existing data
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 const snap = await getDoc(doc(db, "users", user.uid));
@@ -82,14 +162,29 @@
                 accName: document.getElementById('acc-name').value
             };
 
-            if(!data.bankName || !data.accNum || !data.accName) return alert("Fill all fields");
+            if(!data.bankName || !data.accNum || !data.accName) {
+                return alert("Please fill in all bank details before saving.");
+            }
 
-            btn.innerText = "SAVING...";
-            await updateDoc(doc(db, "users", auth.currentUser.uid), { bankDetails: data });
-            
-            const toast = document.getElementById('toast');
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); btn.innerText = "Update Bank Details"; }, 3000);
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ENCRYPTING...`;
+
+            try {
+                await updateDoc(doc(db, "users", auth.currentUser.uid), { bankDetails: data });
+                
+                const toast = document.getElementById('toast');
+                toast.classList.add('show');
+                
+                // Professional Redirect after 2 seconds
+                setTimeout(() => { 
+                    window.location.href = "user-dashboard.html"; 
+                }, 2000);
+
+            } catch (error) {
+                alert("Error saving details. Check connection.");
+                btn.disabled = false;
+                btn.innerText = "Securely Save Details";
+            }
         };
     </script>
 </body>
