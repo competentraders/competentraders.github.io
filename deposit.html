@@ -8,26 +8,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0B0E11; color: white; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0B0E11; color: white; overflow-x: hidden; }
         .glass-card { background: #181A20; border: 1px solid #2B2F36; border-radius: 24px; }
         .accent-text { color: #00D071; }
-        .wa-btn { background: #25D366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
+        .wa-btn { background: #25D366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); transition: all 0.3s ease; }
+        .wa-btn:active { transform: scale(0.96); }
+        
+        /* Professional Toast Notification */
+        #toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #1e222d; border: 1px solid #2B2F36; color: white;
+            padding: 12px 24px; border-radius: 12px; font-size: 12px; font-weight: 800;
+            z-index: 9999; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #toast.show { top: 20px; }
     </style>
 </head>
 <body class="p-6">
 
+    <div id="toast"><i class="fas fa-check-circle accent-text"></i> <span id="toast-msg">Copied to clipboard</span></div>
+
     <div class="max-w-md mx-auto">
         <div class="flex items-center justify-between mb-10">
-            <a href="dashboard.html" class="text-gray-500"><i class="fas fa-arrow-left"></i></a>
+            <a href="dashboard.html" class="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-colors">
+                <i class="fas fa-arrow-left"></i>
+            </a>
             <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Manual Gateway</span>
-            <div class="w-4"></div>
+            <div class="w-10"></div>
         </div>
 
         <div class="text-center mb-10">
             <div class="w-16 h-16 bg-[#00D071]/10 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-[#00D071]/20">
                 <i class="fas fa-building accent-text text-2xl"></i>
             </div>
-            <h1 class="text-xl font-black uppercase italic">Business <span class="accent-text">Node</span></h1>
+            <h1 class="text-xl font-black uppercase italic tracking-tighter">Business <span class="accent-text">Node</span></h1>
             <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Merchant: Godswill Ugbesia</p>
         </div>
 
@@ -36,11 +51,11 @@
                 <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest text-center mb-4">Enter Amount to Fund</p>
                 <div class="relative">
                     <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-600">₦</span>
-                    <input type="number" id="dep-amt" placeholder="5,000" class="w-full bg-black/30 border border-white/5 p-5 pl-10 rounded-2xl text-3xl font-black outline-none focus:border-green-500 transition-all">
+                    <input type="number" id="dep-amt" placeholder="5,000" class="w-full bg-black/30 border border-white/5 p-5 pl-10 rounded-2xl text-3xl font-black outline-none focus:border-green-500 transition-all text-white">
                 </div>
             </div>
 
-            <div class="space-y-4 bg-black/20 p-4 rounded-2xl border border-white/5">
+            <div class="space-y-4 bg-black/20 p-5 rounded-2xl border border-white/5">
                 <div class="flex justify-between items-center">
                     <span class="text-[10px] text-gray-500 font-black uppercase">Bank Name</span>
                     <span class="text-xs font-bold text-gray-300">OPay Digital Bank</span>
@@ -49,18 +64,20 @@
                     <span class="text-[10px] text-gray-500 font-black uppercase">Account Number</span>
                     <div class="flex items-center gap-3">
                         <span class="text-lg font-black tracking-tighter">6119316029</span>
-                        <button onclick="copyAcc()" class="accent-text text-xs"><i class="fas fa-copy"></i></button>
+                        <button onclick="copyAcc()" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center accent-text hover:bg-white/10 transition-all">
+                            <i class="fas fa-copy"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="space-y-4">
-            <button id="main-btn" onclick="initiateWhatsAppDeposit()" class="w-full wa-btn py-5 rounded-[22px] font-black uppercase text-xs flex items-center justify-center gap-3 transition-transform active:scale-95">
-                <i class="fab fa-whatsapp text-lg"></i> Verify via WhatsApp
+            <button id="main-btn" onclick="initiateWhatsAppDeposit()" class="w-full wa-btn py-5 rounded-[22px] font-black uppercase text-xs flex items-center justify-center gap-3">
+                <i class="fab fa-whatsapp text-lg"></i> I Have Paid
             </button>
-            <p class="text-[9px] text-gray-600 text-center font-bold uppercase leading-relaxed">
-                A unique Ticket ID will be generated. Please send the Ticket and your payment screenshot to our business desk.
+            <p class="text-[9px] text-gray-600 text-center font-bold uppercase leading-relaxed tracking-wider">
+                Funds will be added instantly upon receipt verification.
             </p>
         </div>
     </div>
@@ -70,7 +87,6 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        // Firebase Config (Keep your existing one)
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
             authDomain: "competentraders-2efdc.firebaseapp.com",
@@ -93,19 +109,26 @@
             }
         });
 
+        window.showToast = (msg) => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
         window.initiateWhatsAppDeposit = async () => {
             const amt = document.getElementById('dep-amt').value;
             const btn = document.getElementById('main-btn');
             
-            if(!amt || amt < 1000) return alert("Please enter amount (Min ₦1,000)");
+            if(!amt || amt < 1000) return showToast("Min deposit ₦1,000 required");
 
-            // Generate Unique ID
-            const ticketID = "CT-" + Math.floor(1000 + Math.random() * 9000);
             btn.disabled = true;
-            btn.innerText = "GENERATING TICKET...";
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> GENERATING TICKET...`;
 
             try {
-                // 1. Log the Pending Request to Firebase
+                const ticketID = "CT-" + Math.floor(1000 + Math.random() * 9000);
+                
+                // 1. Log to Firebase
                 await addDoc(collection(db, "deposits"), {
                     uid: auth.currentUser.uid,
                     email: auth.currentUser.email,
@@ -115,24 +138,27 @@
                     timestamp: serverTimestamp()
                 });
 
-                // 2. Prepare WhatsApp Content
-                const phone = "2349153258628";
-                const message = `*DEPOSIT TICKET: ${ticketID}*%0A---%0A*Name:* ${userName}%0A*Amount:* ₦${amt}%0A---%0A_I have completed the transfer. Here is my receipt proof:_`;
+                // 2. WhatsApp Config
+                const phone = "2349157023248";
+                const message = `*I HAVE PAID*%0A---%0A*Ticket:* ${ticketID}%0A*Name:* ${userName}%0A*Amount:* ₦${amt}%0A---%0A_Attached is my payment proof._`;
 
-                // 3. Auto-copy account number for convenience
-                navigator.clipboard.writeText("6119316029");
+                showToast("Ticket Generated! Opening WhatsApp...");
                 
-                // 4. Redirect
-                window.location.href = `https://wa.me/${phone}?text=${message}`;
+                setTimeout(() => {
+                    window.location.href = `https://wa.me/${phone}?text=${message}`;
+                }, 1000);
+
             } catch (e) {
-                alert("Connection error. Try again.");
+                console.error(e);
+                showToast("Connection Lost. Please try again.");
                 btn.disabled = false;
+                btn.innerText = "I Have Paid";
             }
         }
 
         window.copyAcc = () => {
             navigator.clipboard.writeText("6119316029");
-            alert("Copied!");
+            showToast("Account Number Copied!");
         }
     </script>
 </body>
