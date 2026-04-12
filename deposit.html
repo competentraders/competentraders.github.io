@@ -21,13 +21,14 @@
             padding: 12px 24px; border-radius: 12px; font-size: 12px; font-weight: 800;
             z-index: 9999; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 80%; max-width: 300px; text-align: center; justify-content: center;
         }
         #toast.show { top: 20px; }
     </style>
 </head>
 <body class="p-6">
 
-    <div id="toast"><i class="fas fa-check-circle accent-text"></i> <span id="toast-msg">Copied to clipboard</span></div>
+    <div id="toast"><i class="fas fa-info-circle accent-text"></i> <span id="toast-msg">Notification</span></div>
 
     <div class="max-w-md mx-auto">
         <div class="flex items-center justify-between mb-10">
@@ -85,7 +86,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"; // Note: Fixed imports below
+        import * as firestore from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
@@ -98,17 +100,18 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        const db = firestore.getFirestore(app);
 
         let userName = "Client";
 
         onAuthStateChanged(auth, async (user) => {
             if(user) {
-                const snap = await getDoc(doc(db, "users", user.uid));
+                const snap = await firestore.getDoc(firestore.doc(db, "users", user.uid));
                 if(snap.exists()) userName = snap.data().fullName;
             }
         });
 
+        // Professional Toast Handler
         window.showToast = (msg) => {
             const toast = document.getElementById('toast');
             document.getElementById('toast-msg').innerText = msg;
@@ -123,37 +126,33 @@
             if(!amt || amt < 1000) return showToast("Min deposit ₦1,000 required");
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> GENERATING TICKET...`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PREPARING TICKET...`;
+
+            const ticketID = "CT-" + Math.floor(1000 + Math.random() * 9000);
+            const phone = "2349157023248";
+            const message = `*I HAVE PAID*%0A---%0A*Ticket:* ${ticketID}%0A*Name:* ${userName}%0A*Amount:* ₦${amt}%0A---%0A_Attached is my payment proof._`;
 
             try {
-                const ticketID = "CT-" + Math.floor(1000 + Math.random() * 9000);
-                
-                // 1. Log to Firebase
-                await addDoc(collection(db, "deposits"), {
-                    uid: auth.currentUser.uid,
-                    email: auth.currentUser.email,
+                // FAIL-SAFE: Attempt database log but do not crash on failure
+                await firestore.addDoc(firestore.collection(db, "deposits"), {
+                    uid: auth.currentUser ? auth.currentUser.uid : "manual",
+                    email: auth.currentUser ? auth.currentUser.email : "guest",
                     amount: Number(amt),
                     ticket: ticketID,
                     status: "pending_verification",
-                    timestamp: serverTimestamp()
+                    timestamp: firestore.serverTimestamp()
                 });
-
-                // 2. WhatsApp Config
-                const phone = "2349157023248";
-                const message = `*I HAVE PAID*%0A---%0A*Ticket:* ${ticketID}%0A*Name:* ${userName}%0A*Amount:* ₦${amt}%0A---%0A_Attached is my payment proof._`;
-
-                showToast("Ticket Generated! Opening WhatsApp...");
-                
-                setTimeout(() => {
-                    window.location.href = `https://wa.me/${phone}?text=${message}`;
-                }, 1000);
-
-            } catch (e) {
-                console.error(e);
-                showToast("Connection Lost. Please try again.");
-                btn.disabled = false;
-                btn.innerText = "I Have Paid";
+                showToast("Verification Ticket Logged!");
+            } catch (error) {
+                console.log("DB bypassed, continuing to WhatsApp.");
             }
+
+            // Always redirect to WhatsApp after a brief delay
+            setTimeout(() => {
+                window.location.href = `https://wa.me/${phone}?text=${message}`;
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fab fa-whatsapp text-lg"></i> I Have Paid`;
+            }, 1000);
         }
 
         window.copyAcc = () => {
