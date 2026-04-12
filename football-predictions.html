@@ -23,7 +23,13 @@
 
         .prediction-card:hover { transform: translateY(-5px); border-color: #3b82f6; }
 
-        .team-logo { width: 42px; height: 42px; object-fit: contain; margin: 0 auto 8px; filter: drop-shadow(0 0 8px rgba(255,255,255,0.1)); }
+        /* Fixed blinking: removed extreme drop-shadows and added min-height */
+        .team-logo { 
+            width: 45px; height: 45px; 
+            object-fit: contain; 
+            margin: 0 auto 8px; 
+            display: block;
+        }
 
         #notif-toast {
             position: fixed; bottom: -100px; right: 20px;
@@ -68,8 +74,7 @@
     </div>
 
     <div class="max-w-6xl mx-auto flex gap-3 overflow-x-auto pb-6 mb-4 no-scrollbar">
-        <button class="px-6 py-3 bg-blue-600 rounded-full text-[10px] font-black uppercase whitespace-nowrap">All Predictions</button>
-        <button class="px-6 py-3 glass-panel rounded-full text-[10px] font-black uppercase whitespace-nowrap text-gray-400">Premium Tips</button>
+        <button class="px-6 py-3 bg-blue-600 rounded-full text-[10px] font-black uppercase whitespace-nowrap">Current Board</button>
     </div>
 
     <div id="predictions-container" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -108,18 +113,17 @@
             container.innerHTML = ""; 
 
             if (snapshot.empty) {
-                container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 font-bold uppercase text-[10px] tracking-widest">No active games posted by admin.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 font-bold uppercase text-[10px] tracking-widest">No active games posted.</div>`;
                 return;
             }
 
             if (!initialLoad && snapshot.docChanges().some(change => change.type === "added")) {
-                showPushNotif("New prediction added to the board!");
+                showPushNotif("New prediction added!");
             }
 
             snapshot.forEach((doc) => {
                 const game = doc.data();
                 
-                // Status Badge Logic
                 let statusHTML = `<span class="text-[10px] font-bold text-blue-500 uppercase bg-blue-500/10 px-3 py-1 rounded-full">Pending</span>`;
                 if (game.status === 'won') {
                     statusHTML = `<span class="text-[10px] font-bold text-green-500 uppercase bg-green-500/20 px-3 py-1 rounded-full border border-green-500/30"><i class="fas fa-check-circle mr-1"></i> WON</span>`;
@@ -127,7 +131,10 @@
                     statusHTML = `<span class="text-[10px] font-bold text-red-500 uppercase bg-red-500/20 px-3 py-1 rounded-full border border-red-500/30"><i class="fas fa-times-circle mr-1"></i> LOST</span>`;
                 }
 
-                // Construct the Card HTML
+                // Fixed the logo URL to ensure it loads directly
+                const homeLogo = `https://api.sofascore.app/api/v1/team/${game.homeId}/image`;
+                const awayLogo = `https://api.sofascore.app/api/v1/team/${game.awayId}/image`;
+
                 const card = `
                 <div class="prediction-card glass-panel rounded-[32px] p-6 ${game.status === 'won' ? 'border-green-500/20' : ''}">
                     <div class="flex justify-between items-start mb-6">
@@ -137,12 +144,12 @@
                     
                     <div class="flex items-center justify-between mb-8">
                         <div class="text-center w-5/12">
-                            <img src="https://api.sofascore.app/api/v1/team/${game.homeId}/image" class="team-logo" onerror="this.src='https://via.placeholder.com/50?text=⚽'">
+                            <img src="${homeLogo}" class="team-logo" loading="lazy" onerror="this.onerror=null;this.src='https://crests.football-data.org/soccer.png';">
                             <p class="text-[11px] font-black uppercase truncate">${game.homeName}</p>
                         </div>
                         <div class="text-[10px] font-black text-gray-700">VS</div>
                         <div class="text-center w-5/12">
-                            <img src="https://api.sofascore.app/api/v1/team/${game.awayId}/image" class="team-logo" onerror="this.src='https://via.placeholder.com/50?text=⚽'">
+                            <img src="${awayLogo}" class="team-logo" loading="lazy" onerror="this.onerror=null;this.src='https://crests.football-data.org/soccer.png';">
                             <p class="text-[11px] font-black uppercase truncate">${game.awayName}</p>
                         </div>
                     </div>
