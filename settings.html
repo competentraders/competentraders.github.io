@@ -2,207 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Account Settings | Competentraders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Settings | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; }
-        .settings-card { background: #0f111a; border-radius: 24px; border: 1px solid #1e293b; overflow: hidden; }
-        .setting-item { display: flex; align-items: center; justify-content: space-between; padding: 20px; border-bottom: 1px solid #1e293b; }
-        
-        /* The Professional Bird Modal */
-        #bird-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9); 
-            z-index: 10000; display: none; align-items: center; justify-content: center;
-            padding: 20px; backdrop-filter: blur(10px);
-        }
-        .bird-box {
-            background: #0b0d12; border: 2px solid #1e293b; 
-            padding: 40px 25px; text-align: center;
-            width: 100%; max-width: 350px; border-radius: 40px;
-        }
-
-        /* Input for the Modal */
-        .modal-input {
-            background: #131722; border: 1px solid #2d3343;
-            width: 100%; padding: 15px; border-radius: 15px;
-            color: white; text-align: center; font-weight: 900;
-            margin-bottom: 20px; outline: none;
-        }
-
-        /* Toggle switch */
-        .switch { position: relative; display: inline-block; width: 45px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #334155; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: #3b82f6; }
-        input:checked + .slider:before { transform: translateX(21px); }
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
+        .input-box { background: #0f111a; border: 1px solid #1e293b; border-radius: 15px; padding: 15px; width: 100%; outline: none; transition: 0.3s; }
+        .input-box:focus { border-color: #3b82f6; }
+        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #3b82f6; color: white; padding: 12px 24px; border-radius: 12px; font-size: 12px; font-weight: 800; z-index: 9999; transition: 0.5s; }
+        #toast.show { top: 20px; }
     </style>
 </head>
-<body class="p-4 pb-12">
+<body class="p-6">
+    <div id="toast">Details Saved Successfully!</div>
 
-    <div id="bird-modal">
-        <div class="bird-box">
-            <div id="m-icon" class="text-6xl mb-4">🕊️</div>
-            <h3 id="m-title" class="text-xl font-black italic uppercase mb-2">Security Check</h3>
-            <p id="m-desc" class="text-gray-500 text-[10px] font-black uppercase mb-6 tracking-widest"></p>
-            
-            <input type="password" id="modalInput" class="modal-input hidden" placeholder="ENTER PIN">
-            <input type="password" id="modalInputNew" class="modal-input hidden" placeholder="ENTER NEW PIN">
-
-            <button id="m-confirm" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-[10px] uppercase mb-3">Confirm Action</button>
-            <button onclick="closeModal()" class="text-[10px] font-black uppercase text-gray-500 underline">Cancel</button>
+    <div class="max-w-md mx-auto">
+        <div class="flex items-center gap-4 mb-8">
+            <a href="dashboard.html" class="text-gray-500 text-xl"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="text-xl font-black uppercase tracking-tight">Withdrawal <span class="text-blue-500">Settings</span></h1>
         </div>
-    </div>
 
-    <div class="flex items-center gap-4 mb-6">
-        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <h1 class="text-xl font-black uppercase italic">App <span class="text-blue-500">Settings</span></h1>
-    </div>
-
-    <div class="settings-card p-6 mb-8 bg-blue-500/5 border-dashed border-blue-500/20">
-        <div class="flex justify-between items-center">
+        <div class="space-y-6">
             <div>
-                <p class="text-[10px] text-gray-500 font-bold uppercase">Privacy Preview</p>
-                <p id="prevBal" class="text-xl font-black">₦ 50,000.00</p>
+                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest">Bank Name</label>
+                <input type="text" id="bank-name" placeholder="e.g. GTBank, Kuda, OPay" class="input-box text-sm">
             </div>
-            <div class="text-right">
-                <p id="prevUser" class="text-xs font-bold italic text-blue-400 uppercase">Active User</p>
+            <div>
+                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest">Account Number</label>
+                <input type="number" id="acc-num" placeholder="0123456789" class="input-box text-sm">
             </div>
+            <div>
+                <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest">Account Holder Name</label>
+                <input type="text" id="acc-name" placeholder="Full Name on Bank Account" class="input-box text-sm">
+            </div>
+
+            <button onclick="saveBankDetails()" id="save-btn" class="w-full py-5 bg-blue-600 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-blue-600/20">
+                Update Bank Details
+            </button>
         </div>
     </div>
 
-    <p class="text-[10px] font-black text-gray-500 uppercase mb-3 ml-2">Security & Privacy</p>
-    <div class="settings-card mb-6">
-        <div class="setting-item">
-            <div class="flex items-center gap-4">
-                <i class="fas fa-eye-slash text-purple-500"></i>
-                <div>
-                    <p class="text-sm font-bold">Hide Balance</p>
-                    <p class="text-[10px] text-gray-500">Mask all money values</p>
-                </div>
-            </div>
-            <label class="switch">
-                <input type="checkbox" id="hideBalBtn" onchange="saveSetting('hideBalance', this.checked)">
-                <span class="slider"></span>
-            </label>
-        </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        <div class="setting-item">
-            <div class="flex items-center gap-4">
-                <i class="fas fa-user-secret text-blue-500"></i>
-                <div>
-                    <p class="text-sm font-bold">Hide Account</p>
-                    <p class="text-[10px] text-gray-500">Mask profile name</p>
-                </div>
-            </div>
-            <label class="switch">
-                <input type="checkbox" id="hideAccBtn" onchange="saveSetting('hideAccount', this.checked)">
-                <span class="slider"></span>
-            </label>
-        </div>
-
-        <div class="setting-item">
-            <div class="flex items-center gap-4">
-                <i class="fas fa-lock text-yellow-500"></i>
-                <div>
-                    <p class="text-sm font-bold">App Lock PIN</p>
-                    <p class="text-[10px] text-gray-500">Require PIN at launch</p>
-                </div>
-            </div>
-            <label class="switch">
-                <input type="checkbox" id="lockBtn" onchange="handleLockToggle(this.checked)">
-                <span class="slider"></span>
-            </label>
-        </div>
-    </div>
-
-    <p class="text-[10px] font-black text-gray-500 uppercase mb-3 ml-2">Reset</p>
-    <div class="settings-card">
-        <button onclick="triggerReset()" class="setting-item w-full text-left">
-            <div class="flex items-center gap-4">
-                <i class="fas fa-trash-can text-red-500"></i>
-                <div>
-                    <p class="text-sm font-bold text-red-500">Wipe My Data</p>
-                    <p class="text-[10px] text-gray-500">Logout and clear history</p>
-                </div>
-            </div>
-        </button>
-    </div>
-
-    <script>
-        const defaults = { hideBalance: false, hideAccount: false, lockActive: false, appPin: "1234" };
-        let settings = JSON.parse(localStorage.getItem('appSettings')) || defaults;
-
-        window.onload = () => {
-            document.getElementById('hideBalBtn').checked = settings.hideBalance;
-            document.getElementById('hideAccBtn').checked = settings.hideAccount;
-            document.getElementById('lockBtn').checked = settings.lockActive;
-            updatePreview();
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
         };
 
-        function updatePreview() {
-            document.getElementById('prevBal').innerText = settings.hideBalance ? "₦ ****" : "₦ 50,000.00";
-            document.getElementById('prevUser').innerText = settings.hideAccount ? "Protected" : "Active User";
-        }
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        function saveSetting(key, val) {
-            settings[key] = val;
-            localStorage.setItem('appSettings', JSON.stringify(settings));
-            updatePreview();
-        }
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists() && snap.data().bankDetails) {
+                    const d = snap.data().bankDetails;
+                    document.getElementById('bank-name').value = d.bankName || "";
+                    document.getElementById('acc-num').value = d.accNum || "";
+                    document.getElementById('acc-name').value = d.accName || "";
+                }
+            } else { window.location.href = "login.html"; }
+        });
 
-        // --- NEW PROFESSIONAL BIRD MODAL LOGIC ---
-        function openModal(title, desc, icon, showInput, onConfirm) {
-            const modal = document.getElementById('bird-modal');
-            document.getElementById('m-title').innerText = title;
-            document.getElementById('m-desc').innerText = desc;
-            document.getElementById('m-icon').innerText = icon;
+        window.saveBankDetails = async () => {
+            const btn = document.getElementById('save-btn');
+            const data = {
+                bankName: document.getElementById('bank-name').value,
+                accNum: document.getElementById('acc-num').value,
+                accName: document.getElementById('acc-name').value
+            };
+
+            if(!data.bankName || !data.accNum || !data.accName) return alert("Fill all fields");
+
+            btn.innerText = "SAVING...";
+            await updateDoc(doc(db, "users", auth.currentUser.uid), { bankDetails: data });
             
-            const input = document.getElementById('modalInput');
-            input.value = "";
-            input.classList.toggle('hidden', !showInput);
-            
-            modal.style.display = 'flex';
-            document.getElementById('m-confirm').onclick = onConfirm;
-        }
-
-        function closeModal() {
-            document.getElementById('bird-modal').style.display = 'none';
-            document.getElementById('lockBtn').checked = settings.lockActive;
-        }
-
-        function handleLockToggle(checked) {
-            if (checked) {
-                openModal("Set PIN", "Create a 4-digit security PIN", "🕊️", true, () => {
-                    const val = document.getElementById('modalInput').value;
-                    if(val.length >= 4) {
-                        saveSetting('lockActive', true);
-                        saveSetting('appPin', val);
-                        closeModal();
-                    }
-                });
-            } else {
-                openModal("Disable Lock", "Enter your PIN to turn off security", "🦉", true, () => {
-                    const val = document.getElementById('modalInput').value;
-                    if(val === settings.appPin) {
-                        saveSetting('lockActive', false);
-                        closeModal();
-                    }
-                });
-            }
-        }
-
-        function triggerReset() {
-            openModal("Factory Reset", "This will wipe all your funds and history", "💀", false, () => {
-                localStorage.clear();
-                window.location.href = "login.html";
-            });
-        }
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); btn.innerText = "Update Bank Details"; }, 3000);
+        };
     </script>
 </body>
 </html>
