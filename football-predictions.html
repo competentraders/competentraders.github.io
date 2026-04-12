@@ -76,7 +76,7 @@
     <div id="predictions-container" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="col-span-full text-center py-20 opacity-20">
             <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
-            <p class="text-xs font-black uppercase tracking-widest">Fetching Market Data...</p>
+            <p class="text-xs font-black uppercase tracking-widest">Connecting to Server...</p>
         </div>
     </div>
 
@@ -103,60 +103,71 @@
         const container = document.getElementById('predictions-container');
         let initialLoad = true;
 
-        // REAL-TIME LISTENER
+        // Listen for changes in the 'predictions' collection
+        // Note: If you haven't added 'timestamp' to your docs yet, remove 'orderBy' temporarily to see them.
         const q = query(collection(db, "predictions"), orderBy("timestamp", "desc"));
 
         onSnapshot(q, (snapshot) => {
-            container.innerHTML = ""; // Clear loader
+            container.innerHTML = ""; 
 
             if (snapshot.empty) {
-                container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 font-bold uppercase text-[10px] tracking-widest">No active games at the moment.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500 font-bold uppercase text-[10px] tracking-widest">No active games posted by admin.</div>`;
                 return;
             }
 
-            // TRIGGER NOTIFICATION if a new game is added after page load
+            // Notif for new games after the page is already open
             if (!initialLoad && snapshot.docChanges().some(change => change.type === "added")) {
-                showPushNotif("Competentraders just added a new game!");
+                showPushNotif("New prediction added to the board!");
             }
 
             snapshot.forEach((doc) => {
                 const game = doc.data();
+                
+                // Construct the Card HTML
                 const card = `
                 <div class="prediction-card glass-panel rounded-[32px] p-6">
                     <div class="flex justify-between items-start mb-6">
-                        <span class="text-[10px] font-bold text-green-500 uppercase bg-green-500/10 px-3 py-1 rounded-full">${game.tag || 'Free Tip'}</span>
-                        <span class="text-[10px] text-gray-500 font-bold uppercase">${game.time || 'Today'}</span>
+                        <span class="text-[10px] font-bold text-green-500 uppercase bg-green-500/10 px-3 py-1 rounded-full">
+                            ${game.tag || 'Free Tip'}
+                        </span>
+                        <span class="text-[10px] text-gray-500 font-bold uppercase">
+                            ${game.time || 'Today'}
+                        </span>
                     </div>
                     
                     <div class="flex items-center justify-between mb-8">
                         <div class="text-center w-5/12">
-                            <img src="${game.homeLogo}" class="team-logo" alt="${game.homeName}">
-                            <p class="text-[11px] font-black uppercase truncate">${game.homeName}</p>
+                            <img src="${game.homeLogo || 'https://via.placeholder.com/50'}" class="team-logo">
+                            <p class="text-[11px] font-black uppercase truncate">${game.homeName || 'TBD'}</p>
                         </div>
                         <div class="text-[10px] font-black text-gray-700">VS</div>
                         <div class="text-center w-5/12">
-                            <img src="${game.awayLogo}" class="team-logo" alt="${game.awayName}">
-                            <p class="text-[11px] font-black uppercase truncate">${game.awayName}</p>
+                            <img src="${game.awayLogo || 'https://via.placeholder.com/50'}" class="team-logo">
+                            <p class="text-[11px] font-black uppercase truncate">${game.awayName || 'TBD'}</p>
                         </div>
                     </div>
 
                     <div class="space-y-2">
-                        ${renderStat("Prediction", game.mainPrediction, "text-blue-500")}
-                        ${renderStat(game.stat1Label || "Corners", game.stat1Value)}
-                        ${renderStat(game.stat2Label || "Goals", game.stat2Value)}
+                        <div class="flex justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
+                            <span class="text-[9px] text-gray-500 uppercase font-black">Prediction:</span>
+                            <span class="text-[9px] text-blue-500 font-black uppercase">${game.mainPrediction || 'Pending'}</span>
+                        </div>
+                        ${game.stat1Value ? renderStat(game.stat1Label || "Corners", game.stat1Value) : ''}
+                        ${game.stat2Value ? renderStat(game.stat2Label || "Goals", game.stat2Value) : ''}
                     </div>
                 </div>`;
+                
                 container.innerHTML += card;
             });
 
             initialLoad = false;
         });
 
-        function renderStat(label, value, colorClass = "text-white") {
+        function renderStat(label, value) {
             return `
             <div class="flex justify-between p-3 bg-white/5 rounded-2xl border border-white/5">
                 <span class="text-[9px] text-gray-500 uppercase font-black">${label}:</span>
-                <span class="text-[9px] ${colorClass} font-black uppercase tracking-wider">${value}</span>
+                <span class="text-[9px] text-white font-black uppercase tracking-wider">${value}</span>
             </div>`;
         }
 
@@ -165,12 +176,11 @@
             document.getElementById('notif-msg').innerText = msg;
             toast.classList.add('show');
             
-            // Play a subtle notification sound (optional)
             const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-            audio.volume = 0.5;
+            audio.volume = 0.3;
             audio.play().catch(() => {});
 
-            setTimeout(() => toast.classList.remove('show'), 6000);
+            setTimeout(() => toast.classList.remove('show'), 5000);
         }
     </script>
 </body>
