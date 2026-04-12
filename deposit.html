@@ -3,140 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout | OPay Secure</title>
+    <title>Secure Deposit | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #08090a; color: #ffffff; }
-        
-        /* EXACT LOGO RECREATION */
-        .opay-ring { width: 30px; height: 30px; border: 5.5px solid #00d387; border-radius: 50%; position: relative; }
-        .opay-dash { position: absolute; left: -8px; top: 6px; width: 10px; height: 6px; background: white; border-radius: 1px; border: 1.5px solid #08090a; }
-        
-        .premium-card { background: #121418; border: 1px solid #1f2229; border-radius: 24px; }
-        .info-pill { background: rgba(0, 211, 135, 0.1); color: #00d387; border: 1px solid rgba(0, 211, 135, 0.2); }
-        .input-gradient { background: linear-gradient(145deg, #1a1d23, #15181d); border: 1px solid #2d323a; }
-        .action-btn { background: #00d387; color: #000; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .action-btn:active { transform: scale(0.95); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0B0E11; color: white; }
+        .glass-card { background: #181A20; border: 1px solid #2B2F36; border-radius: 24px; }
+        .accent-text { color: #00D071; }
+        .wa-btn { background: #25D366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="p-6">
 
-    <div class="w-full max-w-md">
-        <div class="flex items-center justify-center gap-2 mb-10">
-            <div class="opay-ring"><div class="opay-dash"></div></div>
-            <span class="text-3xl font-extrabold tracking-tighter text-white">Pay</span>
+    <div class="max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-10">
+            <a href="dashboard.html" class="text-gray-500"><i class="fas fa-arrow-left"></i></a>
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Manual Gateway</span>
+            <div class="w-4"></div>
         </div>
 
-        <div class="premium-card overflow-hidden">
-            <div class="p-6 border-b border-[#1f2229] flex justify-between items-center">
-                <div>
-                    <span class="info-pill px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">Secured Transaction</span>
-                </div>
-                <div class="text-right">
-                    <p class="text-gray-500 text-[10px] font-bold uppercase">Timer</p>
-                    <p class="font-mono text-white font-bold" id="timer">60:00</p>
+        <div class="text-center mb-10">
+            <div class="w-16 h-16 bg-[#00D071]/10 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-[#00D071]/20">
+                <i class="fas fa-building accent-text text-2xl"></i>
+            </div>
+            <h1 class="text-xl font-black uppercase italic">Business <span class="accent-text">Node</span></h1>
+            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Merchant: Godswill Ugbesia</p>
+        </div>
+
+        <div class="glass-card p-6 mb-6">
+            <div class="mb-8">
+                <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest text-center mb-4">Enter Amount to Fund</p>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-600">₦</span>
+                    <input type="number" id="dep-amt" placeholder="5,000" class="w-full bg-black/30 border border-white/5 p-5 pl-10 rounded-2xl text-3xl font-black outline-none focus:border-green-500 transition-all">
                 </div>
             </div>
 
-            <div class="p-8">
-                <div class="mb-8 text-center">
-                    <p class="text-gray-500 text-xs font-semibold uppercase mb-3">Amount to Deposit</p>
-                    <div class="relative inline-block w-full">
-                        <input type="number" id="depositAmount" placeholder="0.00" 
-                            class="bg-transparent text-white text-5xl font-extrabold text-center w-full focus:outline-none placeholder:text-gray-800">
-                    </div>
-                    <p class="text-gray-600 text-[10px] mt-2 font-bold uppercase tracking-widest italic text-emerald-500">Min: ₦5,000</p>
+            <div class="space-y-4 bg-black/20 p-4 rounded-2xl border border-white/5">
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] text-gray-500 font-black uppercase">Bank Name</span>
+                    <span class="text-xs font-bold text-gray-300">OPay Digital Bank</span>
                 </div>
-
-                <div class="space-y-4 mb-8">
-                    <div class="input-gradient p-5 rounded-2xl relative group">
-                        <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Account Number</p>
-                        <p class="text-2xl font-extrabold tracking-wider" id="accNum">6119316029</p>
-                        <button onclick="copyAcc()" class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#00d387] text-black flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="input-gradient p-4 rounded-2xl">
-                            <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Bank</p>
-                            <p class="text-xs font-bold text-gray-200">OPay Bank</p>
-                        </div>
-                        <div class="input-gradient p-4 rounded-2xl">
-                            <p class="text-gray-500 text-[10px] font-bold uppercase mb-1">Narration</p>
-                            <p class="text-xs font-bold text-blue-400" id="refID">TRX-0000</p>
-                        </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-[10px] text-gray-500 font-black uppercase">Account Number</span>
+                    <div class="flex items-center gap-3">
+                        <span class="text-lg font-black tracking-tighter">6119316029</span>
+                        <button onclick="copyAcc()" class="accent-text text-xs"><i class="fas fa-copy"></i></button>
                     </div>
                 </div>
-
-                <p class="text-[10px] text-gray-500 text-center mb-6 leading-relaxed">
-                    Please complete the transfer in your bank app <span class="text-white">before</span> clicking the confirm button below to update your balance.
-                </p>
-
-                <button onclick="processPayment()" class="action-btn w-full py-5 rounded-2xl font-extrabold text-sm uppercase tracking-widest shadow-xl shadow-emerald-500/10">
-                    Confirm Transfer
-                </button>
             </div>
         </div>
 
-        <div class="mt-8 flex justify-center items-center gap-6 opacity-30 grayscale">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="h-3">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" class="h-4">
-            <span class="text-[9px] font-black tracking-tighter">PCI-DSS</span>
+        <div class="space-y-4">
+            <button id="main-btn" onclick="initiateWhatsAppDeposit()" class="w-full wa-btn py-5 rounded-[22px] font-black uppercase text-xs flex items-center justify-center gap-3 transition-transform active:scale-95">
+                <i class="fab fa-whatsapp text-lg"></i> Verify via WhatsApp
+            </button>
+            <p class="text-[9px] text-gray-600 text-center font-bold uppercase leading-relaxed">
+                A unique Ticket ID will be generated. Please send the Ticket and your payment screenshot to our business desk.
+            </p>
         </div>
     </div>
 
-    <div id="successModal" class="hidden fixed inset-0 bg-[#08090a] z-50 flex items-center justify-center p-6">
-        <div class="text-center animate-bounce">
-            <div class="w-20 h-20 bg-[#00d387] rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-emerald-500/40">
-                <i class="fas fa-check text-black text-3xl"></i>
-            </div>
-            <h2 class="text-2xl font-extrabold mb-2">Deposit Successful</h2>
-            <p class="text-gray-500 text-sm">Dashboard balance updated immediately.</p>
-        </div>
-    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-    <script>
-        // Set unique ref
-        const ref = "OPY-" + Math.floor(Math.random() * 8999 + 1000);
-        document.getElementById('refID').innerText = ref;
+        // Firebase Config (Keep your existing one)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+        };
 
-        // Timer
-        let time = 3600;
-        setInterval(() => {
-            if(time <= 0) return;
-            const m = Math.floor(time/60);
-            const s = time%60;
-            document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-            time--;
-        }, 1000);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        function copyAcc() {
-            navigator.clipboard.writeText("6119316029");
-            alert("Account Number Copied!");
+        let userName = "Client";
+
+        onAuthStateChanged(auth, async (user) => {
+            if(user) {
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if(snap.exists()) userName = snap.data().fullName;
+            }
+        });
+
+        window.initiateWhatsAppDeposit = async () => {
+            const amt = document.getElementById('dep-amt').value;
+            const btn = document.getElementById('main-btn');
+            
+            if(!amt || amt < 1000) return alert("Please enter amount (Min ₦1,000)");
+
+            // Generate Unique ID
+            const ticketID = "CT-" + Math.floor(1000 + Math.random() * 9000);
+            btn.disabled = true;
+            btn.innerText = "GENERATING TICKET...";
+
+            try {
+                // 1. Log the Pending Request to Firebase
+                await addDoc(collection(db, "deposits"), {
+                    uid: auth.currentUser.uid,
+                    email: auth.currentUser.email,
+                    amount: Number(amt),
+                    ticket: ticketID,
+                    status: "pending_verification",
+                    timestamp: serverTimestamp()
+                });
+
+                // 2. Prepare WhatsApp Content
+                const phone = "2349153258628";
+                const message = `*DEPOSIT TICKET: ${ticketID}*%0A---%0A*Name:* ${userName}%0A*Amount:* ₦${amt}%0A---%0A_I have completed the transfer. Here is my receipt proof:_`;
+
+                // 3. Auto-copy account number for convenience
+                navigator.clipboard.writeText("6119316029");
+                
+                // 4. Redirect
+                window.location.href = `https://wa.me/${phone}?text=${message}`;
+            } catch (e) {
+                alert("Connection error. Try again.");
+                btn.disabled = false;
+            }
         }
 
-        function processPayment() {
-            const amount = parseFloat(document.getElementById('depositAmount').value);
-            
-            if (!amount || amount < 5000) {
-                alert("Please enter ₦5,000 or more.");
-                return;
-            }
-
-            // --- LOCAL STORAGE UPDATE ---
-            let bal = parseFloat(localStorage.getItem('accountBalance')) || 0;
-            localStorage.setItem('accountBalance', (bal + amount));
-
-            // Show Success
-            document.getElementById('successModal').classList.remove('hidden');
-
-            // Final redirection
-            setTimeout(() => {
-                window.location.href = "user-dashboard.html";
-            }, 2500);
+        window.copyAcc = () => {
+            navigator.clipboard.writeText("6119316029");
+            alert("Copied!");
         }
     </script>
 </body>
