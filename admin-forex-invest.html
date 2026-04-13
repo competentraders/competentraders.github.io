@@ -12,21 +12,14 @@
         .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .input-style { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
         .input-style:focus { border-color: #6366f1; background: rgba(99, 102, 241, 0.05); }
-        #toast { position: fixed; top: 20px; right: 20px; transform: translateX(200%); transition: 0.5s; z-index: 100; }
-        #toast.show { transform: translateX(0); }
     </style>
 </head>
 <body class="p-4 md:p-10">
 
-    <div id="toast" class="bg-indigo-600 px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3">
-        <i class="fas fa-check-circle"></i>
-        <span class="text-xs font-black uppercase tracking-widest">Plan Published Live!</span>
-    </div>
-
     <div class="max-w-4xl mx-auto">
         <div class="mb-12">
             <h1 class="text-3xl font-black uppercase tracking-tight text-indigo-500">Forex Admin <span class="text-white">Panel</span></h1>
-            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em]">Publish "Trade 4 Me" Investment Plans</p>
+            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em]">Manage CPT Trade 4 Me Sessions</p>
         </div>
 
         <div class="glass-panel p-8 rounded-[40px] mb-12">
@@ -36,30 +29,26 @@
                     <input type="text" id="asset" placeholder="e.g. XAU/USD" class="input-style font-bold">
                 </div>
                 <div>
-                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Investment Plan (Amount)</label>
-                    <input type="text" id="planAmt" placeholder="e.g. 50,000" class="input-style font-bold">
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Investment Amount (Price to Debit)</label>
+                    <input type="text" id="planAmt" placeholder="e.g. 50000" class="input-style font-bold">
                 </div>
                 <div>
                     <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Expected Return</label>
                     <input type="text" id="returnAmt" placeholder="e.g. 75,000" class="input-style font-bold">
                 </div>
                 <div>
-                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Guarantee Percentage</label>
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Guarantee %</label>
                     <input type="text" id="guarantee" placeholder="e.g. 99%" class="input-style font-bold">
                 </div>
             </div>
 
-            <button onclick="handlePublish()" id="publishBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] transition-all shadow-lg shadow-indigo-500/20">
-                Publish to Forex Page
+            <button onclick="publishPlan()" id="publishBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] transition-all">
+                Publish CPT Plan
             </button>
         </div>
 
-        <div class="mb-6">
-            <h3 class="text-sm font-black uppercase tracking-widest text-gray-400 ml-2">Currently Active on Website</h3>
-        </div>
-        
-        <div id="active-list" class="space-y-4">
-            </div>
+        <h3 class="text-sm font-black uppercase tracking-widest text-gray-400 ml-2 mb-6">Active Plans</h3>
+        <div id="active-list" class="space-y-4"></div>
     </div>
 
     <script type="module">
@@ -78,22 +67,15 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Toast Function
-        function showToast() {
-            const t = document.getElementById('toast');
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
-        }
-
         // Publish Function
-        window.handlePublish = async () => {
+        window.publishPlan = async () => {
             const asset = document.getElementById('asset').value;
             const plan = document.getElementById('planAmt').value;
             const returns = document.getElementById('returnAmt').value;
             const guarantee = document.getElementById('guarantee').value;
             const btn = document.getElementById('publishBtn');
 
-            if(!asset || !plan || !returns) return alert("Please fill the details!");
+            if(!asset || !plan || !returns) return alert("Please fill all fields!");
 
             btn.disabled = true;
             btn.innerText = "PUBLISHING...";
@@ -103,24 +85,21 @@
                     asset, plan, returns, guarantee,
                     timestamp: serverTimestamp()
                 });
-                
-                showToast();
-                // Clear fields
+                alert("Plan Published Live!");
                 document.querySelectorAll('input').forEach(i => i.value = "");
             } catch (e) {
                 console.error(e);
-                alert("Error publishing plan.");
+                alert("Error: check your Firebase Rules.");
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Publish to Forex Page";
+                btn.innerText = "Publish CPT Plan";
             }
         };
 
-        // Live Listener for Management
+        // Live Listener
         onSnapshot(query(collection(db, "forex_plans"), orderBy("timestamp", "desc")), (snapshot) => {
             const list = document.getElementById('active-list');
             list.innerHTML = "";
-            
             snapshot.forEach((d) => {
                 const data = d.data();
                 const div = document.createElement('div');
@@ -128,23 +107,19 @@
                 div.innerHTML = `
                     <div>
                         <p class="text-indigo-400 font-black text-sm uppercase">${data.asset}</p>
-                        <p class="text-[10px] text-gray-500 font-bold uppercase">Plan: ${data.plan} | Return: ${data.returns}</p>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase">Debit: ${data.plan} | Return: ${data.returns}</p>
                     </div>
-                    <button onclick="deletePlan('${d.id}')" class="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all">
-                        <i class="fas fa-trash-alt"></i>
+                    <button onclick="deletePlan('${d.id}')" class="text-red-500 hover:text-white bg-red-500/10 p-3 rounded-lg transition-all">
+                        <i class="fas fa-trash"></i>
                     </button>
                 `;
                 list.appendChild(div);
             });
         });
 
-        // Delete Function
         window.deletePlan = async (id) => {
-            if(confirm("Are you sure you want to remove this plan from the live website?")) {
-                await deleteDoc(doc(db, "forex_plans", id));
-            }
+            if(confirm("Remove this plan?")) await deleteDoc(doc(db, "forex_plans", id));
         };
-
     </script>
 </body>
 </html>

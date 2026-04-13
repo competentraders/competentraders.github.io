@@ -57,71 +57,101 @@
         </div>
 
     </div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
 
-        // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
-            authDomain: "competentraders-2efdc.firebaseapp.com",
-            projectId: "competentraders-2efdc",
-            storageBucket: "competentraders-2efdc.firebasestorage.app",
-            messagingSenderId: "150379227882",
-            appId: "1:150379227882:web:19d9c19805ef68b016c593"
-        };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const container = document.getElementById('forex-plans-container');
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const container = document.getElementById('forex-plans-container');
-        const emptyState = document.getElementById('empty-state');
+    // 1. Core Logic for the "CPT TRADE 4 ME" Button
+    window.subscribeToPlan = async (asset, planPrice, returnAmt) => {
+        const user = auth.currentUser;
+        
+        if (!user) {
+            alert("Please login to trade.");
+            return;
+        }
 
-        // Listen for data
-        const q = query(collection(db, "forex_plans"), orderBy("timestamp", "desc"));
+        const userRef = doc(db, "users", user.uid);
+        
+        try {
+            const userSnap = await getDoc(userRef);
+            if (!userSnap.exists()) return;
 
-        onSnapshot(q, (snapshot) => {
-            container.innerHTML = "";
-            
-            if (snapshot.empty) {
-                emptyState.classList.remove('hidden');
+            const currentBalance = userSnap.data().balance || 0;
+            const price = parseFloat(planPrice.replace(/[^0-9.]/g, '')); // Clean string to number
+
+            // Check for Insufficient Funds
+            if (currentBalance < price) {
+                alert("❌ Insufficient Funds! Please deposit more to subscribe to this plan.");
                 return;
-            } else {
-                emptyState.classList.add('hidden');
             }
 
-            snapshot.forEach((doc) => {
-                const plan = doc.data();
-                
-                const card = `
-                    <div class="plan-card glass-panel p-8 rounded-[32px]">
-                        <div class="flex justify-between items-center mb-6">
-                            <span class="text-[9px] font-black uppercase bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full border border-indigo-500/10">${plan.asset}</span>
-                            <span class="text-[9px] font-black text-green-500 uppercase tracking-widest">${plan.guarantee} Guarantee</span>
+            if (confirm(`Confirm subscription for ${asset} (${planPrice})? Your balance will be debited.`)) {
+                // Debit the account
+                await updateDoc(userRef, {
+                    balance: increment(-price)
+                });
+
+                alert("✅ Success! Your account has been debited.");
+
+                // Send the WhatsApp Message
+                const msg = `Hello Competentraders, I just subscribed to CPT TRADE 4 ME.\n\nAsset: ${asset}\nAmount Debited: ${planPrice}\nExpected Return: ${returnAmt}\nUser ID: ${user.uid}`;
+                window.location.href = `https://wa.me/2349157023248?text=${encodeURIComponent(msg)}`;
+            }
+
+        } catch (error) {
+            console.error(error);
+            alert("Transaction failed. Please try again.");
+        }
+    };
+
+    // 2. Display the Plans
+    onSnapshot(query(collection(db, "forex_plans"), orderBy("timestamp", "desc")), (snapshot) => {
+        container.innerHTML = "";
+        snapshot.forEach((doc) => {
+            const plan = doc.data();
+            const card = `
+                <div class="glass-panel p-8 rounded-[32px] border-l-4 border-indigo-500 shadow-xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[10px] font-black uppercase bg-indigo-500/10 text-indigo-400 px-4 py-1 rounded-full border border-indigo-500/10">${plan.asset}</span>
+                        <span class="text-[10px] font-black text-green-500 uppercase">${plan.guarantee} Guarantee</span>
+                    </div>
+
+                    <div class="space-y-4 mb-8">
+                        <div>
+                            <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Investment Plan</p>
+                            <p class="text-3xl font-black text-white">${plan.plan}</p>
                         </div>
-
-                        <div class="space-y-6">
-                            <div>
-                                <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest mb-1">CPT TRADE 4 ME</p>
-                                <p class="text-2xl font-black">Plan ${plan.plan}</p>
-                            </div>
-
-                            <div class="flex justify-between items-end border-t border-white/5 pt-4">
-                                <div>
-                                    <p class="text-[9px] font-black text-gray-500 uppercase mb-1">Expected Return</p>
-                                    <p class="text-xl font-black text-indigo-400">${plan.returns}</p>
-                                </div>
-                                <a href="https://wa.me/234XXXXXXXXXX?text=I%20want%20to%20start%20the%20${plan.asset}%20Plan%20(${plan.plan})" 
-                                   class="bg-indigo-600 hover:bg-indigo-500 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
-                                   Invest
-                                </a>
-                            </div>
+                        <div>
+                            <p class="text-[9px] font-black text-gray-500 uppercase tracking-widest">Expected Return</p>
+                            <p class="text-xl font-black text-indigo-400">${plan.returns}</p>
                         </div>
                     </div>
-                `;
-                container.innerHTML += card;
-            });
+
+                    <button onclick="subscribeToPlan('${plan.asset}', '${plan.plan}', '${plan.returns}')" 
+                       class="block w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-2xl text-center text-[11px] font-black uppercase tracking-[0.2em] transition-all shadow-lg shadow-indigo-500/20">
+                       CPT TRADE 4 ME
+                    </button>
+                </div>
+            `;
+            container.innerHTML += card;
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>
