@@ -12,6 +12,10 @@
         .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .input-style { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
         .input-style:focus { border-color: #6366f1; background: rgba(99, 102, 241, 0.05); }
+        
+        /* Modal Animation */
+        #custom-modal.flex { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="p-4 md:p-10">
@@ -22,7 +26,7 @@
             <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em]">Manage CPT Trade 4 Me Sessions</p>
         </div>
 
-        <div class="glass-panel p-8 rounded-[40px] mb-12">
+        <div class="glass-panel p-8 rounded-[40px] mb-12 border border-white/5">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <div>
                     <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Asset Pair</label>
@@ -42,13 +46,22 @@
                 </div>
             </div>
 
-            <button onclick="publishPlan()" id="publishBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] transition-all">
+            <button onclick="publishPlan()" id="publishBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] transition-all shadow-lg shadow-indigo-500/20">
                 Publish CPT Plan
             </button>
         </div>
 
         <h3 class="text-sm font-black uppercase tracking-widest text-gray-400 ml-2 mb-6">Active Plans</h3>
         <div id="active-list" class="space-y-4"></div>
+    </div>
+
+    <div id="custom-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
+        <div class="glass-panel max-w-sm w-full p-8 rounded-[40px] text-center border-indigo-500/30 shadow-2xl scale-95 transition-transform duration-300">
+            <div id="modal-icon" class="text-6xl mb-6"></div>
+            <h2 id="modal-title" class="text-2xl font-black uppercase mb-2"></h2>
+            <p id="modal-text" class="text-gray-400 text-xs mb-8 leading-relaxed"></p>
+            <div id="modal-buttons" class="flex flex-col gap-3"></div>
+        </div>
     </div>
 
     <script type="module">
@@ -67,6 +80,56 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // MODAL CONTROLLER
+        const showAdminModal = (type, title, text, onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const icon = document.getElementById('modal-icon');
+            const mTitle = document.getElementById('modal-title');
+            const mText = document.getElementById('modal-text');
+            const mBtns = document.getElementById('modal-buttons');
+
+            mBtns.innerHTML = "";
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            if (type === 'success') {
+                icon.innerHTML = "🦅";
+                icon.className = "text-6xl mb-6 text-indigo-500 drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]";
+                mTitle.className = "text-2xl font-black uppercase text-indigo-400";
+            } else if (type === 'delete') {
+                icon.innerHTML = "🗑️";
+                icon.className = "text-6xl mb-6 text-red-500";
+                mTitle.className = "text-2xl font-black uppercase text-red-500";
+            } else {
+                icon.innerHTML = "⚠️";
+                mTitle.className = "text-2xl font-black uppercase text-white";
+            }
+
+            mTitle.innerText = title;
+            mText.innerText = text;
+
+            if (onConfirm) {
+                const yesBtn = document.createElement('button');
+                yesBtn.className = "w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest";
+                yesBtn.innerText = "Proceed";
+                yesBtn.onclick = () => { modal.classList.add('hidden'); onConfirm(); };
+                
+                const noBtn = document.createElement('button');
+                noBtn.className = "w-full bg-white/5 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest text-gray-500";
+                noBtn.innerText = "Cancel";
+                noBtn.onclick = () => modal.classList.add('hidden');
+                
+                mBtns.appendChild(yesBtn);
+                mBtns.appendChild(noBtn);
+            } else {
+                const okBtn = document.createElement('button');
+                okBtn.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest";
+                okBtn.innerText = "Done";
+                okBtn.onclick = () => modal.classList.add('hidden');
+                mBtns.appendChild(okBtn);
+            }
+        };
+
         // Publish Function
         window.publishPlan = async () => {
             const asset = document.getElementById('asset').value;
@@ -75,7 +138,10 @@
             const guarantee = document.getElementById('guarantee').value;
             const btn = document.getElementById('publishBtn');
 
-            if(!asset || !plan || !returns) return alert("Please fill all fields!");
+            if(!asset || !plan || !returns) {
+                showAdminModal('error', 'Missing Data', 'Fill in all fields before publishing.');
+                return;
+            }
 
             btn.disabled = true;
             btn.innerText = "PUBLISHING...";
@@ -85,11 +151,12 @@
                     asset, plan, returns, guarantee,
                     timestamp: serverTimestamp()
                 });
-                alert("Plan Published Live!");
+                
+                showAdminModal('success', 'Plan Live', 'The trade session has been sent to the user platform successfully.');
                 document.querySelectorAll('input').forEach(i => i.value = "");
             } catch (e) {
                 console.error(e);
-                alert("Error: check your Firebase Rules.");
+                showAdminModal('error', 'Database Error', 'Check your Firebase rules or internet connection.');
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Publish CPT Plan";
@@ -118,7 +185,9 @@
         });
 
         window.deletePlan = async (id) => {
-            if(confirm("Remove this plan?")) await deleteDoc(doc(db, "forex_plans", id));
+            showAdminModal('delete', 'Remove Plan?', 'Are you sure you want to take this trade session offline? This cannot be undone.', async () => {
+                await deleteDoc(doc(db, "forex_plans", id));
+            });
         };
     </script>
 </body>
