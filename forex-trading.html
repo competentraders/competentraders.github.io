@@ -17,6 +17,10 @@
         
         .plan-card { transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border-left: 4px solid #6366f1; }
         .plan-card:hover { transform: translateY(-5px); border-color: #818cf8; background: rgba(99, 102, 241, 0.05); }
+
+        /* Modal Animation */
+        #custom-modal.flex { animation: fadeIn 0.3s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="pb-20">
@@ -48,8 +52,7 @@
             </a>
         </div>
 
-        <div id="forex-plans-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
+        <div id="forex-plans-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
 
         <div id="empty-state" class="text-center py-20 hidden">
             <i class="fas fa-layer-group text-gray-800 text-4xl mb-4"></i>
@@ -57,6 +60,16 @@
         </div>
 
     </div>
+
+    <div id="custom-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm">
+        <div class="glass-panel max-w-sm w-full p-8 rounded-[40px] text-center border-indigo-500/30 shadow-2xl scale-95 transition-transform duration-300">
+            <div id="modal-icon" class="text-6xl mb-6"></div>
+            <h3 id="modal-title" class="text-2xl font-black uppercase mb-2"></h3>
+            <p id="modal-text" class="text-gray-400 text-sm mb-8 leading-relaxed"></p>
+            <div id="modal-buttons" class="flex flex-col gap-3"></div>
+        </div>
+    </div>
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getFirestore, collection, query, orderBy, onSnapshot, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
@@ -76,59 +89,109 @@
     const auth = getAuth(app);
     const container = document.getElementById('forex-plans-container');
 
-    // 1. Core Logic for the "CPT TRADE 4 ME" Button
+    // UI MODAL CONTROLLER
+    const showModal = (type, title, text, onConfirm = null) => {
+        const modal = document.getElementById('custom-modal');
+        const icon = document.getElementById('modal-icon');
+        const mTitle = document.getElementById('modal-title');
+        const mText = document.getElementById('modal-text');
+        const mBtns = document.getElementById('modal-buttons');
+
+        mBtns.innerHTML = "";
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        if (type === 'insufficient') {
+            icon.innerHTML = "🦅"; 
+            icon.className = "text-6xl mb-6 opacity-20 grayscale"; // "Dying" bird effect
+            mTitle.className = "text-2xl font-black uppercase mb-2 text-red-500";
+        } else if (type === 'success') {
+            icon.innerHTML = "🦅"; 
+            icon.className = "text-6xl mb-6 text-indigo-500 drop-shadow-[0_0_15px_rgba(99,102,241,0.5)]"; // "Soaring" bird effect
+            mTitle.className = "text-2xl font-black uppercase mb-2 text-indigo-400";
+        } else {
+            icon.innerHTML = "📥";
+            mTitle.className = "text-2xl font-black uppercase mb-2 text-white";
+        }
+
+        mTitle.innerText = title;
+        mText.innerText = text;
+
+        if (onConfirm) {
+            const confirmBtn = document.createElement('button');
+            confirmBtn.className = "w-full bg-indigo-600 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest";
+            confirmBtn.innerText = "Confirm Trade";
+            confirmBtn.onclick = () => { modal.classList.add('hidden'); onConfirm(); };
+            
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = "w-full bg-white/5 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest text-gray-500";
+            cancelBtn.innerText = "Cancel";
+            cancelBtn.onclick = () => modal.classList.add('hidden');
+            
+            mBtns.appendChild(confirmBtn);
+            mBtns.appendChild(cancelBtn);
+        } else {
+            const closeBtn = document.createElement('button');
+            closeBtn.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest text-white";
+            closeBtn.innerText = "Close";
+            closeBtn.onclick = () => modal.classList.add('hidden');
+            mBtns.appendChild(closeBtn);
+        }
+    };
+
+    // CORE SUBSCRIPTION LOGIC
     window.subscribeToPlan = async (asset, planPrice, returnAmt) => {
         const user = auth.currentUser;
-        
         if (!user) {
-            alert("Please login to trade.");
+            showModal('standard', 'Access Denied', 'Please login to your account to execute trades.');
             return;
         }
 
         const userRef = doc(db, "users", user.uid);
-        
         try {
             const userSnap = await getDoc(userRef);
             if (!userSnap.exists()) return;
 
             const currentBalance = userSnap.data().balance || 0;
-            const price = parseFloat(planPrice.replace(/[^0-9.]/g, '')); // Clean string to number
+            const price = parseFloat(planPrice.replace(/[^0-9.]/g, ''));
 
-            // Check for Insufficient Funds
             if (currentBalance < price) {
-                alert("❌ Insufficient Funds! Please deposit more to subscribe to this plan.");
+                showModal('insufficient', 'Empty Nest', 'Your account balance is insufficient. Top up your wallet to let your investment soar.');
                 return;
             }
 
-            if (confirm(`Confirm subscription for ${asset} (${planPrice})? Your balance will be debited.`)) {
-                // Debit the account
-                await updateDoc(userRef, {
-                    balance: increment(-price)
-                });
+            showModal('confirm', 'Execute Trade', `Authorize debit of ${planPrice} for ${asset} trade management?`, async () => {
+                await updateDoc(userRef, { balance: increment(-price) });
+                
+                showModal('success', 'Eagle Soaring!', 'Account debited successfully. Your professional trade management session has started.');
 
-                alert("✅ Success! Your account has been debited.");
-
-                // Send the WhatsApp Message
-                const msg = `Hello Competentraders, I just subscribed to CPT TRADE 4 ME.\n\nAsset: ${asset}\nAmount Debited: ${planPrice}\nExpected Return: ${returnAmt}\nUser ID: ${user.uid}`;
-                window.location.href = `https://wa.me/2349157023248?text=${encodeURIComponent(msg)}`;
-            }
+                const msg = `Hello Competentraders, I just subscribed to CPT TRADE 4 ME.\n\nAsset: ${asset}\nAmount: ${planPrice}\nReturn: ${returnAmt}\nUser UID: ${user.uid}`;
+                
+                // Delay WhatsApp slightly so they see the success message
+                setTimeout(() => {
+                    window.location.href = `https://wa.me/2349157023248?text=${encodeURIComponent(msg)}`;
+                }, 2800);
+            });
 
         } catch (error) {
             console.error(error);
-            alert("Transaction failed. Please try again.");
+            showModal('standard', 'System Error', 'Could not process transaction. Please check your network.');
         }
     };
 
-    // 2. Display the Plans
+    // RENDER LIVE PLANS
     onSnapshot(query(collection(db, "forex_plans"), orderBy("timestamp", "desc")), (snapshot) => {
         container.innerHTML = "";
+        if(snapshot.empty) document.getElementById('empty-state').classList.remove('hidden');
+        else document.getElementById('empty-state').classList.add('hidden');
+
         snapshot.forEach((doc) => {
             const plan = doc.data();
             const card = `
-                <div class="glass-panel p-8 rounded-[32px] border-l-4 border-indigo-500 shadow-xl">
+                <div class="plan-card glass-panel p-8 rounded-[32px] shadow-xl">
                     <div class="flex justify-between items-center mb-6">
                         <span class="text-[10px] font-black uppercase bg-indigo-500/10 text-indigo-400 px-4 py-1 rounded-full border border-indigo-500/10">${plan.asset}</span>
-                        <span class="text-[10px] font-black text-green-500 uppercase">${plan.guarantee} Guarantee</span>
+                        <span class="text-[10px] font-black text-green-500 uppercase tracking-widest">${plan.guarantee} Guarantee</span>
                     </div>
 
                     <div class="space-y-4 mb-8">
