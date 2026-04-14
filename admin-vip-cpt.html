@@ -3,52 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CPT ADMIN | MASTER CONTROL</title>
+    <title>CPT VIP | MASTER CONTROL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #000; color: white; }
-        .cpt-panel { background: #0a0b10; border: 1px solid rgba(212, 175, 55, 0.1); }
-        .cpt-input { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); outline: none; color: white; }
-        .cpt-input:focus { border-color: #d4af37; }
-        .btn-deploy { background: linear-gradient(to right, #996515, #d4af37); }
-        #toast {
-            visibility: hidden; min-width: 250px; background: #d4af37; color: #000;
-            text-align: center; border-radius: 12px; padding: 16px; position: fixed;
-            left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: 900;
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&display=swap');
+        body { background: #06070a; color: white; font-family: 'Outfit', sans-serif; }
+        .input-field { background: #111; border: 1px solid #333; padding: 12px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: #d4af37; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        #custom-toast { 
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #d4af37; color: black; padding: 12px 30px; border-radius: 50px;
+            font-weight: 900; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3); z-index: 9999;
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
-        #toast.show { visibility: visible; animation: fadein 0.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        #custom-toast.show { top: 30px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="p-6">
-    <div id="toast">ACTION SUCCESSFUL</div>
+<body class="p-4 md:p-10">
 
-    <div class="max-w-4xl mx-auto space-y-10">
-        <div class="cpt-panel rounded-[30px] p-8">
-            <h1 class="text-xl font-black uppercase text-yellow-600 mb-8">Deploy New VIP Node</h1>
-            <form id="vipForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" id="cat" placeholder="CATEGORY" class="cpt-input p-4 rounded-xl text-xs font-bold" required>
-                <input type="text" id="name" placeholder="PLAN NAME" class="cpt-input p-4 rounded-xl text-xs font-bold" required>
-                <input type="number" id="amt" placeholder="AMOUNT (₦)" class="cpt-input p-4 rounded-xl text-xs font-bold" required>
-                <input type="text" id="dur" placeholder="DURATION" class="cpt-input p-4 rounded-xl text-xs font-bold" required>
-                <input type="number" id="roi" placeholder="ROI PAYOUT (₦)" class="cpt-input p-4 rounded-xl text-xs font-bold" required>
-                <input type="text" id="guar" placeholder="GUARANTEE %" class="cpt-input p-4 rounded-xl text-xs font-bold" required>
-                <button type="submit" id="btn" class="md:col-span-2 py-4 btn-deploy text-black font-black uppercase text-xs rounded-xl">Add to VIP Terminal</button>
-            </form>
-        </div>
+    <div id="custom-toast">CPT Node Deployed</div>
 
-        <div>
-            <h2 class="text-xs font-black uppercase tracking-widest text-gray-500 mb-4 px-2">Manage Live Plans</h2>
-            <div id="admin-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
+        
+        <div class="glass p-8 rounded-[32px] h-fit sticky top-10">
+            <h1 class="text-2xl font-black uppercase mb-2 text-yellow-600">Deploy VIP Node</h1>
+            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-8">Node Command Center</p>
+            
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Category</label>
+                        <input type="text" id="cat" placeholder="e.g. PREMIUM" class="input-field mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Plan Name</label>
+                        <input type="text" id="name" placeholder="e.g. CPT DIAMOND" class="input-field mt-1">
+                    </div>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Investment (₦)</label>
+                        <input type="number" id="amt" placeholder="50000" class="input-field mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">ROI Payout (₦)</label>
+                        <input type="number" id="roi" placeholder="120000" class="input-field mt-1">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Duration</label>
+                        <input type="text" id="dur" placeholder="7 Days" class="input-field mt-1">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Guarantee</label>
+                        <input type="text" id="guar" placeholder="100% Secured" class="input-field mt-1">
+                    </div>
+                </div>
+
+                <button onclick="deployNode()" id="post-btn" class="w-full bg-yellow-600 py-4 rounded-xl font-black text-black uppercase text-xs tracking-[0.2em] hover:bg-yellow-500 transition-all active:scale-95">Deploy to Terminals</button>
+            </div>
         </div>
+
+        <div class="glass p-8 rounded-[32px]">
+            <h2 class="text-xl font-black uppercase mb-6 flex items-center gap-3">
+                <i class="fas fa-microchip text-yellow-600"></i> Active Terminal Nodes
+            </h2>
+            <div id="admin-list" class="space-y-4 max-h-[700px] overflow-y-auto pr-2 no-scrollbar">
+                <p class="text-gray-600 text-xs italic text-center">Syncing CPT Nodes...</p>
+            </div>
+        </div>
+
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
@@ -62,50 +99,76 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 1. LIST PLANS WITH DELETE BUTTON
-        onSnapshot(query(collection(db, "vip_plans"), orderBy("createdAt", "desc")), (snap) => {
-            const list = document.getElementById('admin-list');
-            list.innerHTML = "";
-            snap.forEach(d => {
-                const p = d.data();
-                list.innerHTML += `
-                    <div class="p-6 bg-zinc-900/50 border border-white/5 rounded-2xl flex justify-between items-center">
-                        <div>
-                            <p class="text-[10px] text-yellow-600 font-black mb-1">${p.category}</p>
-                            <h3 class="text-sm font-black uppercase">${p.planName}</h3>
-                            <p class="text-[10px] text-gray-500">₦${p.amount.toLocaleString()}</p>
-                        </div>
-                        <button onclick="removePlan('${d.id}')" class="w-10 h-10 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                `;
-            });
-        });
+        function showToast(msg) {
+            const t = document.getElementById('custom-toast');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
 
-        // 2. DELETE FUNCTION
-        window.removePlan = async (id) => {
-            if(confirm("Delete this plan? It will vanish from the VIP page too.")) {
-                await deleteDoc(doc(db, "vip_plans", id));
-                const t = document.getElementById("toast");
-                t.className = "show"; setTimeout(() => t.className = "", 3000);
-            }
+        window.deployNode = async () => {
+            const cat = document.getElementById('cat').value.toUpperCase();
+            const name = document.getElementById('name').value.toUpperCase();
+            const amt = Number(document.getElementById('amt').value);
+            const roi = Number(document.getElementById('roi').value);
+            const dur = document.getElementById('dur').value.toUpperCase();
+            const guar = document.getElementById('guar').value.toUpperCase();
+
+            if(!amt || !name) return showToast("Missing Plan Data!");
+
+            try {
+                await addDoc(collection(db, "vip_plans"), {
+                    category: cat, planName: name, amount: amt,
+                    roi: roi, duration: dur, guarantee: guar,
+                    createdAt: serverTimestamp()
+                });
+                // Reset fields
+                document.getElementById('cat').value = "";
+                document.getElementById('name').value = "";
+                document.getElementById('amt').value = "";
+                document.getElementById('roi').value = "";
+                document.getElementById('dur').value = "";
+                document.getElementById('guar').value = "";
+                showToast("CPT Node Online!");
+            } catch (e) { showToast("Deployment Error"); }
         };
 
-        // 3. ADD FUNCTION
-        document.getElementById('vipForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await addDoc(collection(db, "vip_plans"), {
-                category: document.getElementById('cat').value.toUpperCase(),
-                planName: document.getElementById('name').value.toUpperCase(),
-                amount: Number(document.getElementById('amt').value),
-                duration: document.getElementById('dur').value.toUpperCase(),
-                roi: Number(document.getElementById('roi').value),
-                guarantee: document.getElementById('guar').value.toUpperCase(),
-                createdAt: serverTimestamp()
+        // Real-Time List Monitoring
+        const q = query(collection(db, "vip_plans"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            const list = document.getElementById('admin-list');
+            list.innerHTML = "";
+            if(snapshot.empty) {
+                list.innerHTML = `<p class="text-gray-700 text-[10px] font-black uppercase text-center py-20">No Active Terminal Nodes</p>`;
+            }
+            snapshot.forEach((planDoc) => {
+                const p = planDoc.data();
+                const id = planDoc.id;
+                const item = document.createElement('div');
+                item.className = `p-5 bg-white/5 rounded-2xl border border-white/5 space-y-3`;
+                item.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[9px] font-black uppercase text-yellow-600 tracking-widest">${p.category}</span>
+                            <h3 class="text-sm font-black uppercase italic text-white mt-1">${p.planName}</h3>
+                        </div>
+                        <button onclick="deletePlan('${id}')" class="text-gray-700 hover:text-red-500 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] font-bold text-gray-500 border-t border-white/5 pt-3">
+                        <span>₦${p.amount.toLocaleString()}</span>
+                        <span>${p.duration}</span>
+                        <span class="text-green-500 font-black italic">₦${p.roi.toLocaleString()}</span>
+                    </div>`;
+                list.appendChild(item);
             });
-            e.target.reset();
         });
+
+        window.deletePlan = async (id) => { 
+            if(confirm("Terminate this CPT Node? It will vanish from all user terminals.")) { 
+                await deleteDoc(doc(db, "vip_plans", id)); 
+                showToast("Node Terminated"); 
+            } 
+        };
     </script>
 </body>
 </html>
