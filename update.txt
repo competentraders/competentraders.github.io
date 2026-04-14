@@ -19,8 +19,14 @@ forex-trading.html page
 go to
 
 https://competentraders.vercel.app/admin-dashboard-roi.html
-
 to add ROI or plans to buy into user-dashboard.html page
 
+
+
+
+
+go to
+Competentraders.vercel.app/admin-vip-cpt.html
+to add vips to vip.html page
 
 
