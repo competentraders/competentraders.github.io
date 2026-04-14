@@ -11,7 +11,6 @@
         :root { --cpt-gold: #d4af37; }
         body { font-family: 'Outfit', sans-serif; background: #000; color: white; margin: 0; overflow-x: hidden; }
         
-        /* 3D Flipping Logo Animation */
         .flipping-logo {
             animation: flip-3d 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             transform-style: preserve-3d;
@@ -31,16 +30,13 @@
         .cpt-btn {
             background: linear-gradient(to right, #996515, #d4af37);
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
-        .cpt-btn:active { transform: scale(0.96); }
 
         #cpt-toast {
             visibility: hidden; min-width: 280px; background: var(--cpt-gold); color: #000;
             text-align: center; border-radius: 50px; padding: 16px; position: fixed;
             z-index: 10000; left: 50%; bottom: 50px; transform: translateX(-50%);
             font-weight: 900; text-transform: uppercase; font-size: 11px; letter-spacing: 2px;
-            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
         }
         #cpt-toast.show { visibility: visible; animation: slideInUp 0.5s forwards; }
         @keyframes slideInUp { from { bottom: 0; opacity: 0; } to { bottom: 50px; opacity: 1; } }
@@ -59,37 +55,27 @@
     </nav>
 
     <div class="flex flex-col items-center justify-center mt-6 mb-12 px-6">
-        <div class="perspective-1000">
-            <img src="vip.png" alt="CPT VIP" class="flipping-logo h-36 md:h-48 w-auto drop-shadow-[0_0_25px_rgba(212,175,55,0.2)]">
-        </div>
+        <img src="vip.png" alt="CPT VIP" class="flipping-logo h-36 md:h-48 w-auto drop-shadow-[0_0_25px_rgba(212,175,55,0.2)]">
         <h1 class="mt-8 text-3xl font-black uppercase tracking-tighter italic text-center">CPT <span class="text-yellow-600">VIP</span></h1>
-        <div class="h-[1px] w-12 bg-yellow-600/40 mt-3"></div>
     </div>
 
     <main id="vip-container" class="max-w-lg mx-auto px-6 space-y-8 pb-24">
-        <div class="flex flex-col items-center py-20 opacity-20">
-            <i class="fas fa-circle-notch fa-spin mb-4"></i>
-            <p class="text-[10px] font-bold uppercase tracking-widest">Awaiting CPT Node Sync...</p>
-        </div>
+        <div class="text-center py-20 font-black text-gray-700 uppercase tracking-widest text-[10px]">Synchronizing CPT Servers...</div>
     </main>
 
     <div id="vip-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl hidden items-center justify-center p-6 z-[9999]">
-        <div class="cpt-glass w-full max-w-sm p-8 rounded-[40px] text-center">
+        <div class="cpt-glass w-full max-w-sm p-8 rounded-[40px] text-center shadow-2xl">
             <div class="w-16 h-16 bg-yellow-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-fingerprint text-2xl text-yellow-600"></i>
             </div>
             <h2 id="modal-title" class="text-xl font-black uppercase mb-2 italic">CPT PROTOCOL</h2>
             <p id="modal-desc" class="text-gray-400 text-[10px] mb-8 uppercase tracking-widest leading-relaxed"></p>
             <div id="modal-actions" class="space-y-3">
-                <button id="confirm-vip-btn" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs tracking-widest">INITIALIZE TERMINAL</button>
-                <button onclick="closeModal()" class="w-full py-5 text-gray-500 font-black uppercase text-[10px] tracking-widest">ABORT ACCESS</button>
+                <button id="confirm-vip-btn" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs">AGREE & INITIALIZE</button>
+                <button onclick="closeModal()" class="w-full py-5 text-gray-500 font-black uppercase text-[10px]">CANCEL</button>
             </div>
         </div>
     </div>
-
-    <footer class="border-t border-white/5 bg-[#050505] pt-12 pb-10 px-8 text-center">
-        <p class="text-gray-600 text-[9px] font-black uppercase tracking-[0.3em]">Competentraders Global Asset Management © 2026</p>
-    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
@@ -120,38 +106,26 @@
         onAuthStateChanged(auth, (user) => {
             if (!user) { window.location.href = "login.html"; return; }
 
-            // Real-time synchronization: If deleted in Admin, it vanishes here instantly.
+            // LIVE LISTENER: If a plan is deleted in Admin, it disappears here instantly
             onSnapshot(query(collection(db, "vip_plans"), orderBy("createdAt", "desc")), (snap) => {
                 const cont = document.getElementById('vip-container');
                 cont.innerHTML = "";
-                
                 if(snap.empty) {
-                    cont.innerHTML = `<p class="text-center text-gray-700 text-[10px] font-black uppercase py-20">No Active VIP Nodes Available</p>`;
+                    cont.innerHTML = `<p class="text-center text-gray-700 text-[10px] font-black uppercase py-20 tracking-widest">Awaiting CPT Node Deployment...</p>`;
                     return;
                 }
-
                 snap.forEach(d => {
                     const p = d.data();
                     cont.innerHTML += `
-                        <div class="cpt-glass p-8 rounded-[35px] relative overflow-hidden">
-                            <div class="flex justify-between items-start mb-6">
-                                <div>
-                                    <p class="text-yellow-600 font-black text-[9px] uppercase tracking-[0.3em] mb-1">${p.category}</p>
-                                    <h2 class="text-2xl font-black uppercase italic tracking-tighter">${p.planName}</h2>
-                                </div>
-                                <i class="fas fa-crown text-white/5 text-3xl"></i>
+                        <div class="cpt-glass p-8 rounded-[35px] relative">
+                            <h2 class="text-2xl font-black uppercase italic mb-6">${p.planName}</h2>
+                            <div class="grid grid-cols-2 gap-4 mb-8 text-[10px] font-black uppercase tracking-widest">
+                                <div><p class="text-gray-500 mb-1">Investment</p><p class="text-white text-sm">₦${p.amount.toLocaleString()}</p></div>
+                                <div><p class="text-gray-500 mb-1">Contract</p><p class="text-white text-sm">${p.duration}</p></div>
+                                <div><p class="text-gray-500 mb-1">Return</p><p class="text-green-500 text-sm">₦${p.roi.toLocaleString()}</p></div>
+                                <div><p class="text-gray-500 mb-1">Security</p><p class="text-yellow-600 text-sm">${p.guarantee}</p></div>
                             </div>
-                            
-                            <div class="grid grid-cols-2 gap-y-5 mb-8 text-[10px] font-black uppercase tracking-widest">
-                                <div><p class="text-gray-500 mb-1">Investment</p><p class="text-white text-sm italic">₦${p.amount.toLocaleString()}</p></div>
-                                <div><p class="text-gray-500 mb-1">Contract</p><p class="text-white text-sm italic">${p.duration}</p></div>
-                                <div><p class="text-gray-500 mb-1">CPT Return</p><p class="text-green-500 text-sm italic">₦${p.roi.toLocaleString()}</p></div>
-                                <div><p class="text-gray-500 mb-1">Security</p><p class="text-yellow-600 text-sm italic">${p.guarantee}</p></div>
-                            </div>
-
-                            <button onclick="triggerPurchase('${d.id}', '${p.planName}', ${p.amount}, '${p.duration}')" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-[10px] tracking-[0.2em]">
-                                INITIALIZE CPT VIP
-                            </button>
+                            <button onclick="triggerPurchase('${d.id}', '${p.planName}', ${p.amount}, '${p.duration}')" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs">INITIALIZE CPT VIP</button>
                         </div>
                     `;
                 });
@@ -162,8 +136,7 @@
             const modal = document.getElementById('vip-modal');
             modal.classList.replace('hidden', 'flex');
             document.getElementById('confirm-vip-btn').classList.remove('hidden');
-            document.getElementById('modal-title').innerText = "CPT AUTHENTICATION";
-            document.getElementById('modal-desc').innerText = `Syncing ${name} node for ₦${amt.toLocaleString()}. Encryption will be applied.`;
+            document.getElementById('modal-desc').innerText = `Syncing ${name} node for ₦${amt.toLocaleString()}.`;
             document.getElementById('confirm-vip-btn').onclick = () => processVIP(name, amt, duration);
         };
 
@@ -174,47 +147,28 @@
             const uSnap = await getDoc(uRef);
             
             if(uSnap.data().balance < amt) {
-                document.getElementById('modal-title').innerText = "NODE REJECTED";
-                document.getElementById('modal-desc').innerText = "Insufficient terminal liquidity for this CPT node.";
+                document.getElementById('modal-title').innerText = "CPT ERROR";
+                document.getElementById('modal-desc').innerText = "Insufficient liquidity for this node.";
                 btn.classList.add('hidden');
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> SYNCING`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i>`;
 
             try {
-                // 1. Deduct Balance & Log to Firebase
                 await updateDoc(uRef, { balance: increment(-amt) });
                 await addDoc(collection(db, "active_investments"), {
-                    clientId: user.uid,
-                    plan: name,
-                    amount: amt,
-                    type: "CPT-VIP",
-                    status: "running",
-                    createdAt: new Date().toISOString()
+                    clientId: user.uid, plan: name, amount: amt, type: "CPT-VIP", createdAt: new Date().toISOString()
                 });
-
                 showToast("CPT NODE SECURED");
-
-                // 2. Redirect to WhatsApp
                 setTimeout(() => {
-                    const waLink = `https://wa.me/2349153258628?text=${encodeURIComponent(
-                        `*CPT VIP INITIALIZED*\n\n` +
-                        `Plan: ${name}\n` +
-                        `Investment: ₦${amt.toLocaleString()}\n` +
-                        `Duration: ${duration}\n` +
-                        `Client ID: ${user.uid}\n\n` +
-                        `_Please verify my terminal access._`
-                    )}`;
-                    window.location.href = waLink;
+                    const msg = encodeURIComponent(`*CPT VIP INITIALIZED*\nPlan: ${name}\nAmt: ₦${amt.toLocaleString()}\nID: ${user.uid}`);
+                    window.location.href = `https://wa.me/2349153258628?text=${msg}`;
                 }, 1500);
-
             } catch (e) {
-                document.getElementById('modal-title').innerText = "LINK ERROR";
-                document.getElementById('modal-desc').innerText = "The secure handshake failed. Try again.";
+                document.getElementById('modal-title').innerText = "FAILED";
                 btn.disabled = false;
-                btn.innerHTML = "INITIALIZE TERMINAL";
             }
         }
     </script>
