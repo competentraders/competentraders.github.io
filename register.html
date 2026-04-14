@@ -256,20 +256,14 @@
         btn.disabled = true;
 
         try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            const user = userCredential.user;
 
-
-            // Change this:
-const actionCodeSettings = {
-    url: 'https://competentraders.vercel.app/login.html', 
-    handleCodeInApp: true,
-};
-await sendEmailVerification(user, actionCodeSettings);
-
-// To this:
-await sendEmailVerification(user); 
-!!
-
-
+            const actionCodeSettings = {
+                url: 'https://competentraders.vercel.app/login.html', 
+                handleCodeInApp: true,
+            };
+            await sendEmailVerification(user, actionCodeSettings);
 
             // SAVE ALL DATA FOR DASHBOARD
             await setDoc(doc(db, "users", user.uid), {
