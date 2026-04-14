@@ -3,110 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP Inner Circle | Competentraders</title>
+    <title>VIP Terminal | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; overflow-x: hidden; }
-
-        .vip-gradient {
-            background: linear-gradient(135px, #1e1b4b 0%, #312e81 100%);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-        }
-
-        .gold-text {
-            background: linear-gradient(to right, #fde047, #eab308);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900;
-        }
-
-        .premium-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-        }
-
-        @keyframes pulse-gold {
-            0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(234, 179, 8, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
-        }
-        .btn-vip { animation: pulse-gold 2s infinite; }
+        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; }
+        .vip-border { border: 1px solid rgba(212, 175, 55, 0.2); }
+        .gold-glow { box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
     </style>
 </head>
-<body class="p-4 pb-20">
+<body class="p-6 pb-20">
 
-    <div class="max-w-md mx-auto mt-8 mb-10 text-center">
-        <div class="inline-block px-4 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 mb-4">
-            <span class="text-[9px] font-black uppercase tracking-[3px] gold-text">Institutional Access</span>
-        </div>
-        <h1 class="text-4xl font-black uppercase italic leading-tight">VIP SIGNAL <br><span class="text-purple-500">ROOM</span></h1>
-        <p class="text-gray-500 text-xs mt-2 font-bold uppercase tracking-widest">Where the 1% trade</p>
+    <div class="flex flex-col items-center justify-center mb-10">
+        <a href="user-dashboard.html" class="absolute left-6 top-8 text-gray-500"><i class="fas fa-arrow-left text-xl"></i></a>
+        <img src="vip.png" alt="Logo" class="h-12 w-auto mb-2"> <p class="text-[9px] font-black uppercase tracking-[0.4em] text-yellow-600">Premium VIP Node</p>
     </div>
 
-    <div class="max-w-md mx-auto space-y-4">
-        
-        <div class="premium-card p-6 flex items-start gap-4">
-            <div class="w-12 h-12 bg-purple-600/20 rounded-2xl flex items-center justify-center text-purple-500 shrink-0">
-                <i class="fas fa-bolt text-xl"></i>
-            </div>
-            <div>
-                <h3 class="font-black uppercase text-sm mb-1">Ultra-Fast Entry</h3>
-                <p class="text-xs text-gray-400 leading-relaxed">Get signals 5-10 minutes before the market moves. No delays, just pure profit.</p>
-            </div>
-        </div>
-
-        <div class="premium-card p-6 flex items-start gap-4">
-            <div class="w-12 h-12 bg-yellow-600/20 rounded-2xl flex items-center justify-center text-yellow-500 shrink-0">
-                <i class="fas fa-bullseye text-xl"></i>
-            </div>
-            <div>
-                <h3 class="font-black uppercase text-sm mb-1">99% Sniper Accuracy</h3>
-                <p class="text-xs text-gray-400 leading-relaxed">Our proprietary AI algorithm filters out noise. You only get the "Sniper" entries.</p>
-            </div>
-        </div>
-
-        <div class="premium-card p-6 flex items-start gap-4">
-            <div class="w-12 h-12 bg-blue-600/20 rounded-2xl flex items-center justify-center text-blue-500 shrink-0">
-                <i class="fas fa-user-shield text-xl"></i>
-            </div>
-            <div>
-                <h3 class="font-black uppercase text-sm mb-1">Personal Mentorship</h3>
-                <p class="text-xs text-gray-400 leading-relaxed">Direct access to the CEO for portfolio management and risk strategy.</p>
-            </div>
-        </div>
-
+    <div id="vip-container" class="space-y-6">
+        <div class="animate-pulse text-center text-gray-600 uppercase text-[10px] font-bold">Synchronizing VIP Nodes...</div>
     </div>
 
-    <div class="max-w-md mx-auto mt-12">
-        <div class="vip-gradient p-8 rounded-[40px] text-center shadow-2xl relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
+    <div id="vip-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden items-center justify-center p-6 z-[9999]">
+        <div class="bg-[#0f111a] w-full max-w-sm p-8 rounded-[32px] border border-yellow-600/30 text-center">
+            <i class="fas fa-crown text-4xl text-yellow-600 mb-4"></i>
+            <h2 id="modal-title" class="text-xl font-black uppercase mb-2"></h2>
+            <p id="modal-desc" class="text-gray-400 text-[11px] mb-8 uppercase tracking-widest leading-relaxed"></p>
+            <div class="flex flex-col gap-3">
+                <button id="confirm-vip-btn" class="w-full py-4 bg-yellow-600 text-black rounded-2xl font-black uppercase text-xs flex items-center justify-center gap-2">I AGREE & INITIALIZE</button>
+                <button onclick="closeModal()" class="w-full py-4 bg-white/5 text-gray-500 rounded-2xl font-black uppercase text-xs">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.closeModal = () => document.getElementById('vip-modal').classList.replace('flex', 'hidden');
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) { window.location.href = "login.html"; return; }
+
+            // Load VIP Plans from special collection
+            onSnapshot(query(collection(db, "vip_plans"), orderBy("createdAt", "desc")), (snap) => {
+                const cont = document.getElementById('vip-container');
+                cont.innerHTML = "";
+                snap.forEach(d => {
+                    const p = d.data();
+                    cont.innerHTML += `
+                        <div class="bg-[#0f111a] rounded-[32px] p-8 vip-border gold-glow">
+                            <p class="text-yellow-600 font-black text-[10px] uppercase tracking-widest mb-1">${p.category}</p>
+                            <h2 class="text-3xl font-black uppercase mb-6">${p.planName}</h2>
+                            
+                            <div class="space-y-4 mb-8">
+                                <div class="flex justify-between border-b border-white/5 pb-2">
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Investment</span>
+                                    <span class="text-sm font-black">₦${p.amount}</span>
+                                </div>
+                                <div class="flex justify-between border-b border-white/5 pb-2">
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Duration</span>
+                                    <span class="text-sm font-black uppercase">${p.duration}</span>
+                                </div>
+                                <div class="flex justify-between border-b border-white/5 pb-2">
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Return (ROI)</span>
+                                    <span class="text-sm font-black text-green-500">₦${p.roi}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-[10px] text-gray-500 font-bold uppercase">Guarantee</span>
+                                    <span class="text-sm font-black text-yellow-600">${p.guarantee}</span>
+                                </div>
+                            </div>
+
+                            <button onclick="triggerPurchase('${d.id}', '${p.planName}', ${p.amount}, '${p.duration}')" class="w-full py-5 bg-yellow-600 text-black rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-yellow-600/20">
+                                INITIALIZE VIP NODE
+                            </button>
+                        </div>
+                    `;
+                });
+            });
+        });
+
+        window.triggerPurchase = (id, name, amt, duration) => {
+            const modal = document.getElementById('vip-modal');
+            modal.classList.replace('hidden', 'flex');
+            document.getElementById('modal-title').innerText = name;
+            document.getElementById('modal-desc').innerText = `Confirm investment of ₦${amt} for ${duration}. Total security protocols will be engaged.`;
             
-            <p class="text-[10px] font-black uppercase text-purple-300 tracking-[4px] mb-2">Exclusive Membership</p>
-            <h2 class="text-5xl font-black mb-4">₦1M<span class="text-lg text-purple-300 font-normal">/life <br> No Loss at all.</span></h2>
+            document.getElementById('confirm-vip-btn').onclick = () => processVIP(name, amt, duration);
+        };
+
+        async function processVIP(name, amt, duration) {
+            const user = auth.currentUser;
+            const btn = document.getElementById('confirm-vip-btn');
             
-            <ul class="text-left space-y-3 mb-8 ml-4">
-                <li class="text-[11px] font-bold flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Daily Crypto Scalping</li>
-                <li class="text-[11px] font-bold flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Weekend Fixed Matches</li>
-                <li class="text-[11px] font-bold flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Account Management</li>
-            </ul>
+            const uRef = doc(db, "users", user.uid);
+            const uSnap = await getDoc(uRef);
+            
+            if(uSnap.data().balance < amt) {
+                alert("Insufficient Balance in Terminal.");
+                return;
+            }
 
-            <a href="https://wa.me/2349153258628?text=I%20want%20to%20apply%20for%20the%20VIP%20Signal%20Room%20access." 
-               class="btn-vip block w-full py-5 bg-yellow-500 text-black font-black uppercase text-xs tracking-widest rounded-2xl">
-                Request Invitation
-            </a>
-            <p class="text-[9px] text-purple-300 mt-4 font-bold italic uppercase">Limited to 50 members only</p>
-        </div>
-    </div>
+            // Start ⭕ Spinner
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PROCESSING`;
 
-    <div class="text-center mt-10">
-        <a href="user-dashboard.html" class="text-[10px] font-black text-gray-600 uppercase tracking-widest hover:text-white transition-all">
-            <i class="fas fa-arrow-left mr-2"></i> Return to Terminal
-        </a>
-    </div>
+            try {
+                await updateDoc(uRef, { balance: increment(-amt) });
+                await addDoc(collection(db, "active_investments"), {
+                    clientId: user.uid,
+                    plan: name,
+                    amount: amt,
+                    type: "VIP",
+                    status: "running",
+                    createdAt: new Date().toISOString()
+                });
 
+                // Final Success & WhatsApp Redirect
+                setTimeout(() => {
+                    const msg = encodeURIComponent(`Hello Admin, I just initialized the ${name} VIP Plan.\nAmount: ₦${amt}\nDuration: ${duration}.\nPlease verify my access.`);
+                    window.location.href = `https://wa.me/2349153258628?text=${msg}`;
+                }, 2000);
+
+            } catch (e) {
+                alert("Security Error. Try again.");
+                btn.disabled = false;
+                btn.innerHTML = "I AGREE & INITIALIZE";
+            }
+        }
+    </script>
 </body>
 </html>
