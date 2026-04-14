@@ -2,34 +2,112 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Terminal | VIP Deployment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPT ADMIN | VIP CONTROL CENTER</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #000; color: white; font-family: 'Outfit', sans-serif; }
-        .glass-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); outline: none; }
-        #toast {
-            visibility: hidden; min-width: 250px; background: #d4af37; color: #000;
-            text-align: center; border-radius: 50px; padding: 16px; position: fixed;
-            left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: 900; font-size: 10px;
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        :root { --cpt-gold: #d4af37; }
+        body { font-family: 'Outfit', sans-serif; background: #000; color: white; margin: 0; }
+        
+        .cpt-panel { 
+            background: #0a0b10; 
+            border: 1px solid rgba(212, 175, 55, 0.1); 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        .cpt-input {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+            color: white;
+            font-weight: 600;
+        }
+
+        .cpt-input:focus {
+            border-color: var(--cpt-gold);
+            background: rgba(212, 175, 55, 0.03);
+            outline: none;
+        }
+
+        #cpt-toast {
+            visibility: hidden; min-width: 300px; background: var(--cpt-gold); color: #000;
+            text-align: center; border-radius: 12px; padding: 20px; position: fixed;
+            z-index: 10000; left: 50%; bottom: 40px; transform: translateX(-50%);
+            font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+        #cpt-toast.show { visibility: visible; animation: slideUp 0.5s forwards, fadeOut 0.5s 2.5s forwards; }
+        
+        @keyframes slideUp { from { bottom: 0; opacity: 0; } to { bottom: 40px; opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        .btn-deploy {
+            background: linear-gradient(to right, #996515, #d4af37);
+            transition: 0.4s;
+        }
+        .btn-deploy:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn-deploy:disabled { opacity: 0.5; cursor: not-allowed; }
     </style>
 </head>
-<body class="p-10">
-    <div id="toast">VIP NODE DEPLOYED</div>
-    <div class="max-w-xl mx-auto bg-[#0f111a] p-10 rounded-[40px] border border-white/5">
-        <h1 class="text-xl font-black uppercase text-yellow-600 mb-8 tracking-widest">VIP Command Center</h1>
-        <form id="vipForm" class="space-y-4">
-            <input type="text" id="cat" placeholder="Category" class="glass-input w-full p-4 rounded-2xl" required>
-            <input type="text" id="name" placeholder="Plan Name" class="glass-input w-full p-4 rounded-2xl" required>
-            <input type="number" id="amt" placeholder="Amount" class="glass-input w-full p-4 rounded-2xl" required>
-            <input type="text" id="dur" placeholder="Duration" class="glass-input w-full p-4 rounded-2xl" required>
-            <input type="number" id="roi" placeholder="ROI Payout" class="glass-input w-full p-4 rounded-2xl" required>
-            <input type="text" id="guar" placeholder="Guarantee" class="glass-input w-full p-4 rounded-2xl" required>
-            <button type="submit" id="btn" class="w-full py-5 bg-yellow-600 text-black font-black uppercase text-xs rounded-2xl">Deploy Node</button>
-        </form>
+<body class="flex items-center justify-center min-h-screen p-6">
+
+    <div id="cpt-toast"></div>
+
+    <div class="w-full max-w-2xl cpt-panel rounded-[40px] overflow-hidden relative">
+        <div class="h-2 w-full bg-yellow-600/20"></div>
+        
+        <div class="p-10 md:p-16">
+            <div class="flex items-center gap-4 mb-12">
+                <div class="w-14 h-14 rounded-2xl bg-yellow-600/10 flex items-center justify-center">
+                    <i class="fas fa-shield-alt text-yellow-600 text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-black uppercase tracking-tighter">CPT VIP <span class="text-yellow-600">MANAGER</span></h1>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.4em]">Official Admin Control Node</p>
+                </div>
+            </div>
+
+            <form id="vipForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Service Category</label>
+                        <input type="text" id="cat" placeholder="e.g. FOREX TRADING" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Plan Identifier</label>
+                        <input type="text" id="name" placeholder="e.g. CPT VIP 50K" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Principal Amount (₦)</label>
+                        <input type="number" id="amt" placeholder="50000" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Contract Duration</label>
+                        <input type="text" id="dur" placeholder="e.g. 1 MONTH" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Total Payout ROI (₦)</label>
+                        <input type="number" id="roi" placeholder="110000" class="cpt-input w-full p-5 rounded-2xl text-xs text-green-500" required>
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Security Guarantee</label>
+                        <input type="text" id="guar" placeholder="e.g. 99% SECURED" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn" class="w-full py-6 mt-6 btn-deploy text-black font-black uppercase text-xs tracking-[0.3em] rounded-2xl flex items-center justify-center gap-3">
+                    <i class="fas fa-cloud-upload-alt"></i> DEPLOY TO CPT TERMINALS
+                </button>
+            </form>
+        </div>
     </div>
 
     <script type="module">
@@ -48,25 +126,39 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        const toast = document.getElementById("cpt-toast");
+        const showCptToast = (msg) => {
+            toast.innerText = msg;
+            toast.className = "show";
+            setTimeout(() => { toast.className = ""; }, 3000);
+        };
+
         document.getElementById('vipForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn');
             btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> SYNCING...`;
+
             try {
                 await addDoc(collection(db, "vip_plans"), {
-                    category: document.getElementById('cat').value,
-                    planName: document.getElementById('name').value,
+                    category: document.getElementById('cat').value.toUpperCase(),
+                    planName: document.getElementById('name').value.toUpperCase(),
                     amount: Number(document.getElementById('amt').value),
-                    duration: document.getElementById('dur').value,
+                    duration: document.getElementById('dur').value.toUpperCase(),
                     roi: Number(document.getElementById('roi').value),
-                    guarantee: document.getElementById('guar').value,
+                    guarantee: document.getElementById('guar').value.toUpperCase(),
                     createdAt: serverTimestamp()
                 });
-                const t = document.getElementById("toast");
-                t.className = "show";
-                setTimeout(() => t.className = "", 3000);
+                
+                showCptToast("CPT VIP NODE DEPLOYED SUCCESSFULLY");
                 e.target.reset();
-            } catch (err) { console.error(err); } finally { btn.disabled = false; }
+            } catch (err) { 
+                console.error(err);
+                showCptToast("CPT AUTHENTICATION FAILED");
+            } finally { 
+                btn.disabled = false; 
+                btn.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> DEPLOY TO CPT TERMINALS`;
+            }
         });
     </script>
 </body>
