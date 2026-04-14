@@ -68,80 +68,86 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
-            authDomain: "competentraders-2efdc.firebaseapp.com",
-            projectId: "competentraders-2efdc",
-            storageBucket: "competentraders-2efdc.firebasestorage.app",
-            messagingSenderId: "150379227882",
-            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const showModal = (type, title, text, onConfirm = null) => {
+        const modal = document.getElementById('custom-modal');
+        const icon = document.getElementById('modal-icon');
+        const mBtns = document.getElementById('modal-buttons');
+        mBtns.innerHTML = "";
+        modal.classList.replace('hidden', 'flex');
+
+        icon.innerHTML = type === 'success' ? "" : "";
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-text').innerText = text;
+
+        if(onConfirm){
+            const b1 = document.createElement('button');
+            b1.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px]";
+            b1.innerText = "Confirm";
+            b1.onclick = () => { modal.classList.replace('flex', 'hidden'); onConfirm(); };
+            mBtns.appendChild(b1);
+        }
+        const b2 = document.createElement('button');
+        b2.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px]";
+        b2.innerText = onConfirm ? "Cancel" : "Close";
+        b2.onclick = () => modal.classList.replace('flex', 'hidden');
+        mBtns.appendChild(b2);
+    };
+
+    window.publishROI = async () => {
+        const data = {
+            category: document.getElementById('cat').value,
+            price: document.getElementById('price').value,
+            duration: document.getElementById('duration').value,
+            payout: document.getElementById('payout').value,
+            guarantee: document.getElementById('guarantee').value,
+            timestamp: serverTimestamp()
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        if(!data.category || !data.price) return showModal('error', 'Incomplete', 'Please fill the name and amount.');
 
-        const showModal = (type, title, text, onConfirm = null) => {
-            const modal = document.getElementById('custom-modal');
-            const icon = document.getElementById('modal-icon');
-            const mBtns = document.getElementById('modal-buttons');
-            mBtns.innerHTML = "";
-            modal.classList.replace('hidden', 'flex');
+        try {
+            await addDoc(collection(db, "roi_plans"), data);
+            showModal('success', 'Deployed', 'ROI Node is now visible to users.');
+            document.querySelectorAll('input').forEach(i => i.value = "");
+        } catch(e) { showModal('error', 'Error', e.message); }
+    };
 
-            icon.innerHTML = type === 'success' ? "🦅" : "⚠️";
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-text').innerText = text;
-
-            if(onConfirm){
-                const b1 = document.createElement('button');
-                b1.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px]";
-                b1.innerText = "Confirm";
-                b1.onclick = () => { modal.classList.replace('flex', 'hidden'); onConfirm(); };
-                mBtns.appendChild(b1);
-            }
-            const b2 = document.createElement('button');
-            b2.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px]";
-            b2.innerText = onConfirm ? "Cancel" : "Close";
-            b2.onclick = () => modal.classList.replace('flex', 'hidden');
-            mBtns.appendChild(b2);
-        };
-
-        window.publishROI = async () => {
-            const data = {
-                category: document.getElementById('cat').value,
-                price: document.getElementById('price').value,
-                duration: document.getElementById('duration').value,
-                payout: document.getElementById('payout').value,
-                guarantee: document.getElementById('guarantee').value,
-                timestamp: serverTimestamp()
-            };
-
-            if(!data.category || !data.price) return showModal('error', 'Incomplete', 'Please fill the name and amount.');
-
-            try {
-                await addDoc(collection(db, "roi_plans"), data);
-                showModal('success', 'Deployed', 'ROI Node is now visible to users.');
-                document.querySelectorAll('input').forEach(i => i.value = "");
-            } catch(e) { showModal('error', 'Error', e.message); }
-        };
-
-        onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
-            const list = document.getElementById('roi-list');
-            list.innerHTML = "";
-            snap.forEach(d => {
-                const item = d.data();
-                list.innerHTML += `<div class="glass-panel p-5 rounded-2xl flex justify-between items-center border-l-4 border-blue-500">
-                    <div><p class="text-blue-400 font-black text-sm uppercase">${item.category}</p><p class="text-[10px] text-gray-500 font-bold uppercase">${item.price} -> ${item.payout}</p></div>
-                    <button onclick="deleteROI('${d.id}')" class="text-red-500 bg-red-500/10 p-3 rounded-lg"><i class="fas fa-trash"></i></button>
-                </div>`;
-            });
+    onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
+        const list = document.getElementById('roi-list');
+        list.innerHTML = "";
+        snap.forEach(d => {
+            const item = d.data();
+            list.innerHTML += `<div class="glass-panel p-5 rounded-2xl flex justify-between items-center border-l-4 border-blue-500">
+                <div>
+                    <p class="text-blue-400 font-black text-sm uppercase">${item.category}</p>
+                    <p class="text-[9px] text-gray-500 font-bold uppercase">
+                        ${item.price} -> ${item.payout} | ${item.duration} | ${item.guarantee || 'N/A'}
+                    </p>
+                </div>
+                <button onclick="deleteROI('${d.id}')" class="text-red-500 bg-red-500/10 p-3 rounded-lg"><i class="fas fa-trash"></i></button>
+            </div>`;
         });
+    });
 
-        window.deleteROI = (id) => showModal('error', 'Delete?', 'Remove this investment node?', async () => {
-            await deleteDoc(doc(db, "roi_plans", id));
-        });
-    </script>
+    window.deleteROI = (id) => showModal('error', 'Delete?', 'Remove this investment node?', async () => {
+        await deleteDoc(doc(db, "roi_plans", id));
+    });
+</script>
+
 </body>
 </html>
