@@ -10,109 +10,65 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
         :root { --cpt-gold: #d4af37; }
         body { font-family: 'Outfit', sans-serif; background: #000; color: white; margin: 0; }
+        .cpt-panel { background: #0a0b10; border: 1px solid rgba(212, 175, 55, 0.1); }
+        .cpt-input { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); outline: none; transition: 0.3s; color: white; }
+        .cpt-input:focus { border-color: var(--cpt-gold); background: rgba(212, 175, 55, 0.03); }
         
-        .cpt-panel { 
-            background: #0a0b10; 
-            border: 1px solid rgba(212, 175, 55, 0.1); 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        }
-
-        .cpt-input {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: 0.3s;
-            color: white;
-            font-weight: 600;
-        }
-
-        .cpt-input:focus {
-            border-color: var(--cpt-gold);
-            background: rgba(212, 175, 55, 0.03);
-            outline: none;
-        }
-
         #cpt-toast {
             visibility: hidden; min-width: 300px; background: var(--cpt-gold); color: #000;
             text-align: center; border-radius: 12px; padding: 20px; position: fixed;
             z-index: 10000; left: 50%; bottom: 40px; transform: translateX(-50%);
-            font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: 2px;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+            font-weight: 900; text-transform: uppercase; font-size: 11px;
         }
-        #cpt-toast.show { visibility: visible; animation: slideUp 0.5s forwards, fadeOut 0.5s 2.5s forwards; }
-        
+        #cpt-toast.show { visibility: visible; animation: slideUp 0.5s forwards; }
         @keyframes slideUp { from { bottom: 0; opacity: 0; } to { bottom: 40px; opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
-        .btn-deploy {
-            background: linear-gradient(to right, #996515, #d4af37);
-            transition: 0.4s;
-        }
-        .btn-deploy:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn-deploy:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-deploy { background: linear-gradient(to right, #996515, #d4af37); transition: 0.4s; }
+        .node-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .node-card:hover { border-color: #ef4444; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body class="p-6 md:p-12">
 
     <div id="cpt-toast"></div>
 
-    <div class="w-full max-w-2xl cpt-panel rounded-[40px] overflow-hidden relative">
-        <div class="h-2 w-full bg-yellow-600/20"></div>
+    <div class="max-w-4xl mx-auto space-y-12">
         
-        <div class="p-10 md:p-16">
-            <div class="flex items-center gap-4 mb-12">
-                <div class="w-14 h-14 rounded-2xl bg-yellow-600/10 flex items-center justify-center">
-                    <i class="fas fa-shield-alt text-yellow-600 text-2xl"></i>
+        <div class="cpt-panel rounded-[40px] overflow-hidden">
+            <div class="h-1 w-full bg-yellow-600/30"></div>
+            <div class="p-8 md:p-12">
+                <div class="flex items-center gap-4 mb-10">
+                    <div class="w-12 h-12 rounded-xl bg-yellow-600/10 flex items-center justify-center text-yellow-600"><i class="fas fa-plus"></i></div>
+                    <h1 class="text-xl font-black uppercase tracking-tighter">CPT VIP <span class="text-yellow-600">Deployment</span></h1>
                 </div>
-                <div>
-                    <h1 class="text-2xl font-black uppercase tracking-tighter">CPT VIP <span class="text-yellow-600">MANAGER</span></h1>
-                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.4em]">Official Admin Control Node</p>
-                </div>
+
+                <form id="vipForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="text" id="cat" placeholder="CATEGORY" class="cpt-input p-5 rounded-2xl text-[11px] font-bold" required>
+                    <input type="text" id="name" placeholder="PLAN NAME" class="cpt-input p-5 rounded-2xl text-[11px] font-bold" required>
+                    <input type="number" id="amt" placeholder="INVESTMENT AMOUNT (₦)" class="cpt-input p-5 rounded-2xl text-[11px] font-bold" required>
+                    <input type="text" id="dur" placeholder="DURATION" class="cpt-input p-5 rounded-2xl text-[11px] font-bold" required>
+                    <input type="number" id="roi" placeholder="ROI PAYOUT (₦)" class="cpt-input p-5 rounded-2xl text-[11px] font-bold" required>
+                    <input type="text" id="guar" placeholder="GUARANTEE %" class="cpt-input p-5 rounded-2xl text-[11px] font-bold" required>
+                    <button type="submit" id="btn" class="md:col-span-2 py-5 btn-deploy text-black font-black uppercase text-[11px] tracking-widest rounded-2xl">Deploy CPT Node</button>
+                </form>
             </div>
+        </div>
 
-            <form id="vipForm" class="space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Service Category</label>
-                        <input type="text" id="cat" placeholder="e.g. FOREX TRADING" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Plan Identifier</label>
-                        <input type="text" id="name" placeholder="e.g. CPT VIP 50K" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Principal Amount (₦)</label>
-                        <input type="number" id="amt" placeholder="50000" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Contract Duration</label>
-                        <input type="text" id="dur" placeholder="e.g. 1 MONTH" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Total Payout ROI (₦)</label>
-                        <input type="number" id="roi" placeholder="110000" class="cpt-input w-full p-5 rounded-2xl text-xs text-green-500" required>
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-black text-gray-500 uppercase ml-2 mb-2 block">Security Guarantee</label>
-                        <input type="text" id="guar" placeholder="e.g. 99% SECURED" class="cpt-input w-full p-5 rounded-2xl text-xs" required>
-                    </div>
-                </div>
-
-                <button type="submit" id="btn" class="w-full py-6 mt-6 btn-deploy text-black font-black uppercase text-xs tracking-[0.3em] rounded-2xl flex items-center justify-center gap-3">
-                    <i class="fas fa-cloud-upload-alt"></i> DEPLOY TO CPT TERMINALS
-                </button>
-            </form>
+        <div>
+            <div class="flex items-center justify-between mb-6 px-4">
+                <h2 class="text-sm font-black uppercase tracking-[0.3em] text-gray-500">Live Terminal Nodes</h2>
+                <span class="text-[10px] bg-green-500/10 text-green-500 px-3 py-1 rounded-full font-bold">CPT NETWORK ACTIVE</span>
+            </div>
+            
+            <div id="live-nodes" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-10 text-center col-span-2 text-gray-700 font-black uppercase text-[10px] tracking-widest">Awaiting Synchronization...</div>
+            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
@@ -127,18 +83,50 @@
         const db = getFirestore(app);
 
         const toast = document.getElementById("cpt-toast");
-        const showCptToast = (msg) => {
-            toast.innerText = msg;
-            toast.className = "show";
+        const showToast = (msg) => {
+            toast.innerText = msg; toast.className = "show";
             setTimeout(() => { toast.className = ""; }, 3000);
         };
 
+        // --- REAL-TIME MONITORING ---
+        onSnapshot(query(collection(db, "vip_plans"), orderBy("createdAt", "desc")), (snap) => {
+            const container = document.getElementById('live-nodes');
+            container.innerHTML = "";
+            
+            if(snap.empty) container.innerHTML = `<div class="col-span-2 p-10 text-center border border-white/5 rounded-3xl text-gray-600 font-bold uppercase text-[10px]">No Active CPT Nodes Found</div>`;
+
+            snap.forEach(d => {
+                const p = d.data();
+                container.innerHTML += `
+                    <div class="node-card p-6 rounded-[24px] flex justify-between items-center group">
+                        <div>
+                            <p class="text-[9px] font-black text-yellow-600 mb-1 uppercase">${p.category}</p>
+                            <h3 class="text-sm font-black uppercase">${p.planName}</h3>
+                            <p class="text-[10px] text-gray-500 font-bold">₦${p.amount.toLocaleString()} • ${p.duration}</p>
+                        </div>
+                        <button onclick="deleteNode('${d.id}')" class="w-10 h-10 rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all flex items-center justify-center">
+                            <i class="fas fa-trash-alt text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        });
+
+        // --- DELETE LOGIC ---
+        window.deleteNode = async (id) => {
+            if(confirm("TERMINATE CPT NODE?\nThis plan will be removed from all user terminals immediately.")) {
+                try {
+                    await deleteDoc(doc(db, "vip_plans", id));
+                    showToast("CPT NODE TERMINATED");
+                } catch (e) { showToast("TERMINATION FAILED"); }
+            }
+        };
+
+        // --- DEPLOY LOGIC ---
         document.getElementById('vipForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn');
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> SYNCING...`;
-
             try {
                 await addDoc(collection(db, "vip_plans"), {
                     category: document.getElementById('cat').value.toUpperCase(),
@@ -149,16 +137,9 @@
                     guarantee: document.getElementById('guar').value.toUpperCase(),
                     createdAt: serverTimestamp()
                 });
-                
-                showCptToast("CPT VIP NODE DEPLOYED SUCCESSFULLY");
+                showToast("CPT NODE DEPLOYED");
                 e.target.reset();
-            } catch (err) { 
-                console.error(err);
-                showCptToast("CPT AUTHENTICATION FAILED");
-            } finally { 
-                btn.disabled = false; 
-                btn.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> DEPLOY TO CPT TERMINALS`;
-            }
+            } catch (err) { showToast("DEPLOYMENT ERROR"); } finally { btn.disabled = false; }
         });
     </script>
 </body>
