@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin VIP Node | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>body { background: #06070a; color: white; font-family: 'Outfit', sans-serif; }</style>
+</head>
+<body class="p-10">
+    <div class="max-w-xl mx-auto bg-[#0f111a] p-8 rounded-[32px] border border-white/5">
+        <h1 class="text-2xl font-black uppercase mb-8 text-yellow-600">Create VIP Node</h1>
+        
+        <form id="vipForm" class="space-y-4">
+            <input type="text" id="cat" placeholder="Category (e.g. Forex Trading)" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none" required>
+            <input type="text" id="name" placeholder="Plan Name (e.g. CPT VIP)" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none" required>
+            <input type="number" id="amt" placeholder="Amount (e.g. 50000)" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none" required>
+            <input type="text" id="dur" placeholder="Duration (e.g. 1 Month)" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none" required>
+            <input type="number" id="roi" placeholder="ROI Payout (e.g. 110000)" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none" required>
+            <input type="text" id="guar" placeholder="Guarantee (e.g. 99%)" class="w-full p-4 bg-white/5 rounded-xl border border-white/10 outline-none" required>
+            
+            <button type="submit" class="w-full py-4 bg-yellow-600 text-black font-black uppercase rounded-xl mt-6">DEPLOY VIP NODE</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('vipForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "vip_plans"), {
+                    category: document.getElementById('cat').value,
+                    planName: document.getElementById('name').value,
+                    amount: Number(document.getElementById('amt').value),
+                    duration: document.getElementById('dur').value,
+                    roi: Number(document.getElementById('roi').value),
+                    guarantee: document.getElementById('guar').value,
+                    createdAt: serverTimestamp()
+                });
+                alert("VIP Node Deployed Successfully!");
+                e.target.reset();
+            } catch (err) { alert("Error: " + err.message); }
+        });
+    </script>
+</body>
+</html>
