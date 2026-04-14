@@ -235,62 +235,45 @@
     }
 
     document.getElementById('mainRegForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const email = document.getElementById('reg_email').value;
-        const pass = document.getElementById('reg_pass').value;
-        const confirm = document.getElementById('confirm_pass').value;
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const email = document.getElementById('reg_email').value;
+    const pass = document.getElementById('reg_pass').value;
 
-        // Security Validations
-        if (pass !== confirm) { 
-            showToast("Passwords do not match."); 
-            return; 
-        }
-        
-        if (!validatePassword(pass)) { 
-            showToast("Security Breach: Password does not meet node requirements."); 
-            return; 
-        }
+    btn.innerText = "SYNCHRONIZING...";
+    btn.disabled = true;
 
-        btn.innerText = "SYNCHRONIZING...";
-        btn.disabled = true;
+    try {
+        // 1. Create the user in Firebase Auth
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        const user = userCredential.user;
 
-        try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-            const user = userCredential.user;
+        // 2. THE FIX: Send verification WITHOUT custom redirect settings
+        // This avoids the "Firebase Dynamic Links" issue entirely
+        await sendEmailVerification(user);
 
-            const actionCodeSettings = {
-                url: 'https://competentraders.vercel.app/login.html', 
-                handleCodeInApp: true,
-            };
-            await sendEmailVerification(user, actionCodeSettings);
+        // 3. Save user data to Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            fullName: `${document.getElementById('f_name').value} ${document.getElementById('l_name').value}`.trim(),
+            email: email,
+            uid: user.uid,
+            balance: 0,
+            currency: document.getElementById('reg_currency').value,
+            registrationDate: new Date().toISOString()
+        });
 
-            // SAVE ALL DATA FOR DASHBOARD
-            await setDoc(doc(db, "users", user.uid), {
-                fullName: `${document.getElementById('f_name').value} ${document.getElementById('l_name').value} ${document.getElementById('o_name').value}`.trim(),
-                firstName: document.getElementById('f_name').value,
-                lastName: document.getElementById('l_name').value,
-                username: document.getElementById('reg_user').value,
-                phone: document.getElementById('reg_phone').value,
-                email: email,
-                uid: user.uid,
-                dob: document.getElementById('reg_dob').value,
-                gender: document.getElementById('reg_gender').value,
-                country: document.getElementById('reg_country').value,
-                currency: document.getElementById('reg_currency').value, 
-                balance: 0,
-                registrationDate: new Date().toISOString()
-            });
+        // 4. Show the overlay
+        document.getElementById('overlay').style.display = 'flex';
 
-            document.getElementById('overlay').style.display = 'flex';
+    } catch (error) {
+        console.error(error);
+        showToast("Error: " + error.message);
+        btn.innerText = "INITIALIZE SECURE ACCOUNT";
+        btn.disabled = false;
+    }
+});
 
-        } catch (error) {
-            console.error(error);
-            showToast("System Block: " + error.message);
-            btn.innerText = "INITIALIZE SECURE ACCOUNT";
-            btn.disabled = false;
-        }
-    });
+
 </script>
 
 
