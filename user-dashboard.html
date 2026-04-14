@@ -10,7 +10,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
         body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; margin: 0; overflow-x: hidden; }
 
-        /* HAMBURGER TRIGGER */
         .master-trigger {
             position: fixed; top: 12px; left: 12px; width: 45px; height: 45px;
             background: #3b82f6; color: white; border-radius: 10px;
@@ -18,7 +17,6 @@
             z-index: 2147483647 !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
         }
 
-        /* SIDEBAR */
         #master-sidebar {
             position: fixed; inset: 0; background: #0b0d12;
             z-index: 2147483646 !important; display: none;
@@ -33,7 +31,6 @@
             padding: 20px; display: flex; flex-direction: column; transition: 0.3s; 
         }
 
-        /* THE NON-STOP TICKER SYSTEM */
         .ticker-wrapper {
             position: fixed; bottom: 0; width: 100%; height: 50px;
             background: #131722; z-index: 1000; border-top: 1px solid #2d3343;
@@ -42,39 +39,32 @@
 
         .ticker-scroll {
             display: flex;
-            width: 200%; /* Enough room for the loop */
+            width: 200%;
             animation: marquee-nonstop 40s linear infinite;
         }
 
-        .ticker-item {
-            flex-shrink: 0;
-            width: 100%; /* Each set takes full width */
-        }
+        .ticker-item { flex-shrink: 0; width: 100%; }
 
         @keyframes marquee-nonstop {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
 
-        /* Force Widget to stay active */
         .tradingview-widget-container { width: 100% !important; pointer-events: none; }
     </style>
 </head>
 
-
 <body class="pb-24">
 
-    <button class="master-trigger" onclick="toggleMenu()">
+    <button class="master-trigger" id="menu-btn">
         <i class="fas fa-bars fa-lg"></i>
     </button>
-
-
 
     <div id="master-sidebar">
         <div class="p-6 bg-[#131722] border-b border-gray-800 flex flex-col min-h-screen">
             <div class="flex justify-between items-center mb-8">
                 <span class="font-black italic text-white uppercase text-xs">Competent<span class="text-blue-500">raders</span></span>
-                <button onclick="toggleMenu()" class="text-white text-3xl">&times;</button>
+                <button id="close-btn" class="text-white text-3xl">&times;</button>
             </div>
             
             <div class="bg-blue-600/10 border border-blue-500/20 p-5 rounded-[24px] mb-6">
@@ -91,157 +81,44 @@
                 </div>
             </div>
 
-
-
-
-
-
-<div class="space-y-3">
-                <a href="deposit.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-blue-600/20 transition-all group">
+            <div class="space-y-3">
+                <a href="deposit.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
-                            <i class="fas fa-wallet text-green-500 text-xs"></i>
-                        </div>
+                        <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center"><i class="fas fa-wallet text-green-500 text-xs"></i></div>
                         <span class="text-[11px] font-black uppercase tracking-widest text-white">Deposit Funds</span>
                     </div>
-                    <i class="fas fa-chevron-right text-[10px] text-gray-600 group-hover:text-white"></i>
                 </a>
-
-                <a href="withdraw.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-blue-600/20 transition-all group">
+                <a href="withdraw.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                            <i class="fas fa-money-bill-transfer text-orange-500 text-xs"></i>
-                        </div>
+                        <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center"><i class="fas fa-money-bill-transfer text-orange-500 text-xs"></i></div>
                         <span class="text-[11px] font-black uppercase tracking-widest text-white">Withdrawal</span>
                     </div>
-                    <i class="fas fa-chevron-right text-[10px] text-gray-600 group-hover:text-white"></i>
                 </a>
-
-                <a href="settings.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-blue-600/20 transition-all group">
+                <a href="football-predictions.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-gray-500/10 flex items-center justify-center">
-                            <i class="fas fa-cog text-gray-400 text-xs"></i>
-                        </div>
-                        <span class="text-[11px] font-black uppercase tracking-widest text-white">Settings</span>
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center"><i class="fas fa-futbol text-blue-500 text-xs"></i></div>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-white">Predictions</span>
                     </div>
-                    <i class="fas fa-chevron-right text-[10px] text-gray-600 group-hover:text-white"></i>
                 </a>
-
-                <a href="football-predictions.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-blue-600/20 transition-all group">
+                <a href="forex-trading.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                            <i class="fas fa-futbol text-blue-500 text-xs"></i>
-                        </div>
-                        <span class="text-[11px] font-black uppercase tracking-widest text-white">Accurate Football Prediction</span>
+                        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center"><i class="fas fa-globe-americas text-indigo-400 text-xs"></i></div>
+                        <span class="text-[11px] font-black uppercase tracking-widest text-white">Forex Trading</span>
                     </div>
-                    <i class="fas fa-chevron-right text-[10px] text-gray-600 group-hover:text-white"></i>
                 </a>
-
-
-            
-
-
-<a href="invest.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-green-600/20 transition-all group">
-    <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
-            <i class="fas fa-chart-line text-green-500 text-xs"></i>
-        </div>
-        <span class="text-[11px] font-black uppercase tracking-widest text-white">Investment Plans</span>
-    </div>
-    <i class="fas fa-chevron-right text-[10px] text-gray-600 group-hover:text-white"></i>
-</a>
-
-
-
-
-<a href="forex-trading.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-indigo-600/20 transition-all group">
-    <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center">
-            <i class="fas fa-globe-americas text-indigo-400 text-xs"></i>
-        </div>
-        <span class="text-[11px] font-black uppercase tracking-widest text-white">Forex Trading</span>
-    </div>
-    <i class="fas fa-chevron-right text-[10px] text-gray-600 group-hover:text-white"></i>
-</a>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
 
             <div class="mt-auto pt-10 pb-6">
-                <button onclick="handleLogout()" class="w-full py-4 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase text-[10px] tracking-widest border border-red-500/20">LOGOUT SESSION</button>
+                <button id="logout-btn" class="w-full py-4 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase text-[10px] tracking-widest border border-red-500/20">LOGOUT SESSION</button>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
 
     <div class="chart-section">
         <div id="tradingview_live" style="height: 100%; width: 100%;"></div>
     </div>
 
     <div class="p-4 mt-6">
-        <a href="" class="flex items-center gap-4 p-5 rounded-2xl border border-blue-500/20 bg-[#0f111a] shadow-xl">
-            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white"><i class="fas fa-chart-line"></i></div>
-    
-
-            </div>
-        </a>
-    </div>
-
-
-
-
-
-
-
-
-
-        <div class="px-4 py-2">
         <marquee class="text-[10px] font-black uppercase tracking-widest text-blue-400 bg-blue-600/5 py-2 rounded-lg mb-4">
             The ROI plan changes per what we know will work or pay out, kindly select your desire option and rest, the % determines the guarantee thank you.
         </marquee>
@@ -263,10 +140,6 @@
         </div>
     </div>
 
-
-
-
-
     <div class="ticker-wrapper">
         <div class="ticker-scroll">
             <div class="ticker-item">
@@ -275,22 +148,7 @@
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
                     { "symbols": [
                         {"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"FX_IDC:XAUUSD","title":"GOLD"},
-                        {"proName":"BINANCE:ETHUSDT","title":"ETH"},{"proName":"FX:EURUSD","title":"EUR/USD"},
-                        {"proName":"BINANCE:SOLUSDT","title":"SOL"},{"proName":"BINANCE:BNBUSDT","title":"BNB"},
-                        {"proName":"TVC:USOIL","title":"OIL"},{"proName":"BINANCE:DOGEUSDT","title":"DOGE"}
-                    ], "colorTheme": "dark", "isTransparent": true, "displayMode": "regular", "locale": "en" }
-                    </script>
-                </div>
-            </div>
-            <div class="ticker-item">
-                <div class="tradingview-widget-container">
-                    <div class="tradingview-widget-container__widget"></div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                    { "symbols": [
-                        {"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"FX_IDC:XAUUSD","title":"GOLD"},
-                        {"proName":"BINANCE:ETHUSDT","title":"ETH"},{"proName":"FX:EURUSD","title":"EUR/USD"},
-                        {"proName":"BINANCE:SOLUSDT","title":"SOL"},{"proName":"BINANCE:BNBUSDT","title":"BNB"},
-                        {"proName":"TVC:USOIL","title":"OIL"},{"proName":"BINANCE:DOGEUSDT","title":"DOGE"}
+                        {"proName":"FX:EURUSD","title":"EUR/USD"},{"proName":"BINANCE:SOLUSDT","title":"SOL"}
                     ], "colorTheme": "dark", "isTransparent": true, "displayMode": "regular", "locale": "en" }
                     </script>
                 </div>
@@ -298,52 +156,31 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, increment, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
-            authDomain: "competentraders-2efdc.firebaseapp.com",
-            projectId: "competentraders-2efdc",
-            storageBucket: "competentraders-2efdc.firebasestorage.app",
-            messagingSenderId: "150379227882",
-            appId: "1:150379227882:web:19d9c19805ef68b016c593"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                const docSnap = await getDoc(doc(db, "users", user.uid));
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.getElementById('user-name-display').innerText = data.fullName;
-                    document.getElementById('user-email-display').innerText = data.email;
-                    document.getElementById('user-initial').innerText = data.fullName.charAt(0).toUpperCase();
-                    document.getElementById('user-balance').innerText = (data.balance || 0).toFixed(2);
-                    const userCurr = data.currency || "₦";
-                    document.querySelectorAll('.curr').forEach(el => el.innerHTML = userCurr);
-                    document.querySelectorAll('.wa-link').forEach(link => {
-                        link.href = `https://wa.me/2349153258628?text=Hello, I am ${data.fullName}. I want to subscribe.`;
-                    });
-                }
-            } else { window.location.href = "login.html"; }
-        });
+    // Sidebar Fix
+    const sidebar = document.getElementById('master-sidebar');
+    document.getElementById('menu-btn').onclick = () => sidebar.classList.add('active');
+    document.getElementById('close-btn').onclick = () => sidebar.classList.remove('active');
+    document.getElementById('logout-btn').onclick = () => signOut(auth).then(() => window.location.href = "login.html");
 
-        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
-        window.toggleMenu = () => document.getElementById('master-sidebar').classList.toggle('active');
-
-
-
-    // -- ADD THIS INSIDE YOUR SCRIPT --
-
-    const roiContainer = document.getElementById('roi-plans-container');
-
-    // MODAL LOGIC (Zero "This Page Says")
+    // Modal Controller
     const showModal = (type, title, text, onConfirm = null) => {
         const modal = document.getElementById('custom-modal');
         const icon = document.getElementById('modal-icon');
@@ -376,35 +213,48 @@
         mBtns.appendChild(b2);
     };
 
-    // DEBIT LOGIC
+    // Global Access for HTML
     window.buyROI = async (cat, price, payout, duration) => {
         const user = auth.currentUser;
         if(!user) return;
-
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
         const bal = userSnap.data().balance || 0;
         const cleanPrice = parseFloat(price.replace(/[^0-9.]/g, ''));
 
         if(bal < cleanPrice) {
-            showModal('insufficient', 'Empty Nest', 'Your balance is too low for this ROI Node. Kindly top up.');
+            showModal('insufficient', 'Empty Nest', 'Your balance is too low. Kindly top up.');
             return;
         }
 
-        showModal('confirm', 'Initialize Node?', `Authorize debit of ${price} for ${cat} Node?`, async () => {
-            import { updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        showModal('confirm', 'Initialize Node?', `Authorize debit of ${price} for ${cat}?`, async () => {
             await updateDoc(userRef, { balance: increment(-cleanPrice) });
             showModal('success', 'Node Active!', `Growth started. Expected ROI after ${duration}.`);
-            
-            // Notification to WhatsApp
-            const msg = `ROI Subscription: ${cat}\nAmt: ${price}\nDuration: ${duration}\nUser: ${userSnap.data().fullName}`;
+            const msg = `ROI Subscription: ${cat}\nAmt: ${price}\nUser: ${userSnap.data().fullName}`;
             setTimeout(() => window.location.href = `https://wa.me/2349153258628?text=${encodeURIComponent(msg)}`, 3000);
         });
     };
 
-    // LISTEN FOR LIVE ROI PLANS
-    import { collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    // User State Listener
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            onSnapshot(doc(db, "users", user.uid), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('user-name-display').innerText = data.fullName;
+                    document.getElementById('user-email-display').innerText = data.email;
+                    document.getElementById('user-initial').innerText = data.fullName.charAt(0).toUpperCase();
+                    document.getElementById('user-balance').innerText = (data.balance || 0).toFixed(2);
+                    const userCurr = data.currency || "₦";
+                    document.querySelectorAll('.curr').forEach(el => el.innerHTML = userCurr);
+                }
+            });
+        } else { window.location.href = "login.html"; }
+    });
+
+    // ROI Listener (Fixed)
     onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
+        const roiContainer = document.getElementById('roi-plans-container');
         roiContainer.innerHTML = "";
         snap.forEach(d => {
             const plan = d.data();
@@ -415,7 +265,7 @@
                         <span class="text-[9px] font-black uppercase text-green-500">${plan.guarantee} Guarantee</span>
                     </div>
                     <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Growth Target</p>
-                    <h3 class="text-2xl font-black text-white mb-2"><span class="curr"></span>${plan.payout} <span class="text-[10px] text-gray-500 font-normal">ROI</span></h3>
+                    <h3 class="text-2xl font-black text-white mb-2"><span class="curr"></span>${plan.payout}</h3>
                     <div class="flex items-center gap-4 text-[10px] text-gray-400 mb-6">
                         <span><i class="far fa-clock"></i> ${plan.duration}</span>
                         <span><i class="fas fa-microchip"></i> Node Active</span>
@@ -427,24 +277,14 @@
                 </div>`;
         });
     });
+</script>
 
-
-    </script>
-
-
-
-
-
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-    <script>
-        new TradingView.widget({
-            "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1",
-            "theme": "dark", "container_id": "tradingview_live"
-
-
-
-
-        });
-    </script>
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script>
+    new TradingView.widget({
+        "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1",
+        "theme": "dark", "container_id": "tradingview_live"
+    });
+</script>
 </body>
 </html>
