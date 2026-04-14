@@ -159,7 +159,6 @@
     </div>
 
 
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -177,9 +176,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const beep = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
-    // Global Modal Function
     window.showModal = (title, text, confirm = false, callback = null) => {
         const m = document.getElementById('custom-modal');
         if(!m) return;
@@ -191,8 +188,9 @@
         
         if(confirm) {
             const b = document.createElement('button');
-            b.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px]";
-            b.innerText = "CONFIRM ACCESS";
+            b.id = "confirm-btn";
+            b.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px] flex items-center justify-center gap-2";
+            b.innerHTML = "CONFIRM ACCESS";
             b.onclick = callback;
             btns.appendChild(b);
         }
@@ -203,19 +201,13 @@
         btns.appendChild(c);
     };
 
-    // FIXED BUY FUNCTION
     window.buyROI = async (cat, price, payout) => {
         const user = auth.currentUser;
-        if(!user) {
-            window.location.href = "login.html";
-            return;
-        }
+        if(!user) { window.location.href = "login.html"; return; }
         
         const userRef = doc(db, "users", user.uid);
         const userSnap = await getDoc(userRef);
         const uData = userSnap.data();
-        
-        // Ensure price is a clean number
         const amt = Number(String(price).replace(/[^0-9.]/g, ''));
 
         if(uData.balance < amt) { 
@@ -224,11 +216,14 @@
         }
 
         window.showModal("CONFIRM NODE", `Subscribe to ${cat} for ${price}? Your balance will be debited.`, true, async () => {
-            try {
-                // 1. UPDATE BALANCE
-                await updateDoc(userRef, { balance: increment(-amt) });
+            const btn = document.getElementById('confirm-btn');
+            // START LOADING SPINNER
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PROCESSING...`;
 
-                // 2. LOG TO DATABASE (Simplified object to avoid errors)
+            try {
+                // 1. UPDATE DATABASE
+                await updateDoc(userRef, { balance: increment(-amt) });
                 await addDoc(collection(db, "active_investments"), {
                     clientId: user.uid,
                     clientName: uData.fullName || "User",
@@ -239,24 +234,28 @@
                     createdAt: new Date().toISOString()
                 });
 
-                // 3. SUCCESS MESSAGE
-                window.showModal("SUCCESS", "Plan Activated! Your account has been debited. Redirecting to support...");
-                
-                // 4. FORCE REDIRECT AFTER 3 SECONDS
+                // 2. WAIT FOR SPINNER EFFECT (2 Seconds)
                 setTimeout(() => {
-                    window.location.replace("https://tawk.to/chat/69d36adc9ba1621c3a200a7d/default");
-                }, 3000);
+                    window.showModal("SUCCESS", `Plan Activated! ${price} has been debited. Connecting to WhatsApp support...`);
+                    
+                    // 3. WHATSAPP REDIRECT
+                    const msg = encodeURIComponent(`Hello Admin, I just activated the ${cat} plan for ${price}. My registered name is ${uData.fullName}. Please guide me on the next steps.`);
+                    const whatsappUrl = `https://wa.me/2349157023248?text=${msg}`;
+
+                    setTimeout(() => {
+                        window.location.href = whatsappUrl;
+                    }, 3000);
+                }, 2000);
 
             } catch (error) {
                 console.error("Firebase Error:", error);
-                window.showModal("TRANSACTION FAILED", "Check your internet or Firebase rules.");
+                window.showModal("TRANSACTION FAILED", "Check your connection and try again.");
             }
         });
     };
 
     onAuthStateChanged(auth, async (user) => {
         if (user) {
-            // Stats Sync
             onSnapshot(doc(db, "users", user.uid), (s) => {
                 const d = s.data();
                 if(d) {
@@ -264,39 +263,34 @@
                     document.getElementById('user-email-display').innerText = d.email;
                     document.getElementById('user-initial').innerText = d.fullName.charAt(0).toUpperCase();
                     document.getElementById('user-balance').innerText = (d.balance || 0).toFixed(2);
-                    document.querySelectorAll('.curr').forEach(el => el.innerHTML = d.currency || "₦");
+                    document.querySelectorAll('.curr').forEach(el => el.innerHTML = d.currency || "");
                 }
             });
 
-            // Plans Loader
-
-            // Locate this part in your User Dashboard script:
-onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
-    const cont = document.getElementById('roi-plans-container');
-    if(!cont) return;
-    cont.innerHTML = "";
-    snap.forEach(d => {
-        const p = d.data();
-        cont.innerHTML += `
-            <div class="plan-card">
-                <p class="text-[10px] font-bold text-gray-500 uppercase">${p.category}</p>
-                <h3 class="text-2xl font-black text-white"><span class="curr"></span>${p.price}</h3>
-                
-                <p class="text-[9px] text-blue-500 font-bold mt-1 uppercase">
-                    ROI: <span class="curr"></span>${p.payout} | ${p.duration} | ${p.guarantee}
-                </p>
-                
-                <button onclick="window.buyROI('${p.category}', '${p.price}', '${p.payout}')" class="w-full py-4 bg-blue-600 rounded-xl font-black text-[10px] uppercase mt-4">INITIALIZE ACCESS</button>
-            </div>`;
-    });
-});
-
+            onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
+                const cont = document.getElementById('roi-plans-container');
+                if(!cont) return;
+                cont.innerHTML = "";
+                snap.forEach(d => {
+                    const p = d.data();
+                    cont.innerHTML += `
+                        <div class="plan-card">
+                            <p class="text-[10px] font-bold text-gray-500 uppercase">${p.category}</p>
+                            <h3 class="text-2xl font-black text-white"><span class="curr"></span>${p.price}</h3>
+                            <p class="text-[9px] text-blue-500 font-bold mt-1 uppercase">
+                                ROI: <span class="curr"></span>${p.payout} | ${p.duration} | ${p.guarantee}
+                            </p>
+                            <button onclick="window.buyROI('${p.category}', '${p.price}', '${p.payout}')" class="w-full py-4 bg-blue-600 rounded-xl font-black text-[10px] uppercase mt-4">INITIALIZE ACCESS</button>
+                        </div>`;
+                });
+            });
         } else { window.location.href = "login.html"; }
     });
 
     window.toggleMenu = () => document.getElementById('master-sidebar').classList.toggle('active');
     window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
 </script>
+
 
 
 
