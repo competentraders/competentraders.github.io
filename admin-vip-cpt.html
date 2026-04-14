@@ -2,101 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Terminal | VIP Deployment</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; }
-        .glass-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); transition: 0.3s; }
-        .glass-input:focus { border-color: #d4af37; background: rgba(212, 175, 55, 0.05); outline: none; }
-        .preview-card { background: linear-gradient(145deg, #0f111a 0%, #06070a 100%); border: 1px solid rgba(212, 175, 55, 0.2); }
+        body { background: #000; color: white; font-family: 'Outfit', sans-serif; }
+        .glass-input { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); outline: none; }
+        #toast {
+            visibility: hidden; min-width: 250px; background: #d4af37; color: #000;
+            text-align: center; border-radius: 50px; padding: 16px; position: fixed;
+            left: 50%; bottom: 30px; transform: translateX(-50%); font-weight: 900; font-size: 10px;
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
-<body class="p-4 md:p-10">
-
-    <div class="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
-        
-        <div class="bg-[#0f111a] p-8 rounded-[40px] border border-white/5 shadow-2xl">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-10 h-10 rounded-2xl bg-yellow-600/10 flex items-center justify-center text-yellow-600">
-                    <i class="fas fa-terminal"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-black uppercase tracking-tight">VIP <span class="text-yellow-600">Deployment</span></h1>
-                    <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Global Node Configuration</p>
-                </div>
-            </div>
-            
-            <form id="vipForm" class="space-y-4">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[9px] font-black text-gray-500 uppercase ml-2 mb-1 block">Category</label>
-                        <input type="text" id="cat" placeholder="Forex Trading" class="glass-input w-full p-4 rounded-2xl text-sm font-bold" required oninput="updatePreview()">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-gray-500 uppercase ml-2 mb-1 block">Plan Name</label>
-                        <input type="text" id="name" placeholder="CPT VIP" class="glass-input w-full p-4 rounded-2xl text-sm font-bold" required oninput="updatePreview()">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[9px] font-black text-gray-500 uppercase ml-2 mb-1 block">Investment Amount (₦)</label>
-                    <input type="number" id="amt" placeholder="50000" class="glass-input w-full p-4 rounded-2xl text-sm font-bold text-yellow-600" required oninput="updatePreview()">
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[9px] font-black text-gray-500 uppercase ml-2 mb-1 block">Duration</label>
-                        <input type="text" id="dur" placeholder="1 Month" class="glass-input w-full p-4 rounded-2xl text-sm font-bold" required oninput="updatePreview()">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-gray-500 uppercase ml-2 mb-1 block">Guarantee %</label>
-                        <input type="text" id="guar" placeholder="99.9%" class="glass-input w-full p-4 rounded-2xl text-sm font-bold" required oninput="updatePreview()">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-[9px] font-black text-gray-500 uppercase ml-2 mb-1 block">ROI Payout (₦)</label>
-                    <input type="number" id="roi" placeholder="110000" class="glass-input w-full p-4 rounded-2xl text-sm font-bold text-green-500" required oninput="updatePreview()">
-                </div>
-                
-                <button type="submit" id="deployBtn" class="w-full py-5 bg-yellow-600 text-black font-black uppercase text-xs rounded-2xl mt-6 shadow-xl shadow-yellow-600/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
-                    <i class="fas fa-paper-plane"></i> DEPLOY VIP NODE
-                </button>
-            </form>
-        </div>
-
-        <div class="hidden lg:block sticky top-10 h-fit">
-            <p class="text-[10px] font-black text-gray-500 uppercase mb-4 tracking-[0.3em] text-center">Live Terminal Preview</p>
-            <div class="preview-card p-10 rounded-[48px] shadow-2xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-6 opacity-5 text-8xl text-yellow-600"><i class="fas fa-crown"></i></div>
-                
-                <p id="pre-cat" class="text-yellow-600 font-black text-[10px] uppercase tracking-widest mb-2">CATEGORY</p>
-                <h2 id="pre-name" class="text-4xl font-black uppercase mb-10">PLAN NAME</h2>
-                
-                <div class="space-y-6">
-                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
-                        <span class="text-[10px] text-gray-500 font-black uppercase">Capital</span>
-                        <span class="text-xl font-black">₦<span id="pre-amt">0</span></span>
-                    </div>
-                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
-                        <span class="text-[10px] text-gray-500 font-black uppercase">Term</span>
-                        <span id="pre-dur" class="text-sm font-black uppercase">---</span>
-                    </div>
-                    <div class="flex justify-between items-end border-b border-white/5 pb-3">
-                        <span class="text-[10px] text-gray-500 font-black uppercase">Net Return</span>
-                        <span class="text-xl font-black text-green-500">₦<span id="pre-roi">0</span></span>
-                    </div>
-                    <div class="flex justify-between items-end">
-                        <span class="text-[10px] text-gray-500 font-black uppercase">Security</span>
-                        <span id="pre-guar" class="text-sm font-black text-yellow-600">---</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+<body class="p-10">
+    <div id="toast">VIP NODE DEPLOYED</div>
+    <div class="max-w-xl mx-auto bg-[#0f111a] p-10 rounded-[40px] border border-white/5">
+        <h1 class="text-xl font-black uppercase text-yellow-600 mb-8 tracking-widest">VIP Command Center</h1>
+        <form id="vipForm" class="space-y-4">
+            <input type="text" id="cat" placeholder="Category" class="glass-input w-full p-4 rounded-2xl" required>
+            <input type="text" id="name" placeholder="Plan Name" class="glass-input w-full p-4 rounded-2xl" required>
+            <input type="number" id="amt" placeholder="Amount" class="glass-input w-full p-4 rounded-2xl" required>
+            <input type="text" id="dur" placeholder="Duration" class="glass-input w-full p-4 rounded-2xl" required>
+            <input type="number" id="roi" placeholder="ROI Payout" class="glass-input w-full p-4 rounded-2xl" required>
+            <input type="text" id="guar" placeholder="Guarantee" class="glass-input w-full p-4 rounded-2xl" required>
+            <button type="submit" id="btn" class="w-full py-5 bg-yellow-600 text-black font-black uppercase text-xs rounded-2xl">Deploy Node</button>
+        </form>
     </div>
 
     <script type="module">
@@ -115,22 +48,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- PREVIEW LOGIC ---
-        window.updatePreview = () => {
-            document.getElementById('pre-cat').innerText = document.getElementById('cat').value || "CATEGORY";
-            document.getElementById('pre-name').innerText = document.getElementById('name').value || "PLAN NAME";
-            document.getElementById('pre-amt').innerText = Number(document.getElementById('amt').value).toLocaleString();
-            document.getElementById('pre-dur').innerText = document.getElementById('dur').value || "---";
-            document.getElementById('pre-roi').innerText = Number(document.getElementById('roi').value).toLocaleString();
-            document.getElementById('pre-guar').innerText = document.getElementById('guar').value || "---";
-        };
-
         document.getElementById('vipForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('deployBtn');
+            const btn = document.getElementById('btn');
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> SYNCING TO CLOUD...`;
-
             try {
                 await addDoc(collection(db, "vip_plans"), {
                     category: document.getElementById('cat').value,
@@ -141,17 +62,11 @@
                     guarantee: document.getElementById('guar').value,
                     createdAt: serverTimestamp()
                 });
-                
-                alert("SUCCESS: VIP Node active on client terminals.");
+                const t = document.getElementById("toast");
+                t.className = "show";
+                setTimeout(() => t.className = "", 3000);
                 e.target.reset();
-                updatePreview();
-            } catch (err) { 
-                console.error(err);
-                alert("CRITICAL ERROR: " + err.message); 
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i class="fas fa-paper-plane"></i> DEPLOY VIP NODE`;
-            }
+            } catch (err) { console.error(err); } finally { btn.disabled = false; }
         });
     </script>
 </body>

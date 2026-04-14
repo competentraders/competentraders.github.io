@@ -3,104 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIP ELITE TERMINAL | Competentraders</title>
+    <title>CPT VIP TERMINAL | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        :root { --cpt-gold: #d4af37; }
+        body { font-family: 'Outfit', sans-serif; background: #000; color: white; margin: 0; overflow-x: hidden; }
         
-        :root { --gold: #d4af37; --dark-gold: #996515; }
-        body { font-family: 'Outfit', sans-serif; background: #000000; color: white; margin: 0; overflow-x: hidden; }
-        
-        .premium-glass { 
+        .cpt-glass { 
             background: linear-gradient(145deg, rgba(20,20,25,0.9) 0%, rgba(5,5,5,1) 100%);
             border: 1px solid rgba(212, 175, 55, 0.15);
             backdrop-filter: blur(20px);
         }
         
-        .gold-shimmer {
-            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent);
-            background-size: 200% 100%;
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-
-        .btn-elite {
-            background: linear-gradient(to right, var(--dark-gold), var(--gold));
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        .cpt-btn {
+            background: linear-gradient(to right, #996515, #d4af37);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .btn-elite:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4); }
-        
-        .footer-line { border-top: 1px solid rgba(255,255,255,0.05); }
+
+        #cpt-toast {
+            visibility: hidden; min-width: 280px; background: var(--cpt-gold); color: #000;
+            text-align: center; border-radius: 50px; padding: 16px; position: fixed;
+            z-index: 10000; left: 50%; bottom: 50px; transform: translateX(-50%);
+            font-weight: 900; text-transform: uppercase; font-size: 11px; letter-spacing: 2px;
+        }
+        #cpt-toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 50px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 50px; opacity: 1;} to {bottom: 0; opacity: 0;} }
     </style>
 </head>
-<body class="bg-black">
+<body>
+
+    <div id="cpt-toast"></div>
 
     <nav class="p-6 flex justify-between items-center relative z-10">
         <a href="user-dashboard.html" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition">
             <i class="fas fa-chevron-left text-gray-400"></i>
         </a>
-        <div class="text-[10px] font-black uppercase tracking-[0.5em] text-yellow-600/50">SECURE VIP ENCRYPTED</div>
-        <div class="w-12 h-12"></div> </nav>
+        <div class="text-[10px] font-black uppercase tracking-[0.5em] text-yellow-600/50">CPT SECURE ACCESS</div>
+        <div class="w-12 h-12"></div>
+    </nav>
 
     <div class="flex flex-col items-center justify-center mt-4 mb-16 px-6">
-        <div class="relative">
-            <div class="absolute inset-0 blur-3xl bg-yellow-600/10 rounded-full"></div>
-            <img src="vip.png" alt="VIP LOGO" class="h-32 md:h-48 w-auto relative z-10 drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
-        </div>
-        <h1 class="mt-8 text-4xl md:text-6xl font-black uppercase tracking-tighter italic text-center">Elite <span class="text-yellow-600">Investments</span></h1>
-        <p class="mt-4 text-[10px] md:text-xs font-bold uppercase tracking-[0.6em] text-gray-500 text-center max-w-xs leading-loose">Reserved for High-Net-Worth Portfolios and Institutional Assets</p>
+        <img src="vip.png" alt="CPT VIP" class="h-32 md:h-48 w-auto relative z-10 drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
+        <h1 class="mt-8 text-4xl font-black uppercase tracking-tighter italic text-center text-white">CPT <span class="text-yellow-600">VIP</span></h1>
+        <p class="mt-2 text-[10px] font-bold uppercase tracking-[0.4em] text-gray-500">Official Competentraders Node</p>
     </div>
 
     <main id="vip-container" class="max-w-xl mx-auto px-6 space-y-10 pb-24">
-        <div class="flex flex-col items-center py-20">
-            <i class="fas fa-circle-notch fa-spin text-yellow-600 text-3xl"></i>
-            <p class="mt-4 text-[10px] font-bold uppercase tracking-widest text-gray-600">Accessing Sovereign Wealth Nodes...</p>
-        </div>
+        <div class="text-center py-20 font-black text-gray-700 uppercase tracking-widest text-xs">Synchronizing CPT Servers...</div>
     </main>
 
-    <footer class="footer-line bg-[#050505] pt-16 pb-10 px-8">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div>
-                <h3 class="text-yellow-600 font-black uppercase text-sm mb-6 tracking-widest">Competentraders Elite</h3>
-                <p class="text-gray-500 text-xs leading-relaxed uppercase font-bold tracking-tighter">
-                    Providing institutional-grade trading infrastructure for global investors since 2018. Secure, encrypted, and guaranteed.
-                </p>
-            </div>
-            <div>
-                <h3 class="text-white font-black uppercase text-sm mb-6 tracking-widest">Compliance</h3>
-                <ul class="text-gray-500 text-[10px] font-bold uppercase space-y-3">
-                    <li><i class="fas fa-shield-check text-yellow-600 mr-2"></i> Anti-Money Laundering (AML)</li>
-                    <li><i class="fas fa-file-contract text-yellow-600 mr-2"></i> Private Equity Terms</li>
-                    <li><i class="fas fa-user-secret text-yellow-600 mr-2"></i> Data Anonymity Protocol</li>
-                </ul>
-            </div>
-            <div class="text-center md:text-right">
-                <div class="flex justify-center md:justify-end gap-6 mb-6">
-                    <i class="fab fa-cc-visa text-gray-700 text-2xl"></i>
-                    <i class="fab fa-cc-mastercard text-gray-700 text-2xl"></i>
-                    <i class="fab fa-bitcoin text-gray-700 text-2xl"></i>
-                </div>
-                <p class="text-[9px] text-gray-600 font-bold uppercase tracking-widest">© 2026 Competentraders Global Inc.</p>
-            </div>
-        </div>
-    </footer>
-
     <div id="vip-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl hidden items-center justify-center p-6 z-[9999]">
-        <div class="premium-glass w-full max-w-sm p-10 rounded-[40px] text-center shadow-2xl">
-            <div class="w-20 h-20 bg-yellow-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fas fa-crown text-3xl text-yellow-600"></i>
+        <div class="cpt-glass w-full max-w-sm p-10 rounded-[40px] text-center shadow-2xl">
+            <div id="modal-icon-box" class="w-16 h-16 bg-yellow-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-crown text-2xl text-yellow-600"></i>
             </div>
-            <h2 id="modal-title" class="text-2xl font-black uppercase mb-3 tracking-tighter italic"></h2>
+            <h2 id="modal-title" class="text-2xl font-black uppercase mb-3 tracking-tighter italic">CPT PROTOCOL</h2>
             <p id="modal-desc" class="text-gray-400 text-[10px] mb-10 uppercase tracking-[0.2em] leading-relaxed"></p>
-            <div class="space-y-3">
-                <button id="confirm-vip-btn" class="w-full py-5 btn-elite text-black rounded-2xl font-black uppercase text-xs tracking-[0.2em]">Execute Initialization</button>
-                <button onclick="closeModal()" class="w-full py-5 text-gray-500 font-black uppercase text-[10px] tracking-widest">Decline Protocol</button>
+            <div id="modal-actions" class="space-y-3">
+                <button id="confirm-vip-btn" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs">AGREE & INITIALIZE CPT PLAN</button>
+                <button onclick="closeModal()" class="w-full py-5 text-gray-500 font-black uppercase text-[10px]">CANCEL</button>
             </div>
         </div>
     </div>
+
+    <footer class="border-t border-white/5 bg-[#050505] pt-16 pb-10 px-8 text-center">
+        <h3 class="text-yellow-600 font-black uppercase text-sm mb-4 tracking-widest">Competentraders (CPT)</h3>
+        <p class="text-gray-600 text-[9px] font-bold uppercase tracking-widest">© 2026 Competentraders Global. All Rights Reserved.</p>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
@@ -120,6 +93,13 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
+        const toast = document.getElementById("cpt-toast");
+        window.showToast = (msg) => {
+            toast.innerText = msg;
+            toast.className = "show";
+            setTimeout(() => { toast.className = ""; }, 3000);
+        };
+
         window.closeModal = () => document.getElementById('vip-modal').classList.replace('flex', 'hidden');
 
         onAuthStateChanged(auth, (user) => {
@@ -131,39 +111,15 @@
                 snap.forEach(d => {
                     const p = d.data();
                     cont.innerHTML += `
-                        <div class="premium-glass p-10 rounded-[48px] relative overflow-hidden group">
-                            <div class="gold-shimmer absolute top-0 left-0 w-full h-1"></div>
-                            
-                            <div class="flex justify-between items-start mb-10">
-                                <div>
-                                    <p class="text-yellow-600 font-black text-[10px] uppercase tracking-[0.4em] mb-2">${p.category}</p>
-                                    <h2 class="text-4xl font-black uppercase italic tracking-tighter">${p.planName}</h2>
-                                </div>
-                                <i class="fas fa-shield-check text-yellow-600/20 text-3xl"></i>
+                        <div class="cpt-glass p-10 rounded-[40px] relative">
+                            <h2 class="text-3xl font-black uppercase italic mb-8">${p.planName}</h2>
+                            <div class="space-y-4 mb-10 text-[11px] font-bold uppercase tracking-widest text-gray-400">
+                                <div class="flex justify-between font-black"><span>INVESTMENT</span><span class="text-white">₦${p.amount.toLocaleString()}</span></div>
+                                <div class="flex justify-between font-black"><span>DURATION</span><span class="text-white">${p.duration}</span></div>
+                                <div class="flex justify-between font-black"><span>RETURN</span><span class="text-green-500">₦${p.roi.toLocaleString()}</span></div>
+                                <div class="flex justify-between font-black"><span>GUARANTEE</span><span class="text-yellow-600">${p.guarantee}</span></div>
                             </div>
-                            
-                            <div class="grid grid-cols-2 gap-y-8 mb-12">
-                                <div>
-                                    <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Capital Investment</p>
-                                    <p class="text-xl font-black italic tracking-tighter">₦${Number(p.amount).toLocaleString()}</p>
-                                </div>
-                                <div>
-                                    <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Node Term</p>
-                                    <p class="text-xl font-black uppercase italic tracking-tighter">${p.duration}</p>
-                                </div>
-                                <div>
-                                    <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Projected ROI</p>
-                                    <p class="text-xl font-black text-green-500 italic tracking-tighter">₦${Number(p.roi).toLocaleString()}</p>
-                                </div>
-                                <div>
-                                    <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest mb-1">Risk Protocol</p>
-                                    <p class="text-xl font-black text-yellow-600 italic tracking-tighter">${p.guarantee} Guaranteed</p>
-                                </div>
-                            </div>
-
-                            <button onclick="triggerPurchase('${d.id}', '${p.planName}', ${p.amount}, '${p.duration}')" class="w-full py-6 btn-elite text-black rounded-[20px] font-black uppercase text-[11px] tracking-[0.3em]">
-                                Engage VIP Protocol
-                            </button>
+                            <button onclick="triggerPurchase('${d.id}', '${p.planName}', ${p.amount}, '${p.duration}')" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs">INITIALIZE CPT VIP</button>
                         </div>
                     `;
                 });
@@ -173,46 +129,37 @@
         window.triggerPurchase = (id, name, amt, duration) => {
             const modal = document.getElementById('vip-modal');
             modal.classList.replace('hidden', 'flex');
-            document.getElementById('modal-title').innerText = name;
-            document.getElementById('modal-desc').innerText = `Initialize VIP Node with ₦${amt.toLocaleString()}. Encryption will be applied to this transaction for ${duration}.`;
-            
+            document.getElementById('confirm-vip-btn').classList.remove('hidden');
+            document.getElementById('modal-desc').innerText = `Syncing ${name} with your CPT account for ₦${amt.toLocaleString()}.`;
             document.getElementById('confirm-vip-btn').onclick = () => processVIP(name, amt, duration);
         };
 
         async function processVIP(name, amt, duration) {
             const user = auth.currentUser;
             const btn = document.getElementById('confirm-vip-btn');
-            const uRef = doc(db, "users", user.uid);
-            const uSnap = await getDoc(uRef);
+            const uSnap = await getDoc(doc(db, "users", user.uid));
             
             if(uSnap.data().balance < amt) {
-                alert("ACCESS DENIED: Insufficient liquidity in terminal.");
+                document.getElementById('modal-title').innerText = "CPT ERROR";
+                document.getElementById('modal-desc').innerText = "Insufficient balance for this CPT Plan.";
+                btn.classList.add('hidden');
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> AUTHORIZING...`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> CONNECTING...`;
 
             try {
-                await updateDoc(uRef, { balance: increment(-amt) });
-                await addDoc(collection(db, "active_investments"), {
-                    clientId: user.uid,
-                    plan: name,
-                    amount: amt,
-                    type: "VIP-ELITE",
-                    status: "active",
-                    createdAt: new Date().toISOString()
-                });
-
+                await updateDoc(doc(db, "users", user.uid), { balance: increment(-amt) });
+                await addDoc(collection(db, "active_investments"), { clientId: user.uid, plan: name, type: "CPT-VIP", createdAt: new Date().toISOString() });
+                showToast("CPT PLAN ACTIVE");
                 setTimeout(() => {
-                    const msg = encodeURIComponent(`[VIP INITIALIZED]\nPlan: ${name}\nPrincipal: ₦${amt.toLocaleString()}\nTerm: ${duration}\nClient ID: ${user.uid}\n\nPlease confirm node synchronization.`);
-                    window.location.href = `https://wa.me/2349153258628?text=${msg}`;
+                    window.location.href = `https://wa.me/2349153258628?text=${encodeURIComponent("CPT VIP ACTIVATED:\nPlan: "+name)}`;
                 }, 2000);
-
             } catch (e) {
-                alert("PROTOCOL ERROR: Handshake failed.");
-                btn.disabled = false;
-                btn.innerHTML = "Execute Initialization";
+                document.getElementById('modal-title').innerText = "CPT ERROR";
+                document.getElementById('modal-desc').innerText = "CPT Server handshake failed.";
+                btn.classList.add('hidden');
             }
         }
     </script>
