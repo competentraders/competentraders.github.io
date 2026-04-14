@@ -17,7 +17,7 @@
             z-index: 2147483647 !important; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
         }
 
-        /* FIXED SLIDING SIDEBAR (80% Width) */
+        /* SLIDING SIDEBAR - 80% WIDTH */
         #master-sidebar {
             position: fixed; top: 0; left: -100%; width: 80%; height: 100%;
             background: #0b0d12; z-index: 2147483646 !important;
@@ -28,8 +28,13 @@
         #master-sidebar.active { left: 0; box-shadow: 50px 0 100px rgba(0,0,0,0.9); }
 
         .chart-section { height: 45vh; width: 100%; border-bottom: 2px solid #1e222d; }
-        .plan-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 20px; padding: 20px; transition: 0.3s; }
+        
+        .plan-card { 
+            background: #0f111a; border: 1px solid #1e293b; border-radius: 20px; 
+            padding: 20px; display: flex; flex-direction: column; transition: 0.3s; 
+        }
 
+        /* TICKER SYSTEM */
         .ticker-wrapper {
             position: fixed; bottom: 0; width: 100%; height: 50px;
             background: #131722; z-index: 1000; border-top: 1px solid #2d3343;
@@ -38,7 +43,6 @@
         .ticker-scroll { display: flex; width: 200%; animation: marquee-nonstop 40s linear infinite; }
         .ticker-item { flex-shrink: 0; width: 100%; }
         @keyframes marquee-nonstop { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        .tradingview-widget-container { width: 100% !important; pointer-events: none; }
     </style>
 </head>
 <body class="pb-24">
@@ -47,18 +51,17 @@
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/69d36adc9ba1621c3a200a7d/default';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
+    s1.async=true; s1.src='https://embed.tawk.to/69d36adc9ba1621c3a200a7d/default';
+    s1.charset='UTF-8'; s1.setAttribute('crossorigin','*');
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
+
     <button class="master-trigger" onclick="toggleMenu()">
         <i class="fas fa-bars fa-lg"></i>
     </button>
 
-    <div id="master-sidebar" class="flex">
+    <div id="master-sidebar">
         <div class="p-6 bg-[#131722] border-b border-gray-800 flex flex-col min-h-screen">
             <div class="flex justify-between items-center mb-8">
                 <span class="font-black italic text-white uppercase text-xs">Competent<span class="text-blue-500">raders</span></span>
@@ -69,39 +72,50 @@
                 <div class="flex items-center gap-4 mb-5">
                     <div id="user-initial" class="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center font-black text-xl text-white">?</div>
                     <div>
-                        <p id="user-name-display" class="text-sm font-black uppercase tracking-tight text-white">Loading...</p>
+                        <p id="user-name-display" class="text-sm font-black uppercase text-white">Loading...</p>
                         <p id="user-email-display" class="text-[9px] text-gray-500 font-bold"></p>
                     </div>
                 </div>
                 <div class="pt-4 border-t border-white/5">
-                    <p class="text-[9px] text-gray-500 font-black uppercase tracking-widest mb-1">Balance</p>
+                    <p class="text-[9px] text-gray-500 font-black uppercase mb-1">Balance</p>
                     <h2 class="text-2xl font-black text-white"><span class="curr"></span><span id="user-balance">0.00</span></h2>
                 </div>
             </div>
 
             <div class="space-y-3">
-                <a href="deposit.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center"><i class="fas fa-wallet text-green-500 text-xs"></i></div>
-                        <span class="text-[11px] font-black uppercase text-white">Deposit Funds</span>
-                    </div>
+                <a href="deposit.html" class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center"><i class="fas fa-wallet text-green-500 text-xs"></i></div>
+                    <span class="text-[11px] font-black uppercase text-white">Deposit Funds</span>
                 </a>
-                <a href="withdraw.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center"><i class="fas fa-money-bill-transfer text-orange-500 text-xs"></i></div>
-                        <span class="text-[11px] font-black uppercase text-white">Withdrawal</span>
-                    </div>
+
+                <a href="withdraw.html" class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center"><i class="fas fa-money-bill-transfer text-orange-500 text-xs"></i></div>
+                    <span class="text-[11px] font-black uppercase text-white">Withdrawal</span>
                 </a>
-                <a href="invest.html" class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center"><i class="fas fa-chart-line text-green-500 text-xs"></i></div>
-                        <span class="text-[11px] font-black uppercase text-white">Investments</span>
-                    </div>
+
+                <a href="settings.html" class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div class="w-8 h-8 rounded-lg bg-gray-500/10 flex items-center justify-center"><i class="fas fa-cog text-gray-400 text-xs"></i></div>
+                    <span class="text-[11px] font-black uppercase text-white">Settings</span>
+                </a>
+
+                <a href="football-predictions.html" class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center"><i class="fas fa-futbol text-blue-500 text-xs"></i></div>
+                    <span class="text-[11px] font-black uppercase text-white">Football Prediction</span>
+                </a>
+
+                <a href="invest.html" class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center"><i class="fas fa-chart-line text-green-500 text-xs"></i></div>
+                    <span class="text-[11px] font-black uppercase text-white">Investment Plans</span>
+                </a>
+
+                <a href="forex-trading.html" class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center"><i class="fas fa-globe-americas text-indigo-400 text-xs"></i></div>
+                    <span class="text-[11px] font-black uppercase text-white">Forex Trading</span>
                 </a>
             </div>
 
             <div class="mt-auto pt-10 pb-6">
-                <button onclick="handleLogout()" class="w-full py-4 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase text-[10px] tracking-widest border border-red-500/20">LOGOUT SESSION</button>
+                <button onclick="handleLogout()" class="w-full py-4 bg-red-500/10 text-red-500 rounded-2xl font-black uppercase text-[10px] border border-red-500/20">LOGOUT SESSION</button>
             </div>
         </div>
     </div>
@@ -110,17 +124,23 @@
         <div id="tradingview_live" style="height: 100%; width: 100%;"></div>
     </div>
 
+    <div class="px-4 mt-6">
+        <marquee class="bg-blue-600/10 text-blue-500 text-[10px] font-black py-2 rounded-lg uppercase">
+            ROI plan changes per what we know will work. Select your option and rest. The % determines the guarantee.
+        </marquee>
+    </div>
+
     <div class="p-4">
-        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 uppercase"><i class="fas fa-bolt"></i> Live ROI Nodes</h2>
+        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 uppercase"><i class="fas fa-wallet"></i> Signal & ROI Plans</h2>
         <div id="roi-plans-container" class="grid grid-cols-1 gap-4 mb-8">
             </div>
     </div>
 
     <div id="custom-modal" class="fixed inset-0 z-[2147483647] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
-        <div class="bg-[#0f111a] max-w-sm w-full p-8 rounded-[40px] text-center border border-blue-500/30 shadow-2xl">
-            <div id="modal-icon" class="text-6xl mb-6 text-blue-500">🦅</div>
-            <h2 id="modal-title" class="text-2xl font-black uppercase mb-2 text-white"></h2>
-            <p id="modal-text" class="text-gray-400 text-xs mb-8 leading-relaxed"></p>
+        <div class="bg-[#0f111a] max-w-sm w-full p-8 rounded-[40px] text-center border border-blue-500/30">
+            <div id="modal-icon" class="text-6xl mb-6">🦅</div>
+            <h2 id="modal-title" class="text-2xl font-black uppercase text-white"></h2>
+            <p id="modal-text" class="text-gray-400 text-xs mb-8"></p>
             <div id="modal-buttons" class="flex flex-col gap-3"></div>
         </div>
     </div>
@@ -131,9 +151,7 @@
                 <div class="tradingview-widget-container">
                     <div class="tradingview-widget-container__widget"></div>
                     <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-                    { "symbols": [
-                        {"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"FX_IDC:XAUUSD","title":"GOLD"}
-                    ], "colorTheme": "dark", "isTransparent": true, "displayMode": "regular", "locale": "en" }
+                    { "symbols": [{"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"FX_IDC:XAUUSD","title":"GOLD"}], "colorTheme": "dark", "isTransparent": true }
                     </script>
                 </div>
             </div>
@@ -157,67 +175,52 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        // BEEP LOGIC
         const beep = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 
-        const showModal = (title, text, showConfirm = false, onConfirm = null) => {
-            const modal = document.getElementById('custom-modal');
-            modal.classList.replace('hidden', 'flex');
+        const showModal = (title, text, confirm = false, callback = null) => {
+            const m = document.getElementById('custom-modal');
+            m.classList.replace('hidden', 'flex');
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-text').innerText = text;
-            const btnArea = document.getElementById('modal-buttons');
-            btnArea.innerHTML = "";
-
-            if(showConfirm) {
-                const b1 = document.createElement('button');
-                b1.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px]";
-                b1.innerText = "Confirm Access";
-                b1.onclick = onConfirm;
-                btnArea.appendChild(b1);
+            const btns = document.getElementById('modal-buttons');
+            btns.innerHTML = "";
+            if(confirm) {
+                const b = document.createElement('button');
+                b.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px]";
+                b.innerText = "Confirm Access";
+                b.onclick = callback;
+                btns.appendChild(b);
             }
-            const b2 = document.createElement('button');
-            b2.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px]";
-            b2.innerText = "Close";
-            b2.onclick = () => modal.classList.replace('flex', 'hidden');
-            btnArea.appendChild(b2);
+            const c = document.createElement('button');
+            c.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px]";
+            c.innerText = "Close";
+            c.onclick = () => m.classList.replace('flex', 'hidden');
+            btns.appendChild(c);
         };
 
-        window.buyROI = async (cat, price, payout, duration) => {
+        window.buyROI = async (cat, price, payout) => {
             const user = auth.currentUser;
             if(!user) return;
             const userRef = doc(db, "users", user.uid);
             const userSnap = await getDoc(userRef);
             const uData = userSnap.data();
-            const cleanPrice = parseFloat(price.replace(/[^0-9.]/g, ''));
+            const amt = parseFloat(price.replace(/[^0-9.]/g, ''));
 
-            if(uData.balance < cleanPrice) {
-                showModal("Insufficient Funds", "Please top up your terminal balance.");
-                return;
-            }
+            if(uData.balance < amt) { showModal("Balance Low", "Please top up."); return; }
 
-            showModal("Initialize Node?", `Debit ${price} for ${cat}?`, true, async () => {
-                await updateDoc(userRef, { balance: increment(-cleanPrice) });
-                
-                // SAVE PURCHASE WITH CLIENT DETAILS & ID
+            showModal("Confirm Node", `Subscribe to ${cat} for ${price}?`, true, async () => {
+                await updateDoc(userRef, { balance: increment(-amt) });
                 await addDoc(collection(db, "active_investments"), {
-                    clientId: user.uid,
-                    clientName: uData.fullName,
-                    plan: cat,
-                    amount: cleanPrice,
-                    payout: payout,
-                    status: "running",
-                    timestamp: serverTimestamp()
+                    clientId: user.uid, clientName: uData.fullName,
+                    plan: cat, amount: amt, status: "running", timestamp: serverTimestamp()
                 });
-
-                showModal("Success", "Node Active. Redirecting to support...");
-                setTimeout(() => { Tawk_API.maximize(); }, 2500);
+                showModal("Activated", "Opening support...");
+                setTimeout(() => { Tawk_API.maximize(); }, 2000);
             });
         };
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // User Stats Listener
                 onSnapshot(doc(db, "users", user.uid), (s) => {
                     const d = s.data();
                     document.getElementById('user-name-display').innerText = d.fullName;
@@ -227,7 +230,6 @@
                     document.querySelectorAll('.curr').forEach(el => el.innerHTML = d.currency || "₦");
                 });
 
-                // ROI Plans Listener
                 onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
                     const cont = document.getElementById('roi-plans-container');
                     cont.innerHTML = "";
@@ -235,29 +237,18 @@
                         const p = d.data();
                         cont.innerHTML += `
                             <div class="plan-card">
-                                <p class="text-[10px] font-bold text-gray-400 uppercase">${p.category}</p>
+                                <p class="text-[10px] font-bold text-gray-500 uppercase">${p.category}</p>
                                 <h3 class="text-2xl font-black text-white"><span class="curr"></span>${p.price}</h3>
-                                <p class="text-[9px] text-blue-500 font-bold mt-1">ROI: <span class="curr"></span>${p.payout} | ${p.duration}</p>
-                                <button onclick="buyROI('${p.category}', '${p.price}', '${p.payout}', '${p.duration}')" class="block w-full py-4 bg-blue-600 rounded-xl font-black text-[10px] uppercase text-center mt-4">Initialize Access</button>
+                                <p class="text-[9px] text-blue-500 font-bold mt-1">ROI: ${p.payout} | ${p.duration}</p>
+                                <button onclick="buyROI('${p.category}', '${p.price}', '${p.payout}')" class="w-full py-4 bg-blue-600 rounded-xl font-black text-[10px] uppercase mt-4">Initialize Access</button>
                             </div>`;
                     });
                 });
-
-                // CHECK FOR MATURITY (Mocks time for demo, triggers sound)
-                onSnapshot(query(collection(db, "active_investments"), orderBy("timestamp", "desc")), (snap) => {
-                    snap.forEach(doc => {
-                        if(doc.data().status === "matured" && doc.data().clientId === user.uid) {
-                            beep.play();
-                            showModal("Matured!", "Your investment is ready for payout. Contact support.");
-                        }
-                    });
-                });
-
             } else { window.location.href = "login.html"; }
         });
 
-        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
         window.toggleMenu = () => document.getElementById('master-sidebar').classList.toggle('active');
+        window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
     </script>
 
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
