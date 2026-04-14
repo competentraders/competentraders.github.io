@@ -11,27 +11,39 @@
         :root { --cpt-gold: #d4af37; }
         body { font-family: 'Outfit', sans-serif; background: #000; color: white; margin: 0; overflow-x: hidden; }
         
+        /* 3D Flipping Logo Animation */
+        .flipping-logo {
+            animation: flip-3d 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            transform-style: preserve-3d;
+        }
+        @keyframes flip-3d {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
         .cpt-glass { 
-            background: linear-gradient(145deg, rgba(20,20,25,0.9) 0%, rgba(5,5,5,1) 100%);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            backdrop-filter: blur(20px);
+            background: linear-gradient(145deg, rgba(15,16,22,0.95) 0%, rgba(5,5,5,1) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            backdrop-filter: blur(15px);
         }
         
         .cpt-btn {
             background: linear-gradient(to right, #996515, #d4af37);
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
         }
+        .cpt-btn:active { transform: scale(0.96); }
 
         #cpt-toast {
             visibility: hidden; min-width: 280px; background: var(--cpt-gold); color: #000;
             text-align: center; border-radius: 50px; padding: 16px; position: fixed;
             z-index: 10000; left: 50%; bottom: 50px; transform: translateX(-50%);
             font-weight: 900; text-transform: uppercase; font-size: 11px; letter-spacing: 2px;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
         }
-        #cpt-toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 50px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 50px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        #cpt-toast.show { visibility: visible; animation: slideInUp 0.5s forwards; }
+        @keyframes slideInUp { from { bottom: 0; opacity: 0; } to { bottom: 50px; opacity: 1; } }
     </style>
 </head>
 <body>
@@ -39,40 +51,44 @@
     <div id="cpt-toast"></div>
 
     <nav class="p-6 flex justify-between items-center relative z-10">
-        <a href="user-dashboard.html" class="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition">
-            <i class="fas fa-chevron-left text-gray-400"></i>
+        <a href="user-dashboard.html" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition">
+            <i class="fas fa-arrow-left text-gray-400 text-sm"></i>
         </a>
-        <div class="text-[10px] font-black uppercase tracking-[0.5em] text-yellow-600/50">CPT SECURE ACCESS</div>
-        <div class="w-12 h-12"></div>
+        <div class="text-[9px] font-black uppercase tracking-[0.4em] text-yellow-600/60">CPT ENCRYPTED NODE</div>
+        <div class="w-10 h-10"></div>
     </nav>
 
-    <div class="flex flex-col items-center justify-center mt-4 mb-16 px-6">
-        <img src="vip.png" alt="CPT VIP" class="h-32 md:h-48 w-auto relative z-10 drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
-        <h1 class="mt-8 text-4xl font-black uppercase tracking-tighter italic text-center text-white">CPT <span class="text-yellow-600">VIP</span></h1>
-        <p class="mt-2 text-[10px] font-bold uppercase tracking-[0.4em] text-gray-500">Official Competentraders Node</p>
+    <div class="flex flex-col items-center justify-center mt-6 mb-12 px-6">
+        <div class="perspective-1000">
+            <img src="vip.png" alt="CPT VIP" class="flipping-logo h-36 md:h-48 w-auto drop-shadow-[0_0_25px_rgba(212,175,55,0.2)]">
+        </div>
+        <h1 class="mt-8 text-3xl font-black uppercase tracking-tighter italic text-center">CPT <span class="text-yellow-600">VIP</span></h1>
+        <div class="h-[1px] w-12 bg-yellow-600/40 mt-3"></div>
     </div>
 
-    <main id="vip-container" class="max-w-xl mx-auto px-6 space-y-10 pb-24">
-        <div class="text-center py-20 font-black text-gray-700 uppercase tracking-widest text-xs">Synchronizing CPT Servers...</div>
+    <main id="vip-container" class="max-w-lg mx-auto px-6 space-y-8 pb-24">
+        <div class="flex flex-col items-center py-20 opacity-20">
+            <i class="fas fa-circle-notch fa-spin mb-4"></i>
+            <p class="text-[10px] font-bold uppercase tracking-widest">Awaiting CPT Node Sync...</p>
+        </div>
     </main>
 
     <div id="vip-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl hidden items-center justify-center p-6 z-[9999]">
-        <div class="cpt-glass w-full max-w-sm p-10 rounded-[40px] text-center shadow-2xl">
-            <div id="modal-icon-box" class="w-16 h-16 bg-yellow-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <i class="fas fa-crown text-2xl text-yellow-600"></i>
+        <div class="cpt-glass w-full max-w-sm p-8 rounded-[40px] text-center">
+            <div class="w-16 h-16 bg-yellow-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-fingerprint text-2xl text-yellow-600"></i>
             </div>
-            <h2 id="modal-title" class="text-2xl font-black uppercase mb-3 tracking-tighter italic">CPT PROTOCOL</h2>
-            <p id="modal-desc" class="text-gray-400 text-[10px] mb-10 uppercase tracking-[0.2em] leading-relaxed"></p>
+            <h2 id="modal-title" class="text-xl font-black uppercase mb-2 italic">CPT PROTOCOL</h2>
+            <p id="modal-desc" class="text-gray-400 text-[10px] mb-8 uppercase tracking-widest leading-relaxed"></p>
             <div id="modal-actions" class="space-y-3">
-                <button id="confirm-vip-btn" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs">AGREE & INITIALIZE CPT PLAN</button>
-                <button onclick="closeModal()" class="w-full py-5 text-gray-500 font-black uppercase text-[10px]">CANCEL</button>
+                <button id="confirm-vip-btn" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs tracking-widest">INITIALIZE TERMINAL</button>
+                <button onclick="closeModal()" class="w-full py-5 text-gray-500 font-black uppercase text-[10px] tracking-widest">ABORT ACCESS</button>
             </div>
         </div>
     </div>
 
-    <footer class="border-t border-white/5 bg-[#050505] pt-16 pb-10 px-8 text-center">
-        <h3 class="text-yellow-600 font-black uppercase text-sm mb-4 tracking-widest">Competentraders (CPT)</h3>
-        <p class="text-gray-600 text-[9px] font-bold uppercase tracking-widest">© 2026 Competentraders Global. All Rights Reserved.</p>
+    <footer class="border-t border-white/5 bg-[#050505] pt-12 pb-10 px-8 text-center">
+        <p class="text-gray-600 text-[9px] font-black uppercase tracking-[0.3em]">Competentraders Global Asset Management © 2026</p>
     </footer>
 
     <script type="module">
@@ -93,11 +109,10 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const toast = document.getElementById("cpt-toast");
-        window.showToast = (msg) => {
-            toast.innerText = msg;
-            toast.className = "show";
-            setTimeout(() => { toast.className = ""; }, 3000);
+        const showToast = (msg) => {
+            const t = document.getElementById("cpt-toast");
+            t.innerText = msg; t.className = "show";
+            setTimeout(() => { t.className = ""; }, 3000);
         };
 
         window.closeModal = () => document.getElementById('vip-modal').classList.replace('flex', 'hidden');
@@ -105,21 +120,38 @@
         onAuthStateChanged(auth, (user) => {
             if (!user) { window.location.href = "login.html"; return; }
 
+            // Real-time synchronization: If deleted in Admin, it vanishes here instantly.
             onSnapshot(query(collection(db, "vip_plans"), orderBy("createdAt", "desc")), (snap) => {
                 const cont = document.getElementById('vip-container');
                 cont.innerHTML = "";
+                
+                if(snap.empty) {
+                    cont.innerHTML = `<p class="text-center text-gray-700 text-[10px] font-black uppercase py-20">No Active VIP Nodes Available</p>`;
+                    return;
+                }
+
                 snap.forEach(d => {
                     const p = d.data();
                     cont.innerHTML += `
-                        <div class="cpt-glass p-10 rounded-[40px] relative">
-                            <h2 class="text-3xl font-black uppercase italic mb-8">${p.planName}</h2>
-                            <div class="space-y-4 mb-10 text-[11px] font-bold uppercase tracking-widest text-gray-400">
-                                <div class="flex justify-between font-black"><span>INVESTMENT</span><span class="text-white">₦${p.amount.toLocaleString()}</span></div>
-                                <div class="flex justify-between font-black"><span>DURATION</span><span class="text-white">${p.duration}</span></div>
-                                <div class="flex justify-between font-black"><span>RETURN</span><span class="text-green-500">₦${p.roi.toLocaleString()}</span></div>
-                                <div class="flex justify-between font-black"><span>GUARANTEE</span><span class="text-yellow-600">${p.guarantee}</span></div>
+                        <div class="cpt-glass p-8 rounded-[35px] relative overflow-hidden">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <p class="text-yellow-600 font-black text-[9px] uppercase tracking-[0.3em] mb-1">${p.category}</p>
+                                    <h2 class="text-2xl font-black uppercase italic tracking-tighter">${p.planName}</h2>
+                                </div>
+                                <i class="fas fa-crown text-white/5 text-3xl"></i>
                             </div>
-                            <button onclick="triggerPurchase('${d.id}', '${p.planName}', ${p.amount}, '${p.duration}')" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-xs">INITIALIZE CPT VIP</button>
+                            
+                            <div class="grid grid-cols-2 gap-y-5 mb-8 text-[10px] font-black uppercase tracking-widest">
+                                <div><p class="text-gray-500 mb-1">Investment</p><p class="text-white text-sm italic">₦${p.amount.toLocaleString()}</p></div>
+                                <div><p class="text-gray-500 mb-1">Contract</p><p class="text-white text-sm italic">${p.duration}</p></div>
+                                <div><p class="text-gray-500 mb-1">CPT Return</p><p class="text-green-500 text-sm italic">₦${p.roi.toLocaleString()}</p></div>
+                                <div><p class="text-gray-500 mb-1">Security</p><p class="text-yellow-600 text-sm italic">${p.guarantee}</p></div>
+                            </div>
+
+                            <button onclick="triggerPurchase('${d.id}', '${p.planName}', ${p.amount}, '${p.duration}')" class="w-full py-5 cpt-btn text-black rounded-2xl font-black uppercase text-[10px] tracking-[0.2em]">
+                                INITIALIZE CPT VIP
+                            </button>
                         </div>
                     `;
                 });
@@ -130,36 +162,59 @@
             const modal = document.getElementById('vip-modal');
             modal.classList.replace('hidden', 'flex');
             document.getElementById('confirm-vip-btn').classList.remove('hidden');
-            document.getElementById('modal-desc').innerText = `Syncing ${name} with your CPT account for ₦${amt.toLocaleString()}.`;
+            document.getElementById('modal-title').innerText = "CPT AUTHENTICATION";
+            document.getElementById('modal-desc').innerText = `Syncing ${name} node for ₦${amt.toLocaleString()}. Encryption will be applied.`;
             document.getElementById('confirm-vip-btn').onclick = () => processVIP(name, amt, duration);
         };
 
         async function processVIP(name, amt, duration) {
             const user = auth.currentUser;
             const btn = document.getElementById('confirm-vip-btn');
-            const uSnap = await getDoc(doc(db, "users", user.uid));
+            const uRef = doc(db, "users", user.uid);
+            const uSnap = await getDoc(uRef);
             
             if(uSnap.data().balance < amt) {
-                document.getElementById('modal-title').innerText = "CPT ERROR";
-                document.getElementById('modal-desc').innerText = "Insufficient balance for this CPT Plan.";
+                document.getElementById('modal-title').innerText = "NODE REJECTED";
+                document.getElementById('modal-desc').innerText = "Insufficient terminal liquidity for this CPT node.";
                 btn.classList.add('hidden');
                 return;
             }
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> CONNECTING...`;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin mr-2"></i> SYNCING`;
 
             try {
-                await updateDoc(doc(db, "users", user.uid), { balance: increment(-amt) });
-                await addDoc(collection(db, "active_investments"), { clientId: user.uid, plan: name, type: "CPT-VIP", createdAt: new Date().toISOString() });
-                showToast("CPT PLAN ACTIVE");
+                // 1. Deduct Balance & Log to Firebase
+                await updateDoc(uRef, { balance: increment(-amt) });
+                await addDoc(collection(db, "active_investments"), {
+                    clientId: user.uid,
+                    plan: name,
+                    amount: amt,
+                    type: "CPT-VIP",
+                    status: "running",
+                    createdAt: new Date().toISOString()
+                });
+
+                showToast("CPT NODE SECURED");
+
+                // 2. Redirect to WhatsApp
                 setTimeout(() => {
-                    window.location.href = `https://wa.me/2349153258628?text=${encodeURIComponent("CPT VIP ACTIVATED:\nPlan: "+name)}`;
-                }, 2000);
+                    const waLink = `https://wa.me/2349153258628?text=${encodeURIComponent(
+                        `*CPT VIP INITIALIZED*\n\n` +
+                        `Plan: ${name}\n` +
+                        `Investment: ₦${amt.toLocaleString()}\n` +
+                        `Duration: ${duration}\n` +
+                        `Client ID: ${user.uid}\n\n` +
+                        `_Please verify my terminal access._`
+                    )}`;
+                    window.location.href = waLink;
+                }, 1500);
+
             } catch (e) {
-                document.getElementById('modal-title').innerText = "CPT ERROR";
-                document.getElementById('modal-desc').innerText = "CPT Server handshake failed.";
-                btn.classList.add('hidden');
+                document.getElementById('modal-title').innerText = "LINK ERROR";
+                document.getElementById('modal-desc').innerText = "The secure handshake failed. Try again.";
+                btn.disabled = false;
+                btn.innerHTML = "INITIALIZE TERMINAL";
             }
         }
     </script>
