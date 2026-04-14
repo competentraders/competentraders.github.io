@@ -60,11 +60,15 @@
         .tradingview-widget-container { width: 100% !important; pointer-events: none; }
     </style>
 </head>
+
+
 <body class="pb-24">
 
     <button class="master-trigger" onclick="toggleMenu()">
         <i class="fas fa-bars fa-lg"></i>
     </button>
+
+
 
     <div id="master-sidebar">
         <div class="p-6 bg-[#131722] border-b border-gray-800 flex flex-col min-h-screen">
@@ -237,21 +241,31 @@
 
 
 
-    <div class="p-4">
-        <h2 class="text-xl font-black mb-4 flex items-center gap-2 text-blue-500 uppercase"><i class="fas fa-wallet"></i> Signal & ROI Plans</h2>
-        <div class="grid grid-cols-1 gap-4 mb-8">
-            <div class="plan-card">
-                <p class="text-[10px] font-bold text-gray-500 uppercase">Universal Node</p>
-                <h3 class="text-2xl font-black text-white"><span class="curr"></span>50,000</h3>
-                <a href="#" class="wa-link block w-full py-4 bg-blue-600 rounded-xl font-black text-[10px] uppercase text-center mt-4">Initialize Access</a>
+        <div class="px-4 py-2">
+        <marquee class="text-[10px] font-black uppercase tracking-widest text-blue-400 bg-blue-600/5 py-2 rounded-lg mb-4">
+            The ROI plan changes per what we know will work or pay out, kindly select your desire option and rest, the % determines the guarantee thank you.
+        </marquee>
+        
+        <h2 class="text-sm font-black mb-4 flex items-center gap-2 text-white uppercase tracking-tighter">
+            <i class="fas fa-bolt text-yellow-500"></i> Select Desire ROI Node
+        </h2>
+
+        <div id="roi-plans-container" class="grid grid-cols-1 gap-4 mb-20">
             </div>
-            <div class="plan-card border-orange-500/20">
-                <p class="text-[10px] font-bold text-gray-500 uppercase">XAU/USD ROI</p>
-                <h3 class="text-2xl font-black text-white"><span class="curr"></span>100,000</h3>
-                <a href="#" class="wa-link block w-full py-4 bg-orange-600 rounded-xl font-black text-[10px] uppercase text-center mt-4">Start Growth</a>
-            </div>
+    </div>
+
+    <div id="custom-modal" class="fixed inset-0 z-[2147483647] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
+        <div class="glass-panel max-w-sm w-full p-8 rounded-[40px] text-center border-blue-500/30 shadow-2xl scale-95 transition-transform duration-300">
+            <div id="modal-icon" class="text-6xl mb-6"></div>
+            <h2 id="modal-title" class="text-2xl font-black uppercase mb-2 text-white"></h2>
+            <p id="modal-text" class="text-gray-400 text-xs mb-8 leading-relaxed"></p>
+            <div id="modal-buttons" class="flex flex-col gap-3"></div>
         </div>
     </div>
+
+
+
+
 
     <div class="ticker-wrapper">
         <div class="ticker-scroll">
@@ -322,13 +336,114 @@
 
         window.handleLogout = () => signOut(auth).then(() => window.location.href = "login.html");
         window.toggleMenu = () => document.getElementById('master-sidebar').classList.toggle('active');
+
+
+
+    // -- ADD THIS INSIDE YOUR SCRIPT --
+
+    const roiContainer = document.getElementById('roi-plans-container');
+
+    // MODAL LOGIC (Zero "This Page Says")
+    const showModal = (type, title, text, onConfirm = null) => {
+        const modal = document.getElementById('custom-modal');
+        const icon = document.getElementById('modal-icon');
+        const mBtns = document.getElementById('modal-buttons');
+        mBtns.innerHTML = "";
+        modal.classList.replace('hidden', 'flex');
+
+        if(type === 'insufficient') {
+            icon.innerHTML = "🦅"; icon.className = "text-6xl mb-6 opacity-20 grayscale";
+            document.getElementById('modal-title').className = "text-2xl font-black uppercase text-red-500";
+        } else {
+            icon.innerHTML = "🦅"; icon.className = "text-6xl mb-6 text-blue-500 drop-shadow-xl";
+            document.getElementById('modal-title').className = "text-2xl font-black uppercase text-blue-400";
+        }
+
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-text').innerText = text;
+
+        if(onConfirm) {
+            const b1 = document.createElement('button');
+            b1.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px]";
+            b1.innerText = "Confirm Access";
+            b1.onclick = () => { modal.classList.replace('flex', 'hidden'); onConfirm(); };
+            mBtns.appendChild(b1);
+        }
+        const b2 = document.createElement('button');
+        b2.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px]";
+        b2.innerText = onConfirm ? "Cancel" : "Close";
+        b2.onclick = () => modal.classList.replace('flex', 'hidden');
+        mBtns.appendChild(b2);
+    };
+
+    // DEBIT LOGIC
+    window.buyROI = async (cat, price, payout, duration) => {
+        const user = auth.currentUser;
+        if(!user) return;
+
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        const bal = userSnap.data().balance || 0;
+        const cleanPrice = parseFloat(price.replace(/[^0-9.]/g, ''));
+
+        if(bal < cleanPrice) {
+            showModal('insufficient', 'Empty Nest', 'Your balance is too low for this ROI Node. Kindly top up.');
+            return;
+        }
+
+        showModal('confirm', 'Initialize Node?', `Authorize debit of ${price} for ${cat} Node?`, async () => {
+            import { updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+            await updateDoc(userRef, { balance: increment(-cleanPrice) });
+            showModal('success', 'Node Active!', `Growth started. Expected ROI after ${duration}.`);
+            
+            // Notification to WhatsApp
+            const msg = `ROI Subscription: ${cat}\nAmt: ${price}\nDuration: ${duration}\nUser: ${userSnap.data().fullName}`;
+            setTimeout(() => window.location.href = `https://wa.me/2349153258628?text=${encodeURIComponent(msg)}`, 3000);
+        });
+    };
+
+    // LISTEN FOR LIVE ROI PLANS
+    import { collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
+        roiContainer.innerHTML = "";
+        snap.forEach(d => {
+            const plan = d.data();
+            roiContainer.innerHTML += `
+                <div class="plan-card border-l-4 border-blue-600">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-[9px] font-black uppercase text-blue-500 bg-blue-500/10 px-3 py-1 rounded-full">${plan.category}</span>
+                        <span class="text-[9px] font-black uppercase text-green-500">${plan.guarantee} Guarantee</span>
+                    </div>
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Growth Target</p>
+                    <h3 class="text-2xl font-black text-white mb-2"><span class="curr"></span>${plan.payout} <span class="text-[10px] text-gray-500 font-normal">ROI</span></h3>
+                    <div class="flex items-center gap-4 text-[10px] text-gray-400 mb-6">
+                        <span><i class="far fa-clock"></i> ${plan.duration}</span>
+                        <span><i class="fas fa-microchip"></i> Node Active</span>
+                    </div>
+                    <button onclick="buyROI('${plan.category}', '${plan.price}', '${plan.payout}', '${plan.duration}')" 
+                        class="w-full py-4 bg-blue-600 rounded-xl font-black text-[10px] uppercase shadow-lg shadow-blue-500/20">
+                        Purchase Access (${plan.price})
+                    </button>
+                </div>`;
+        });
+    });
+
+
     </script>
+
+
+
+
 
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
         new TradingView.widget({
             "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1",
             "theme": "dark", "container_id": "tradingview_live"
+
+
+
+
         });
     </script>
 </body>

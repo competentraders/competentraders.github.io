@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin: ROI Manager | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #06070a; color: white; }
+        .glass-panel { background: rgba(15, 18, 24, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .input-style { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; width: 100%; color: white; outline: none; transition: 0.3s; }
+        .input-style:focus { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        
+        #custom-modal.flex { animation: fadeIn 0.2s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+    <div class="max-w-4xl mx-auto">
+        <div class="mb-12 text-center md:text-left">
+            <h1 class="text-3xl font-black uppercase tracking-tight text-blue-500">ROI <span class="text-white">Manager</span></h1>
+            <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.3em]">Configure Investment Nodes</p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-[40px] mb-12 border border-white/5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Investment Category</label>
+                    <input type="text" id="cat" placeholder="e.g. Sport or CPT Node" class="input-style font-bold">
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Purchase Price (Amount to Debit)</label>
+                    <input type="text" id="price" placeholder="e.g. 50000" class="input-style font-bold">
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Duration</label>
+                    <input type="text" id="duration" placeholder="e.g. 7 Days" class="input-style font-bold">
+                </div>
+                <div>
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Expected Payout</label>
+                    <input type="text" id="payout" placeholder="e.g. 150,000" class="input-style font-bold">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-[9px] font-black uppercase text-gray-500 ml-2 mb-2 block">Guarantee %</label>
+                    <input type="text" id="guarantee" placeholder="e.g. 99% Sure" class="input-style font-bold">
+                </div>
+            </div>
+
+            <button onclick="publishROI()" id="pubBtn" class="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] transition-all shadow-lg shadow-blue-500/20">
+                Deploy ROI Node
+            </button>
+        </div>
+
+        <h3 class="text-sm font-black uppercase tracking-widest text-gray-400 ml-2 mb-6">Live ROI Nodes</h3>
+        <div id="roi-list" class="space-y-4"></div>
+    </div>
+
+    <div id="custom-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-md">
+        <div class="glass-panel max-w-sm w-full p-8 rounded-[40px] text-center border-blue-500/30 shadow-2xl scale-95 transition-transform duration-300">
+            <div id="modal-icon" class="text-6xl mb-6"></div>
+            <h2 id="modal-title" class="text-2xl font-black uppercase mb-2 text-white"></h2>
+            <p id="modal-text" class="text-gray-400 text-xs mb-8 leading-relaxed"></p>
+            <div id="modal-buttons" class="flex flex-col gap-3"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const showModal = (type, title, text, onConfirm = null) => {
+            const modal = document.getElementById('custom-modal');
+            const icon = document.getElementById('modal-icon');
+            const mBtns = document.getElementById('modal-buttons');
+            mBtns.innerHTML = "";
+            modal.classList.replace('hidden', 'flex');
+
+            icon.innerHTML = type === 'success' ? "🦅" : "⚠️";
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-text').innerText = text;
+
+            if(onConfirm){
+                const b1 = document.createElement('button');
+                b1.className = "w-full bg-blue-600 py-4 rounded-2xl font-black uppercase text-[10px]";
+                b1.innerText = "Confirm";
+                b1.onclick = () => { modal.classList.replace('flex', 'hidden'); onConfirm(); };
+                mBtns.appendChild(b1);
+            }
+            const b2 = document.createElement('button');
+            b2.className = "w-full bg-white/10 py-4 rounded-2xl font-black uppercase text-[10px]";
+            b2.innerText = onConfirm ? "Cancel" : "Close";
+            b2.onclick = () => modal.classList.replace('flex', 'hidden');
+            mBtns.appendChild(b2);
+        };
+
+        window.publishROI = async () => {
+            const data = {
+                category: document.getElementById('cat').value,
+                price: document.getElementById('price').value,
+                duration: document.getElementById('duration').value,
+                payout: document.getElementById('payout').value,
+                guarantee: document.getElementById('guarantee').value,
+                timestamp: serverTimestamp()
+            };
+
+            if(!data.category || !data.price) return showModal('error', 'Incomplete', 'Please fill the name and amount.');
+
+            try {
+                await addDoc(collection(db, "roi_plans"), data);
+                showModal('success', 'Deployed', 'ROI Node is now visible to users.');
+                document.querySelectorAll('input').forEach(i => i.value = "");
+            } catch(e) { showModal('error', 'Error', e.message); }
+        };
+
+        onSnapshot(query(collection(db, "roi_plans"), orderBy("timestamp", "desc")), (snap) => {
+            const list = document.getElementById('roi-list');
+            list.innerHTML = "";
+            snap.forEach(d => {
+                const item = d.data();
+                list.innerHTML += `<div class="glass-panel p-5 rounded-2xl flex justify-between items-center border-l-4 border-blue-500">
+                    <div><p class="text-blue-400 font-black text-sm uppercase">${item.category}</p><p class="text-[10px] text-gray-500 font-bold uppercase">${item.price} -> ${item.payout}</p></div>
+                    <button onclick="deleteROI('${d.id}')" class="text-red-500 bg-red-500/10 p-3 rounded-lg"><i class="fas fa-trash"></i></button>
+                </div>`;
+            });
+        });
+
+        window.deleteROI = (id) => showModal('error', 'Delete?', 'Remove this investment node?', async () => {
+            await deleteDoc(doc(db, "roi_plans", id));
+        });
+    </script>
+</body>
+</html>
