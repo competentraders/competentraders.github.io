@@ -8,31 +8,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #06070a; color: white; }
+        
+        :root { --bg: #06070a; --card: rgba(15, 18, 24, 0.8); --text: white; }
+        .light-mode { --bg: #f8fafc; --card: white; --text: #0f172a; }
+
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; }
         
         .glass-panel { 
-            background: rgba(15, 18, 24, 0.8); 
+            background: var(--card); 
             backdrop-filter: blur(12px); 
             border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
         .input-group {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(120, 120, 120, 0.05);
+            border: 1px solid rgba(120, 120, 120, 0.1);
             transition: all 0.3s ease;
         }
 
         .input-group:focus-within {
             border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.05);
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
         }
 
-        .error-shake {
-            animation: shake 0.4s ease-in-out;
-            border-color: #ef4444 !important;
-        }
-
+        .error-shake { animation: shake 0.4s ease-in-out; border-color: #ef4444 !important; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
@@ -40,74 +40,71 @@
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body class="flex items-center justify-center min-h-screen p-6" id="bodyTag">
 
     <div class="w-full max-w-md">
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center gap-2 mb-4">
+        <div class="flex justify-between items-center mb-10">
+            <div class="flex items-center gap-2">
                 <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
                     <i class="fas fa-shield-halved text-white text-lg"></i>
                 </div>
                 <span class="text-2xl font-black uppercase tracking-tighter">Competent<span class="text-blue-500">raders</span></span>
             </div>
-            <h2 class="text-xl font-bold">Secure Gateway</h2>
-            <p class="text-gray-500 text-xs mt-1 uppercase tracking-widest">Authorized Access Only</p>
+            <button onclick="document.getElementById('bodyTag').classList.toggle('light-mode')" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-blue-500 border border-blue-500/20">
+                <i class="fas fa-circle-half-stroke"></i>
+            </button>
         </div>
 
         <div id="login-container" class="glass-panel p-8 rounded-[32px] relative overflow-hidden">
             <div id="error-msg" class="hidden mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-500 text-xs font-bold">
                 <i class="fas fa-exclamation-triangle"></i>
-                <span>Authentication Failed: Please try again.</span>
+                <span>Authentication Failed</span>
             </div>
 
             <form onsubmit="handleLogin(event)" class="space-y-6">
                 <div>
-                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Username</label>
-                    <div class="input-group flex items-center px-4 py-3.5 rounded-xl">
-                        <i class="fas fa-user text-gray-600 mr-3 text-sm"></i>
-                        <input type="text" id="login_user" required class="bg-transparent outline-none w-full text-sm" placeholder="Enter username">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Username or Email</label>
+                    <div class="input-group flex items-center px-4 rounded-xl">
+                        <i class="fas fa-user-circle text-blue-500 mr-3 text-sm"></i>
+                        <input type="text" id="login_user" required class="bg-transparent outline-none w-full py-4 text-sm" placeholder="Enter credentials">
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Password</label>
-                    <div class="input-group flex items-center px-4 py-3.5 rounded-xl">
-                        <i class="fas fa-lock text-gray-600 mr-3 text-sm"></i>
-                        <input type="password" id="login_pass" required class="bg-transparent outline-none w-full text-sm" placeholder="••••••••">
+                    <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Access Password</label>
+                    <div class="input-group flex items-center px-4 rounded-xl">
+                        <i class="fas fa-lock text-blue-500 mr-3 text-sm"></i>
+                        <input type="password" id="login_pass" required class="bg-transparent outline-none w-full py-4 text-sm" placeholder="••••••••">
+                        <i class="fas fa-eye text-gray-500 cursor-pointer hover:text-blue-500 transition" onclick="togglePass()"></i>
                     </div>
                 </div>
 
                 <div class="flex justify-between items-center px-1">
                     <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" class="w-4 h-4 rounded border-gray-800 bg-gray-900 checked:bg-blue-600">
-                        <span class="text-[10px] text-gray-500 font-bold uppercase">Remember me</span>
+                        <input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-gray-500 bg-transparent checked:bg-blue-600">
+                        <span class="text-[10px] text-gray-500 font-bold uppercase">Keep me logged in</span>
                     </label>
-                    <a href="forgot-password.html" class="text-[10px] text-blue-500 font-bold uppercase">Forgot Key?</a>
+                    <a href="forgot-password.html" class="text-[10px] text-blue-500 font-bold uppercase hover:underline">Forgot Password?</a>
                 </div>
 
-                <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm tracking-widest shadow-xl shadow-blue-600/20 transition-all uppercase">
-                    Verify & Login
+                <button type="submit" id="loginBtn" class="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs tracking-[0.2em] shadow-xl shadow-blue-600/20 transition-all uppercase">
+                    Initialize Session
                 </button>
             </form>
 
-            <div class="mt-8 text-center">
+            <div class="mt-8 text-center pt-6 border-t border-white/5">
                 <p class="text-[10px] text-gray-600 uppercase font-bold tracking-widest">
-                    Don't have a secure account? <br>
-                    <a href="register.html" class="text-blue-500 hover:underline mt-2 inline-block">Create One Now</a>
+                    New Trader? <a href="register.html" class="text-blue-500 hover:underline">Create Secure Account</a>
                 </p>
             </div>
         </div>
-
-        <p class="mt-10 text-center text-[10px] text-gray-700 uppercase tracking-[0.4em]">
-            AES-256 Bit Encryption Active
-        </p>
     </div>
-<script type="module">
-    // 1. IMPORT FIREBASE
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-    // 2. YOUR CONFIG (Must match Register.html)
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
     const firebaseConfig = {
         apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
         authDomain: "competentraders-2efdc.firebaseapp.com",
@@ -119,68 +116,75 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // 3. THE LOGIN FUNCTION
+    // Toggle Password Visibility
+    window.togglePass = () => {
+        const p = document.getElementById('login_pass');
+        p.type = p.type === 'password' ? 'text' : 'password';
+    };
+
     window.handleLogin = async function(e) {
         e.preventDefault();
         
-        const email = document.getElementById('login_user').value; // Using Email as the identifier
+        let identifier = document.getElementById('login_user').value.trim();
         const pass = document.getElementById('login_pass').value;
-        const container = document.getElementById('login-container');
+        const remember = document.getElementById('rememberMe').checked;
+        const btn = document.getElementById('loginBtn');
         const errorBox = document.getElementById('error-msg');
-        const btn = e.target.querySelector('button');
+        const container = document.getElementById('login-container');
 
-        // UI Reset
         errorBox.classList.add('hidden');
         btn.innerText = "AUTHENTICATING...";
         btn.disabled = true;
 
         try {
-            // FIREBASE LOGIN CALL
-            const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-            const user = userCredential.user;
+            // STEP 1: If input is not an email, find the email associated with the username
+            let finalEmail = identifier;
+            if (!identifier.includes('@')) {
+                const q = query(collection(db, "users"), where("username", "==", identifier));
+                const querySnapshot = await getDocs(q);
+                
+                if (querySnapshot.empty) {
+                    throw { code: 'auth/user-not-found' };
+                }
+                querySnapshot.forEach((doc) => {
+                    finalEmail = doc.data().email;
+                });
+            }
 
-            // CHECK IF EMAIL IS VERIFIED (Security Step)
-            if (!user.emailVerified) {
-                errorBox.querySelector('span').innerText = "Account not active. Check your Gmail.";
+            // STEP 2: Handle "Remember Me"
+            await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+
+            // STEP 3: Sign In
+            const userCredential = await signInWithEmailAndPassword(auth, finalEmail, pass);
+            
+            if (!userCredential.user.emailVerified) {
+                errorBox.querySelector('span').innerText = "Account Verification Required in Gmail.";
                 errorBox.classList.remove('hidden');
-                btn.innerText = "VERIFY & LOGIN";
+                btn.innerText = "INITIALIZE SESSION";
                 btn.disabled = false;
                 return;
             }
 
-            // SUCCESS
             btn.innerText = "ACCESS GRANTED";
-            container.style.opacity = "0.5";
-            
-            setTimeout(() => {
-                window.location.href = "user-dashboard.html";
-            }, 1000);
+            setTimeout(() => { window.location.href = "user-dashboard.html"; }, 800);
 
         } catch (error) {
-            // FAILURE
             console.error(error.code);
-            let message = "Invalid Credentials.";
-            if (error.code === 'auth/user-not-found') message = "Account does not exist.";
-            if (error.code === 'auth/wrong-password') message = "Incorrect Password.";
-            if (error.code === 'auth/invalid-email') message = "Please enter a valid email.";
-
+            let message = "Security Check Failed: Invalid Credentials.";
+            if (error.code === 'auth/user-not-found') message = "Account ID not recognized.";
+            if (error.code === 'auth/wrong-password') message = "Authentication failed: Wrong password.";
+            
             errorBox.querySelector('span').innerText = message;
             errorBox.classList.remove('hidden');
             container.classList.add('error-shake');
+            setTimeout(() => container.classList.remove('error-shake'), 400);
             
-            setTimeout(() => {
-                container.classList.remove('error-shake');
-            }, 400);
-
-            btn.innerText = "VERIFY & LOGIN";
+            btn.innerText = "INITIALIZE SESSION";
             btn.disabled = false;
-            document.getElementById('login_pass').value = "";
         }
     }
 </script>
-
-
-
 </body>
 </html>
