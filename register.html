@@ -259,17 +259,27 @@
         // This prevents the "Expired/Invalid" error by giving the link a destination
         await sendEmailVerification(user, actionCodeSettings);
 
-        // 3. Save Data with "Pending" status
-        await setDoc(doc(db, "users", user.uid), {
-            firstName: document.getElementById('f_name').value,
-            lastName: document.getElementById('l_name').value,
-            username: document.getElementById('reg_user').value,
-            email: email,
-            uid: user.uid,
-            accountStatus: "pending_verification",
-            balance: 0,
-            registrationDate: new Date().toISOString()
-        });
+
+
+     // Change Step 3 in your registration script to this:
+await setDoc(doc(db, "users", user.uid), {
+    firstName: document.getElementById('f_name').value,
+    lastName: document.getElementById('l_name').value,
+    // Add this line so the dashboard has a single name to grab
+    fullName: document.getElementById('f_name').value + " " + document.getElementById('l_name').value, 
+    username: document.getElementById('reg_user').value,
+    email: email,
+    uid: user.uid,
+    accountStatus: "pending_verification",
+    balance: 0,
+    currency: document.getElementById('reg_currency').value, // Make sure currency is saved too!
+    registrationDate: new Date().toISOString()
+});
+
+
+
+
+
 
         // 4. Show the "Check Email" Overlay
         document.getElementById('overlay').style.display = 'flex';
