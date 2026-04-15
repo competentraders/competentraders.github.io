@@ -14,6 +14,8 @@
         .flipping-logo {
             animation: flip-3d 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             transform-style: preserve-3d;
+            /* FIX: This removes the black background around the image */
+            mix-blend-mode: screen; 
         }
         @keyframes flip-3d {
             0% { transform: rotateY(0deg); }
@@ -40,9 +42,27 @@
         }
         #cpt-toast.show { visibility: visible; animation: slideInUp 0.5s forwards; }
         @keyframes slideInUp { from { bottom: 0; opacity: 0; } to { bottom: 50px; opacity: 1; } }
+
+        /* --- NEW WATERMARK STYLE --- */
+        .cpt-watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90vw;
+            max-width: 700px;
+            opacity: 0.04; /* Very faint */
+            pointer-events: none; /* Can click through it */
+            z-index: 0;
+            /* FIX: Removes black background and makes it a watermark */
+            mix-blend-mode: screen; 
+            filter: grayscale(100%);
+        }
     </style>
 </head>
 <body>
+
+    <img src="vip.png" class="cpt-watermark" alt="">
 
     <div id="cpt-toast"></div>
 
@@ -54,12 +74,12 @@
         <div class="w-10 h-10"></div>
     </nav>
 
-    <div class="flex flex-col items-center justify-center mt-6 mb-12 px-6">
+    <div class="flex flex-col items-center justify-center mt-6 mb-12 px-6 relative z-10">
         <img src="vip.png" alt="CPT VIP" class="flipping-logo h-36 md:h-48 w-auto drop-shadow-[0_0_25px_rgba(212,175,55,0.2)]">
         <h1 class="mt-8 text-3xl font-black uppercase tracking-tighter italic text-center">CPT <span class="text-yellow-600">VIP</span></h1>
     </div>
 
-    <main id="vip-container" class="max-w-lg mx-auto px-6 space-y-8 pb-24">
+    <main id="vip-container" class="max-w-lg mx-auto px-6 space-y-8 pb-24 relative z-10">
         <div class="text-center py-20 font-black text-gray-700 uppercase tracking-widest text-[10px]">Synchronizing CPT Servers...</div>
     </main>
 
@@ -88,7 +108,7 @@
             projectId: "competentraders-2efdc",
             storageBucket: "competentraders-2efdc.firebasestorage.app",
             messagingSenderId: "150379227882",
-            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+            addId: "1:150379227882:web:19d9c19805ef68b016c593"
         };
 
         const app = initializeApp(firebaseConfig);
