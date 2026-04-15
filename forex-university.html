@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPT UNIVERSITY | Master Syllabus</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;900&display=swap');
+        body { font-family: 'Outfit', sans-serif; background: #000; color: white; margin: 0; }
+        
+        .university-card { 
+            background: linear-gradient(145deg, rgba(15, 20, 30, 0.9) 0%, rgba(5, 5, 10, 1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+        .university-card:hover { border-color: rgba(59, 130, 246, 0.4); transform: translateY(-2px); }
+
+        .module-item { border-left: 2px solid rgba(59, 130, 246, 0.3); padding-left: 12px; margin-bottom: 8px; }
+
+        .enroll-btn {
+            background: #3b82f6;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.5);
+        }
+        .enroll-btn:hover { background: #2563eb; transform: scale(1.02); }
+
+        /* Level Specific Colors */
+        .lvl-1 { color: #94a3b8; } /* Novice */
+        .lvl-2 { color: #eab308; } /* Intermediate */
+        .lvl-3 { color: #3b82f6; } /* Professional */
+        .lvl-4 { color: #ef4444; } /* Expert */
+        .lvl-5 { color: #a855f7; } /* World-Class */
+
+        .cpt-watermark {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 90vw; opacity: 0.05; pointer-events: none; z-index: 0;
+            mix-blend-mode: screen;
+        }
+    </style>
+</head>
+<body class="pb-20">
+
+    <img src="vip.png" class="cpt-watermark" alt="">
+
+    <nav class="p-6 flex justify-between items-center relative z-10 sticky top-0 bg-black/50 backdrop-blur-lg">
+        <a href="user-dashboard.html" class="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition">
+            <i class="fas fa-arrow-left text-gray-400 text-sm"></i>
+        </a>
+        <div class="text-[10px] font-black uppercase tracking-[0.4em] text-blue-500">Institutional Training Matrix</div>
+        <div class="w-10 h-10 bg-blue-600/10 rounded-full flex items-center justify-center border border-blue-500/20">
+            <i class="fas fa-graduation-cap text-blue-500 text-xs"></i>
+        </div>
+    </nav>
+
+    <header class="px-6 py-12 text-center relative z-10">
+        <h1 class="text-4xl font-black italic uppercase tracking-tighter mb-2">CPT <span class="text-blue-500">University</span></h1>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.3em]">Education • practice • Accountability</p>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-6 space-y-10 relative z-10">
+
+        <div class="university-card p-8 rounded-[40px]">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-widest lvl-1">Level 01</span>
+                    <h2 class="text-2xl font-black uppercase italic">Novice Foundation</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase">Duration</p>
+                    <p class="text-xs font-black">1 MONTH</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <div class="module-item">
+                    <p class="text-[10px] font-black uppercase text-blue-400">Module 1-5</p>
+                    <p class="text-[11px] text-gray-300 uppercase leading-relaxed">Pair structures, Pips/Lots, MT4/MT5 Setup, Candlestick Psychology, and Risk Mindset.</p>
+                </div>
+            </div>
+
+            <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%201%20NOVICE%20(FREE)" 
+               class="w-full py-5 enroll-btn rounded-2xl font-black uppercase text-xs tracking-widest flex justify-between px-8 items-center">
+                <span>Enroll Now</span>
+                <span>₦0 (FREE)</span>
+            </a>
+        </div>
+
+        <div class="university-card p-8 rounded-[40px]">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-widest lvl-2">Level 02</span>
+                    <h2 class="text-2xl font-black uppercase italic">Intermediate Trader</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase">Duration</p>
+                    <p class="text-xs font-black">2 MONTHS</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <div class="module-item">
+                    <p class="text-[10px] font-black uppercase text-yellow-500">Module 6-10</p>
+                    <p class="text-[11px] text-gray-300 uppercase leading-relaxed">Technical Analysis, S&R, Moving Averages, Session Behavior, and 2% Risk Protocols.</p>
+                </div>
+            </div>
+
+            <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%202%20INTERMEDIATE%20(N25,000)" 
+               class="w-full py-5 enroll-btn rounded-2xl font-black uppercase text-xs tracking-widest flex justify-between px-8 items-center">
+                <span>Enroll Now</span>
+                <span>₦50,000</span>
+            </a>
+        </div>
+
+        <div class="university-card p-8 rounded-[40px]">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-widest lvl-3">Level 03</span>
+                    <h2 class="text-2xl font-black uppercase italic">Professional Node</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase">Duration</p>
+                    <p class="text-xs font-black">6 MONTHS</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <div class="module-item">
+                    <p class="text-[10px] font-black uppercase text-blue-500">Module 11-15</p>
+                    <p class="text-[11px] text-gray-300 uppercase leading-relaxed">Price Action Mastery, SMC Intro, Order Blocks, Sniper Entries, and Emotional Discipline.</p>
+                </div>
+            </div>
+
+            <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%203%20PROFESSIONAL%20(N75,000)" 
+               class="w-full py-5 enroll-btn rounded-2xl font-black uppercase text-xs tracking-widest flex justify-between px-8 items-center">
+                <span>Enroll Now</span>
+                <span>₦80,000</span>
+            </a>
+        </div>
+
+        <div class="university-card p-8 rounded-[40px]">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-widest lvl-4">Level 04</span>
+                    <h2 class="text-2xl font-black uppercase italic">Expert Trader</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase">Duration</p>
+                    <p class="text-xs font-black">1 YEAR</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <div class="module-item">
+                    <p class="text-[10px] font-black uppercase text-red-500">Module 16-20</p>
+                    <p class="text-[11px] text-gray-300 uppercase leading-relaxed">Institutional Stop Hunts, Custom Systems, Prop Firm Scaling, and DXY/Gold Correlations.</p>
+                </div>
+            </div>
+
+            <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%204%20EXPERT%20(N150,000)" 
+               class="w-full py-5 enroll-btn rounded-2xl font-black uppercase text-xs tracking-widest flex justify-between px-8 items-center">
+                <span>Enroll Now</span>
+                <span>₦200,000</span>
+            </a>
+        </div>
+
+        <div class="university-card p-8 rounded-[40px] border-purple-500/30">
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <span class="text-[9px] font-black uppercase tracking-widest lvl-5">Level 05</span>
+                    <h2 class="text-2xl font-black uppercase italic">World-Class Elite</h2>
+                </div>
+                <div class="text-right">
+                    <p class="text-[9px] font-bold text-gray-500 uppercase">Duration</p>
+                    <p class="text-xs font-black">LIFETIME</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4 mb-8">
+                <div class="module-item">
+                    <p class="text-[10px] font-black uppercase text-purple-500">Module 21-25 + Bonus</p>
+                    <p class="text-[11px] text-gray-300 uppercase leading-relaxed">Macroeconomics, **COT Reports**, Algorithmic Liquidity, Brand Building, and Wealth Diversification.</p>
+                </div>
+            </div>
+
+            <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%205%20WORLD%20CLASS%20(N500,000)" 
+               class="w-full py-5 enroll-btn rounded-2xl font-black uppercase text-xs tracking-widest flex justify-between px-8 items-center bg-purple-600 hover:bg-purple-700">
+                <span>Enroll Now</span>
+                <span>₦1,000,000</span>
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="mt-20 py-10 text-center border-t border-white/5">
+        <p class="text-[8px] text-gray-600 uppercase tracking-[0.5em]">Institutional Accreditation Node Active</p>
+    </footer>
+<hr>
+
+
+
+<br>
+
+
+
+<main class="max-w-4xl mx-auto px-6 space-y-12 pb-24 relative z-10">
+
+    <div class="university-card p-8 rounded-[40px] border-l-4 border-gray-400">
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Level 01</span>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter">Novice Foundation</h2>
+                <p class="text-[10px] text-gray-500 font-bold uppercase mt-1">Goal: Understand Forex + Avoid Beginner Mistakes</p>
+            </div>
+            <div class="text-right">
+                <span class="block text-[9px] font-black text-gray-600 uppercase">Duration</span>
+                <span class="text-xs font-black bg-white/5 px-3 py-1 rounded-full">1 MONTH</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 text-[11px] uppercase tracking-wider font-semibold text-gray-300">
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-blue-400 font-black mb-2">📘 Module 1: Intro to Forex</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>What is Forex (Market Structure)</li>
+                        <li>Major, minor, exotic pairs</li>
+                        <li>How money is made in trading</li>
+                        <li>Liquidity & market participants</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-blue-400 font-black mb-2">📘 Module 2: Trading Basics</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Pips, lots, spreads, leverage</li>
+                        <li>Bid vs Ask | Margin & risk</li>
+                        <li>Types of brokers (ECN/MM)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-blue-400 font-black mb-2">📘 Module 3: Platforms</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>MT4/MT5 basics</li>
+                        <li>Placing trades (Buy/Sell)</li>
+                        <li>Stop loss & Take profit</li>
+                        <li>Chart types (Candlestick focus)</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-blue-400 font-black mb-2">📘 Module 4 & 5: Strategy & Risk</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Bullish vs Bearish candles</li>
+                        <li>Engulfing, Pin Bar, Doji</li>
+                        <li>Overtrading & Revenge trading</li>
+                        <li>Demo vs Real account mindset</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%201%20NOVICE%20(FREE)" 
+           class="w-full py-6 enroll-btn rounded-3xl font-black uppercase text-xs tracking-[0.2em] flex justify-between px-10 items-center">
+            <span>START FOUNDATION</span>
+            <span>₦0 (FREE)</span>
+        </a>
+    </div>
+
+    <div class="university-card p-8 rounded-[40px] border-l-4 border-yellow-500">
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-yellow-500">Level 02</span>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter">Intermediate Trader</h2>
+                <p class="text-[10px] text-gray-500 font-bold uppercase mt-1">Goal: Build Strategy + Basic Consistency</p>
+            </div>
+            <div class="text-right">
+                <span class="block text-[9px] font-black text-gray-600 uppercase">Duration</span>
+                <span class="text-xs font-black bg-white/5 px-3 py-1 rounded-full">2 MONTHS</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 text-[11px] uppercase tracking-wider font-semibold text-gray-300">
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-yellow-500 font-black mb-2">📊 Module 6: Technical Analysis</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Support & Resistance</li>
+                        <li>Trend lines & channels</li>
+                        <li>Breakouts & retests</li>
+                        <li>Market structure (HH, HL, LH, LL)</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-yellow-500 font-black mb-2">📊 Module 7: Indicators</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Moving averages</li>
+                        <li>RSI & MACD Mastery</li>
+                        <li>When NOT to use indicators</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-yellow-500 font-black mb-2">📊 Module 8 & 9: Sessions & Edge</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>London/NY/Asian session behavior</li>
+                        <li>Best trading times</li>
+                        <li>Trend vs Range strategies</li>
+                        <li>Backtesting basics</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-yellow-500 font-black mb-2">📊 Module 10: Risk Mgmt</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>1–2% risk rule</li>
+                        <li>Risk-to-reward ratio (RRR)</li>
+                        <li>Precision Position sizing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%202%20INTERMEDIATE%20(N25,000)" 
+           class="w-full py-6 enroll-btn rounded-3xl font-black uppercase text-xs tracking-[0.2em] flex justify-between px-10 items-center">
+            <span>INITIALIZE TRAINING</span>
+            <span>₦50,000</span>
+        </a>
+    </div>
+
+    <div class="university-card p-8 rounded-[40px] border-l-4 border-blue-500">
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Level 03</span>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-blue-500">Professional Trader</h2>
+                <p class="text-[10px] text-gray-500 font-bold uppercase mt-1">Goal: Consistency + Discipline + Edge</p>
+            </div>
+            <div class="text-right">
+                <span class="block text-[9px] font-black text-gray-600 uppercase">Duration</span>
+                <span class="text-xs font-black bg-white/5 px-3 py-1 rounded-full">6 MONTHS</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 text-[11px] uppercase tracking-wider font-semibold text-gray-300">
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-blue-500 font-black mb-2">📈 Module 11 & 12: SMC Intro</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Advanced candlestick psychology</li>
+                        <li>Fakeouts & traps</li>
+                        <li>Order blocks & Liquidity zones</li>
+                        <li>Fair value gaps (FVG) & Inducement</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-blue-500 font-black mb-2">📈 Module 13: Structure Deep Dive</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Break of Structure (BOS)</li>
+                        <li>Change of Character (CHOCH)</li>
+                        <li>Internal vs external structure</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-blue-500 font-black mb-2">📈 Module 14: Execution</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Sniper entry models</li>
+                        <li>Multi-timeframe analysis</li>
+                        <li>Precision execution</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-blue-500 font-black mb-2">📈 Module 15: Psychology</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Emotional control systems</li>
+                        <li>Journaling trades</li>
+                        <li>Handling losses like a pro</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%203%20PROFESSIONAL%20(N75,000)" 
+           class="w-full py-6 enroll-btn rounded-3xl font-black uppercase text-xs tracking-[0.2em] flex justify-between px-10 items-center">
+            <span>UPGRADE TO PRO</span>
+            <span>₦80,000</span>
+        </a>
+    </div>
+
+    <div class="university-card p-8 rounded-[40px] border-l-4 border-red-500">
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-red-500">Level 04</span>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-red-500">Expert Trader</h2>
+                <p class="text-[10px] text-gray-500 font-bold uppercase mt-1">Goal: Think Like Institutions</p>
+            </div>
+            <div class="text-right">
+                <span class="block text-[9px] font-black text-gray-600 uppercase">Duration</span>
+                <span class="text-xs font-black bg-white/5 px-3 py-1 rounded-full">1 YEAR</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 text-[11px] uppercase tracking-wider font-semibold text-gray-300">
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-red-500 font-black mb-2">🧠 Module 16 & 17: Inst. Trading</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>How banks move price</li>
+                        <li>Liquidity grabs & Stop hunts</li>
+                        <li>Creating your own system</li>
+                        <li>Strategy optimization</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-red-500 font-black mb-2">🧠 Module 18: Tracking</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Trading journal metrics</li>
+                        <li>Drawdown & Expectancy analysis</li>
+                        <li>Identifying core weaknesses</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-red-500 font-black mb-2">🧠 Module 19: Capital Growth</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Compounding strategy</li>
+                        <li>Scaling accounts</li>
+                        <li>Prop firm dominance (FTMO Style)</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-red-500 font-black mb-2">🧠 Module 20: Multi-Market</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Forex vs Indices vs Crypto</li>
+                        <li>Correlations (DXY, Gold, Oil)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%204%20EXPERT%20(N150,000)" 
+           class="w-full py-6 enroll-btn rounded-3xl font-black uppercase text-xs tracking-[0.2em] flex justify-between px-10 items-center bg-red-600 hover:bg-red-700">
+            <span>UNLOCK EXPERT NODE</span>
+            <span>₦200,000</span>
+        </a>
+    </div>
+
+    <div class="university-card p-8 rounded-[40px] border-l-4 border-purple-600 shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-purple-500">Level 05</span>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-purple-500">World-Class Elite</h2>
+                <p class="text-[10px] text-gray-500 font-bold uppercase mt-1">Goal: Elite Trader + Brand + Wealth Builder</p>
+            </div>
+            <div class="text-right">
+                <span class="block text-[9px] font-black text-gray-600 uppercase">Duration</span>
+                <span class="text-xs font-black bg-purple-500/10 text-purple-400 px-3 py-1 rounded-full">LIFETIME</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 text-[11px] uppercase tracking-wider font-semibold text-gray-300">
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-purple-500 font-black mb-2">🏆 Module 21 & 22: Elite Flow</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Macroeconomics & Interest rates</li>
+                        <li>News trading (NFP, CPI, FOMC)</li>
+                        <li>Algorithmic markets</li>
+                        <li>Liquidity engineering</li>
+                        <li class="text-white font-black underline">COT REPORT ANALYSIS</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-purple-500 font-black mb-2">🏆 Module 23: Inst. Management</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Managing Large Capital</li>
+                        <li>Hedge fund risk models</li>
+                        <li>Portfolio diversification</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="module-group">
+                    <p class="text-purple-500 font-black mb-2">🏆 Module 24 & 25: Business</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Building a trading brand</li>
+                        <li>Signals/Mentorship systems</li>
+                        <li>Wealth & Lifestyle design</li>
+                        <li>Passive income strategies</li>
+                    </ul>
+                </div>
+                <div class="module-group">
+                    <p class="text-green-400 font-black mb-2">🔥 BONUS CONTENT</p>
+                    <ul class="space-y-1 opacity-70 list-disc list-inside">
+                        <li>Live trading sessions</li>
+                        <li>Trade breakdown videos</li>
+                        <li>Student challenges</li>
+                        <li class="text-white">FULL CERTIFICATION SYSTEM</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://wa.me/2349153258628?text=I%20want%20to%20enroll%20in%20LEVEL%205%20WORLD%20CLASS%20(N500,000)" 
+           class="w-full py-6 enroll-btn rounded-3xl font-black uppercase text-xs tracking-[0.2em] flex justify-between px-10 items-center bg-purple-600 hover:bg-purple-700 shadow-purple-500/20">
+            <span>ELITE MENTORSHIP</span>
+            <span>₦1,000,000</span>
+        </a>
+    </div>
+
+    <div class="university-card p-10 rounded-[50px] bg-gradient-to-br from-blue-900/20 to-transparent text-center">
+        <i class="fas fa-medal text-4xl text-blue-500 mb-6"></i>
+        <h2 class="text-2xl font-black uppercase italic mb-4">Official Accreditation</h2>
+        <div class="flex flex-wrap justify-center gap-3 text-[9px] font-black uppercase tracking-widest text-gray-400">
+            <span class="bg-white/5 px-4 py-2 rounded-full border border-white/10">Beginner Cert.</span>
+            <span class="bg-white/5 px-4 py-2 rounded-full border border-white/10">Intermediate Cert.</span>
+            <span class="bg-blue-500/10 text-blue-400 px-4 py-2 rounded-full border border-blue-500/20">Pro Cert.</span>
+            <span class="bg-red-500/10 text-red-400 px-4 py-2 rounded-full border border-red-500/20">Expert Cert.</span>
+            <span class="bg-purple-500/10 text-purple-400 px-4 py-2 rounded-full border border-purple-500/20">Elite Cert.</span>
+        </div>
+    </div>
+
+</main>
+
+
+
+
+
+
+
+
+
+<br>
+
+</body>
+</html>
