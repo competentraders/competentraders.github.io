@@ -240,38 +240,55 @@
     const email = document.getElementById('reg_email').value;
     const pass = document.getElementById('reg_pass').value;
 
-    btn.innerText = "SYNCHRONIZING...";
+    btn.innerText = "ESTABLISHING SECURE CONNECTION...";
     btn.disabled = true;
 
+    // --- The Professional Redirect Configuration ---
+    const actionCodeSettings = {
+        // This MUST be the actual live URL of your login page
+        url: window.location.origin + '/login.html', 
+        handleCodeInApp: true,
+    };
+
     try {
-        // 1. Create the user in Firebase Auth
+        // 1. Create User
         const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
         const user = userCredential.user;
 
-        // 2. THE FIX: Send verification WITHOUT custom redirect settings
-        // This avoids the "Firebase Dynamic Links" issue entirely
-        await sendEmailVerification(user);
+        // 2. Send Verification with the REDIRECT SETTINGS
+        // This prevents the "Expired/Invalid" error by giving the link a destination
+        await sendEmailVerification(user, actionCodeSettings);
 
-        // 3. Save user data to Firestore
+        // 3. Save Data with "Pending" status
         await setDoc(doc(db, "users", user.uid), {
-            fullName: `${document.getElementById('f_name').value} ${document.getElementById('l_name').value}`.trim(),
+            firstName: document.getElementById('f_name').value,
+            lastName: document.getElementById('l_name').value,
+            username: document.getElementById('reg_user').value,
             email: email,
             uid: user.uid,
+            accountStatus: "pending_verification",
             balance: 0,
-            currency: document.getElementById('reg_currency').value,
             registrationDate: new Date().toISOString()
         });
 
-        // 4. Show the overlay
+        // 4. Show the "Check Email" Overlay
         document.getElementById('overlay').style.display = 'flex';
 
     } catch (error) {
-        console.error(error);
-        showToast("Error: " + error.message);
+        console.error("Master Logic Error:", error.code);
+        
+        // Handle the specific "Domain not whitelisted" error
+        if (error.code === 'auth/unauthorized-continue-uri') {
+            showToast("Error: Domain not whitelisted in Firebase Console.");
+        } else {
+            showToast("System Error: " + error.message);
+        }
+        
         btn.innerText = "INITIALIZE SECURE ACCOUNT";
         btn.disabled = false;
     }
 });
+
 
 
 </script>
