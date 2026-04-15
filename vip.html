@@ -14,7 +14,9 @@
         .flipping-logo {
             animation: flip-3d 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
             transform-style: preserve-3d;
-             
+            /* CRITICAL: We removed mix-blend-mode. 
+               This relies on YOU providing a TRANSPARENT vip.png. */
+            background-color: transparent !important;
         }
         @keyframes flip-3d {
             0% { transform: rotateY(0deg); }
@@ -50,11 +52,10 @@
             transform: translate(-50%, -50%);
             width: 90vw;
             max-width: 700px;
-            opacity: 0.04; /* Very faint */
+            /* UPDATED: Brighter opacity (12%) */
+            opacity: 0.12; 
             pointer-events: none; /* Can click through it */
             z-index: 0;
-            /* FIX: Removes black background and makes it a watermark */
-            mix-blend-mode: screen; 
             filter: grayscale(100%);
         }
     </style>
@@ -83,7 +84,7 @@
     </main>
 
     <div id="vip-modal" class="fixed inset-0 bg-black/95 backdrop-blur-xl hidden items-center justify-center p-6 z-[9999]">
-        <div class="cpt-glass w-full max-w-sm p-8 rounded-[40px] text-center shadow-2xl">
+        <div class="cpt-glass w-full max-sm p-8 rounded-[40px] text-center shadow-2xl">
             <div class="w-16 h-16 bg-yellow-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fas fa-fingerprint text-2xl text-yellow-600"></i>
             </div>
@@ -107,7 +108,7 @@
             projectId: "competentraders-2efdc",
             storageBucket: "competentraders-2efdc.firebasestorage.app",
             messagingSenderId: "150379227882",
-            addId: "1:150379227882:web:19d9c19805ef68b016c593"
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
         };
 
         const app = initializeApp(firebaseConfig);
