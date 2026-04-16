@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication Hub | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+        :root { --bg: #06070a; --card: #0f1218; --accent: #3b82f6; --whatsapp: #25d366; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: white; line-height: 1.6; }
+        .glass-card { background: var(--card); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .input-field { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 12px; font-size: 13px; color: white; outline: none; transition: 0.3s; }
+        .input-field:focus { border-color: var(--accent); background: rgba(59, 130, 246, 0.05); }
+        .email-badge { background: rgba(59, 130, 246, 0.1); color: #60a5fa; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+    </style>
+</head>
+<body class="p-6 pb-24">
+
+    <div class="flex justify-between items-center mb-8">
+        <a href="user-dashboard.html" class="w-10 h-10 glass-card rounded-xl flex items-center justify-center text-gray-400">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <div class="text-right">
+            <h1 class="text-lg font-black uppercase italic tracking-tighter">Support <span class="text-accent">Terminal</span></h1>
+            <p class="text-[8px] font-bold text-gray-600 uppercase tracking-[0.3em]">Encrypted Channels</p>
+        </div>
+    </div>
+
+    <div class="glass-card p-6 rounded-[2rem] border-l-4 border-l-[#25d366] mb-8 flex justify-between items-center shadow-lg shadow-green-500/5">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-[#25d366]/10 rounded-2xl flex items-center justify-center text-[#25d366]">
+                <i class="fab fa-whatsapp text-2xl"></i>
+            </div>
+            <div>
+                <h2 class="text-xs font-black uppercase tracking-widest">WhatsApp Direct</h2>
+                <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">+234 915 702 3248</p>
+            </div>
+        </div>
+        <a href="https://wa.me/2349157023248" class="px-4 py-2 bg-[#25d366] text-black text-[10px] font-black uppercase rounded-lg hover:scale-105 transition">Chat Now</a>
+    </div>
+
+    <div class="glass-card p-8 rounded-[2.5rem] mb-12">
+        <h3 class="text-sm font-black uppercase tracking-widest mb-6 text-accent"><i class="fas fa-envelope-open-text mr-2"></i> Submit Official Ticket</h3>
+        
+        <form action="mailto:fraudteamcompetentraders@gmail.com" method="post" enctype="text/plain" class="flex flex-col gap-4">
+            <div class="grid grid-cols-2 gap-4">
+                <input type="text" name="Name" placeholder="Full Name" class="input-field" required>
+                <input type="email" name="Email" placeholder="Email Address" class="input-field" required>
+            </div>
+            <input type="text" name="Subject" placeholder="Inquiry Subject (e.g. Fraud Report, Account Issue)" class="input-field" required>
+            <textarea name="Message" rows="4" placeholder="Type your detailed message here..." class="input-field" required></textarea>
+            
+            <button type="submit" class="w-full py-4 bg-accent rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-accent/20 hover:brightness-110 transition">
+                Send to Fraud Team
+            </button>
+        </form>
+        <p class="text-[9px] text-center text-gray-600 mt-4 font-bold uppercase">All messages are logged and sent to: fraudteamcompetentraders@gmail.com</p>
+    </div>
+
+    <div class="space-y-4">
+        <h3 class="text-xs font-black uppercase tracking-[0.4em] text-gray-700 mb-6">Corporate Directory</h3>
+        
+        <div class="glass-card p-5 rounded-3xl border border-white/5">
+            <div class="flex justify-between items-start mb-2">
+                <span class="email-badge">Business & Partnership</span>
+                <i class="fas fa-briefcase text-[10px] text-gray-700"></i>
+            </div>
+            <p class="text-[11px] font-black text-white mb-1">businesscompetentraders@gmail.com</p>
+            <p class="text-[10px] text-gray-500 leading-relaxed font-medium">Contact for institutional partnerships, high-level investment proposals, and expansion inquiries.</p>
+        </div>
+
+        <div class="glass-card p-5 rounded-3xl border border-red-500/10">
+            <div class="flex justify-between items-start mb-2">
+                <span class="email-badge !bg-red-500/10 !text-red-500">Security & Fraud</span>
+                <i class="fas fa-shield-alt text-[10px] text-gray-700"></i>
+            </div>
+            <p class="text-[11px] font-black text-white mb-1">fraudteamcompetentraders@gmail.com</p>
+            <p class="text-[10px] text-gray-500 leading-relaxed font-medium">Report suspicious activity, account breaches, or fraudulent behavior immediately to our security specialists.</p>
+        </div>
+
+        <div class="glass-card p-5 rounded-3xl border border-white/5">
+            <div class="flex justify-between items-start mb-2">
+                <span class="email-badge">Internal Operations</span>
+                <i class="fas fa-users-cog text-[10px] text-gray-700"></i>
+            </div>
+            <p class="text-[11px] font-black text-white mb-1">Team.competentraders@gmail.com</p>
+            <p class="text-[10px] text-gray-500 leading-relaxed font-medium">General team communication, administrative support, and staff coordination desk.</p>
+        </div>
+
+        <div class="glass-card p-5 rounded-3xl border border-white/5">
+            <div class="flex justify-between items-start mb-2">
+                <span class="email-badge">General Inquiry</span>
+                <i class="fas fa-info-circle text-[10px] text-gray-700"></i>
+            </div>
+            <p class="text-[11px] font-black text-white mb-1">competentraders@gmail.com</p>
+            <p class="text-[10px] text-gray-500 leading-relaxed font-medium">The main hub for user inquiries, general platform feedback, and basic assistance.</p>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/69d36adc9ba1621c3a200a7d/default';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+    </body>
+</html>
