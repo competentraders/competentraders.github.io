@@ -8,36 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
-        
         :root { --bg: #06070a; --card: rgba(15, 18, 24, 0.8); --text: white; }
         .light-mode { --bg: #f8fafc; --card: white; --text: #0f172a; }
-
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; }
-        
-        .glass-panel { 
-            background: var(--card); 
-            backdrop-filter: blur(12px); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .input-group {
-            background: rgba(120, 120, 120, 0.05);
-            border: 1px solid rgba(120, 120, 120, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .input-group:focus-within {
-            border-color: #3b82f6;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.1);
-        }
-
+        .glass-panel { background: var(--card); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .input-group { background: rgba(120, 120, 120, 0.05); border: 1px solid rgba(120, 120, 120, 0.1); transition: all 0.3s ease; }
+        .input-group:focus-within { border-color: #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
         .error-shake { animation: shake 0.4s ease-in-out; border-color: #ef4444 !important; }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-6" id="bodyTag">
@@ -139,47 +117,47 @@
 
         try {
             let finalEmail = identifier;
+            // Username logic
             if (!identifier.includes('@')) {
                 const q = query(collection(db, "users"), where("username", "==", identifier));
                 const querySnapshot = await getDocs(q);
-                
-                if (querySnapshot.empty) {
-                    throw { code: 'auth/user-not-found' };
-                }
-                querySnapshot.forEach((doc) => {
-                    finalEmail = doc.data().email;
-                });
+                if (querySnapshot.empty) throw { code: 'auth/user-not-found' };
+                querySnapshot.forEach((doc) => { finalEmail = doc.data().email; });
             }
 
             await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
 
-            // LOG IN
+            // AUTHENTICATION
             const userCredential = await signInWithEmailAndPassword(auth, finalEmail, pass);
             const user = userCredential.user;
 
-            // STATUS CHECK (The Activation Gate)
+            // DATABASE GATE
             const userDoc = await getDoc(doc(db, "users", user.uid));
             
             if (userDoc.exists()) {
                 const userData = userDoc.data();
-
                 if (userData.accountStatus === "active") {
                     btn.innerText = "ACCESS GRANTED";
+                    // Change this to your exact dashboard filename if different
                     setTimeout(() => { window.location.href = "user-dashboard.html"; }, 800);
                 } else {
-                    // BLOCKED: Not yet activated
                     await signOut(auth);
                     throw { code: 'custom/pending-activation' };
                 }
+            } else {
+                // User in Auth but not in Firestore
+                await signOut(auth);
+                throw { code: 'custom/record-not-found' };
             }
 
         } catch (error) {
-            console.error(error.code);
+            console.error("Login Error:", error.code);
             let message = "Security Check Failed: Invalid Credentials.";
             
             if (error.code === 'auth/user-not-found') message = "Account ID not recognized.";
-            if (error.code === 'auth/wrong-password') message = "Authentication failed: Wrong password.";
+            if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') message = "Authentication failed: Wrong password.";
             if (error.code === 'custom/pending-activation') message = "Account Pending Activation. Contact Admin on WhatsApp.";
+            if (error.code === 'custom/record-not-found') message = "Profile data missing. Please re-register.";
             
             errorBox.querySelector('span').innerText = message;
             errorBox.classList.remove('hidden');
