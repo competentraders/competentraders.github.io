@@ -1,0 +1,19 @@
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    // ... Your Firebase Config ...
+
+    // Get the User ID from the URL (e.g., verify.html?uid=123)
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('uid');
+
+    if (userId) {
+        const userRef = doc(db, "users", userId);
+        updateDoc(userRef, { accountStatus: "active" })
+            .then(() => {
+                alert("Account Activated! Redirecting to Login...");
+                window.location.href = "login.html";
+            });
+    }
+</script>

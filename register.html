@@ -209,57 +209,38 @@
         btn.innerText = "INITIALIZING SECURE LINK...";
         btn.disabled = true;
 
-        try {
-            // 1. Check Referral ID (If provided)
-            let referredBy = null;
-            if(refCode !== "") {
-                const q = query(collection(db, "users"), where("referralId", "==", refCode));
-                const snap = await getDocs(q);
-                if (snap.empty) {
-                    btn.innerText = "INITIALIZE SECURE ACCOUNT";
-                    btn.disabled = false;
-                    return showToast("Invalid Referral ID.");
-                }
-                referredBy = refCode;
-            }
 
-            // 2. Create the User in Auth
-            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-            const user = userCredential.user;
 
-            // 3. SEND THE VERIFICATION (Simplified to ensure delivery)
-            await sendEmailVerification(user);
 
-            // 4. Save User Data to Firestore
-            await setDoc(doc(db, "users", user.uid), {
-                firstName: document.getElementById('f_name').value,
-                lastName: document.getElementById('l_name').value,
-                fullName: document.getElementById('f_name').value + " " + document.getElementById('l_name').value, 
-                username: document.getElementById('reg_user').value,
-                email: email,
-                phone: document.getElementById('reg_phone').value,
-                dob: document.getElementById('reg_dob').value,
-                gender: document.getElementById('reg_gender').value,
-                country: document.getElementById('reg_country').value,
-                currency: document.getElementById('reg_currency').value,
-                uid: user.uid,
-                referredBy: referredBy,
-                accountStatus: "pending",
-                balance: 0,
-                referralEarnings: 0,
-                referralCount: 0,
-                registrationDate: new Date().toISOString()
-            });
+        // Replace the try/catch block in your registration script with this:
+try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+    const user = userCredential.user;
 
-            // 5. Show Success Overlay
-            document.getElementById('overlay').style.display = 'flex';
-
-        } catch (error) {
-            btn.innerText = "INITIALIZE SECURE ACCOUNT";
-            btn.disabled = false;
-            showToast(error.message);
-        }
+    // We skip Firebase's automatic email and save the user directly
+    await setDoc(doc(db, "users", user.uid), {
+        fullName: document.getElementById('f_name').value + " " + document.getElementById('l_name').value,
+        email: email,
+        uid: user.uid,
+        accountStatus: "pending", // They start as pending
+        referralId: "CPT-" + Math.floor(1000 + Math.random() * 9000), // Give them their ID immediately
+        balance: 0,
+        registrationDate: new Date().toISOString()
     });
+
+    // We show the overlay, but tell them to click the 'Manual' link you'll provide
+    document.getElementById('overlay').style.display = 'flex';
+    
+    // Optional: Log them out immediately so they have to login to "verify"
+    await auth.signOut();
+
+} catch (error) {
+    showToast(error.message);
+}
+
+
+
+
 </script>
 
 
