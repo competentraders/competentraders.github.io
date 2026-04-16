@@ -3,108 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referral System | Competentraders</title>
+    <title>Referral | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; overflow-x: hidden; }
-        .referral-card { background: linear-gradient(145deg, #131722, #0b0d12); border: 1px solid rgba(59, 130, 246, 0.2); }
-        .id-box { background: rgba(59, 130, 246, 0.1); border: 1px dashed #3b82f6; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        :root { --bg: #06070a; --card: #0f1218; --text: #f8fafc; --border: rgba(255, 255, 255, 0.05); }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); }
+        .glass-panel { background: var(--card); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .stat-card { background: rgba(59, 130, 246, 0.05); border: 1px solid rgba(59, 130, 246, 0.1); }
+        .withdraw-note { background: rgba(245, 158, 11, 0.05); border: 1px dashed rgba(245, 158, 11, 0.3); }
     </style>
 </head>
-<body class="p-4">
+<body class="p-6">
 
-    <div class="flex items-center gap-4 mb-8">
-        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <h1 class="text-xl font-black uppercase italic">Referral <span class="text-blue-500">System</span></h1>
-    </div>
-
-    <div class="mb-8 text-center">
-        <p class="text-gray-500 text-xs font-bold uppercase tracking-widest">Welcome Back</p>
-        <h2 class="text-3xl font-black" id="userNameDisplay">Trader</h2>
-    </div>
-
-    <div class="referral-card p-8 rounded-[2rem] shadow-2xl relative overflow-hidden mb-8">
-        <div class="absolute top-0 right-0 p-4 opacity-10">
-            <i class="fas fa-users text-8xl"></i>
+    <div class="max-w-2xl mx-auto space-y-8">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-black uppercase italic tracking-tighter">Referral<span class="text-blue-600"></span></h1>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]">Affiliate Terminal</p>
+            </div>
+            <a href="user-dashboard.html" class="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-blue-500">
+                <i class="fas fa-arrow-left"></i>
+            </a>
         </div>
 
-        <div class="relative z-10">
-            <h3 class="text-lg font-bold mb-2">Your Referral ID</h3>
-            <p class="text-gray-400 text-sm mb-6">Share this ID with your friends to earn 10% commission on every deposit they make.</p>
-            
-            <div class="id-box p-5 rounded-2xl flex justify-between items-center mb-6">
-                <span class="text-2xl font-black tracking-widest text-blue-500" id="referralID">...</span>
-                <button onclick="copyID()" class="text-gray-400 hover:text-white transition">
-                    <i class="fas fa-copy"></i>
-                </button>
+        <div class="glass-panel p-8 rounded-[2.5rem] text-center space-y-6">
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-2">Share Invitation Link</label>
+                <div class="flex items-center gap-2 bg-black/40 p-4 rounded-2xl border border-white/5">
+                    <span id="referralCode" class="text-2xl font-black tracking-widest text-blue-400">---</span>
+                    <button onclick="copyCode()" class="ml-auto text-gray-400 hover:text-white transition">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
             </div>
-
-            <button onclick="shareReferral()" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-sm uppercase shadow-lg shadow-blue-500/30 active:scale-95 transition">
-                Invite Friends Now
+            <button onclick="shareLink()" class="w-full py-4 bg-blue-600 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition">
+                Copy Full Referral Link
             </button>
         </div>
-    </div>
 
-    <div class="grid grid-cols-2 gap-4 mb-8">
-        <div class="bg-[#131722] p-6 rounded-3xl border border-gray-800">
-            <p class="text-gray-500 text-[10px] font-bold uppercase">Total Referrals</p>
-            <p class="text-2xl font-black">0</p>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="stat-card p-6 rounded-3xl text-center">
+                <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Active Referrals</p>
+                <h3 id="referralCount" class="text-3xl font-black mt-2">0</h3>
+            </div>
+            <div class="stat-card p-6 rounded-3xl text-center border-green-500/20">
+                <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Withdrawable</p>
+                <h3 id="referralEarnings" class="text-3xl font-black mt-2 text-green-500">₦0</h3>
+            </div>
         </div>
-        <div class="bg-[#131722] p-6 rounded-3xl border border-gray-800">
-            <p class="text-gray-500 text-[10px] font-bold uppercase">Earned</p>
-            <p class="text-2xl font-black text-green-500">$0.00</p>
-        </div>
-    </div>
 
-    <div id="copyAlert" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-8 py-3 rounded-full font-bold shadow-2xl transition-all">
-        ID Copied to Clipboard!
-    </div>
-
-    <script>
-        // 1. Pull Name from Profile Storage
-        window.onload = () => {
-            const savedData = JSON.parse(localStorage.getItem('userProfile'));
-            if (savedData && savedData.fullName) {
-                document.getElementById('userNameDisplay').innerText = savedData.fullName;
-            }
-
-            // 2. Generate or Load Referral ID
-            let refID = localStorage.getItem('userReferralID');
-            if (!refID) {
-                // Generates a random number like CPT-4921
-                refID = "CPT-" + Math.floor(1000 + Math.random() * 9000);
-                localStorage.setItem('userReferralID', refID);
-            }
-            document.getElementById('referralID').innerText = refID;
-        };
-
-        // 3. Copy Function
-        function copyID() {
-            const idText = document.getElementById('referralID').innerText;
-            navigator.clipboard.writeText(idText);
+        <div class="glass-panel p-6 rounded-[2rem] space-y-4">
+            <div class="withdraw-note p-4 rounded-xl">
+                <p class="text-[9px] font-bold text-amber-500 uppercase leading-relaxed">
+                    <i class="fas fa-circle-info mr-1"></i> Policy Note:
+                    <br>Minimum withdrawal: <span class="text-white">₦2,000</span>.
+                    <br>Processing fee: <span class="text-white">₦500</span> per request.
+                </p>
+            </div>
             
-            const alert = document.getElementById('copyAlert');
-            alert.classList.remove('hidden');
-            setTimeout(() => alert.classList.add('hidden'), 2000);
-        }
+            <button id="withdrawBtn" disabled class="w-full py-4 bg-gray-800 text-gray-500 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                Insufficient Balance
+            </button>
+        </div>
 
-        // 4. Share Function
-        function shareReferral() {
-            const id = document.getElementById('referralID').innerText;
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Join Competentraders',
-                    text: `Join me on Competentraders! Use my Referral ID: ${id}`,
-                    url: window.location.href
-                });
-            } else {
-                copyID();
+        <div class="space-y-4">
+            <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 px-2">Referral Network</h4>
+            <div id="referralList" class="space-y-3">
+                <div class="text-center py-10 text-gray-600 text-[10px] font-bold uppercase tracking-widest">Scanning...</div>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+        authDomain: "competentraders-2efdc.firebaseapp.com",
+        projectId: "competentraders-2efdc",
+        storageBucket: "competentraders-2efdc.firebasestorage.app",
+        messagingSenderId: "150379227882",
+        appId: "1:150379227882:web:19d9c19805ef68b016c593"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let userDetails = null;
+    let currentBalance = 0;
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                userDetails = userDoc.data();
+                document.getElementById('referralCode').innerText = userDetails.referralId;
+                
+                // Fetch only 'active' referrals (optional: you only pay for active ones)
+                const q = query(collection(db, "users"), where("referredBy", "==", userDetails.referralId));
+                const querySnapshot = await getDocs(q);
+                
+                const count = querySnapshot.size;
+                currentBalance = count * 1000; // Assuming 1k per person
+                
+                document.getElementById('referralCount').innerText = count;
+                document.getElementById('referralEarnings').innerText = `₦${currentBalance}`;
+
+                // Handle Withdraw Button Logic
+                const wBtn = document.getElementById('withdrawBtn');
+                if (currentBalance >= 2000) {
+                    wBtn.disabled = false;
+                    wBtn.innerText = "Request Withdrawal";
+                    wBtn.className = "w-full py-4 bg-green-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all";
+                    wBtn.onclick = handleWithdraw;
+                }
+
+                // List Referrals
+                if (!querySnapshot.empty) {
+                    const listHtml = [];
+                    querySnapshot.forEach((doc) => {
+                        const s = doc.data();
+                        listHtml.push(`
+                            <div class="glass-panel p-4 rounded-2xl flex justify-between items-center border-l-4 ${s.accountStatus === 'active' ? 'border-green-500' : 'border-amber-500'}">
+                                <div>
+                                    <p class="text-[11px] font-bold">${s.fullName}</p>
+                                    <p class="text-[8px] text-gray-500 uppercase font-black">${s.accountStatus}</p>
+                                </div>
+                                <span class="text-[9px] font-black text-gray-400">${s.registrationDate.split('T')[0]}</span>
+                            </div>
+                        `);
+                    });
+                    document.getElementById('referralList').innerHTML = listHtml.join('');
+                } else {
+                    document.getElementById('referralList').innerHTML = `<div class="text-center py-10 text-gray-600 text-[10px] font-bold uppercase tracking-widest">No Referrals Recorded</div>`;
+                }
             }
+        } else {
+            window.location.href = "login.html";
         }
-    </script>
+    });
+
+    function handleWithdraw() {
+        const netAmount = currentBalance - 500;
+        const waNumber = "2349153258628";
+        const msg = `Hello Admin, I want to withdraw my Referral Earnings.%0A%0AName: ${userDetails.fullName}%0AUsername: ${userDetails.username}%0ABalance: ₦${currentBalance}%0AAfter Fee (₦500): ₦${netAmount}%0A%0APlease provide bank details form.`;
+        
+        if(confirm(`Confirm Withdrawal Request?\nTotal: ₦${currentBalance}\nFee: ₦500\nYou will receive: ₦${netAmount}`)) {
+            window.location.href = `https://wa.me/${waNumber}?text=${msg}`;
+        }
+    }
+
+    window.copyCode = () => {
+        const code = document.getElementById('referralCode').innerText;
+        navigator.clipboard.writeText(code);
+        alert("Code Copied!");
+    };
+
+    window.shareLink = () => {
+        const code = document.getElementById('referralCode').innerText;
+        const link = `https://competentraders.vercel.app/register.html?ref=${code}`;
+        navigator.clipboard.writeText(link);
+        alert("Link Copied to Clipboard!");
+    };
+</script>
 </body>
 </html>
