@@ -147,6 +147,14 @@
         </form>
     </div>
 
+
+
+
+
+
+
+
+
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -165,18 +173,20 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
+    // Helper: Toggle Password Visibility
+    window.togglePass = (id) => {
+        const input = document.getElementById(id);
+        input.type = input.type === 'password' ? 'text' : 'password';
+    };
+
+    // Real-time Password Validator
     window.checkPassword = (p) => {
         const critLength = document.getElementById('crit-length');
         const critUpper = document.getElementById('crit-upper');
         const critEnd = document.getElementById('crit-end');
-        if (p.length >= 8) { critLength.classList.replace('text-gray-600', 'text-blue-500'); } else { critLength.classList.replace('text-blue-500', 'text-gray-600'); }
-        if (/^[A-Z]/.test(p)) { critUpper.classList.replace('text-gray-600', 'text-blue-500'); } else { critUpper.classList.replace('text-blue-500', 'text-gray-600'); }
-        if (/[0-9!@#$%^&*]$/.test(p)) { critEnd.classList.replace('text-gray-600', 'text-blue-500'); } else { critEnd.classList.replace('text-blue-500', 'text-gray-600'); }
-    };
-
-    window.togglePass = (id) => {
-        const input = document.getElementById(id);
-        input.type = input.type === 'password' ? 'text' : 'password';
+        if (p.length >= 8) critLength.style.color = "#3b82f6"; else critLength.style.color = "#64748b";
+        if (/^[A-Z]/.test(p)) critUpper.style.color = "#3b82f6"; else critUpper.style.color = "#64748b";
+        if (/[0-9!@#$%^&*]$/.test(p)) critEnd.style.color = "#3b82f6"; else critEnd.style.color = "#64748b";
     };
 
     function showToast(msg) {
@@ -196,49 +206,31 @@
 
         if(pass !== confirm) return showToast("Passwords do not match!");
 
-        btn.innerText = "VERIFYING SECURITY NODE...";
+        btn.innerText = "INITIALIZING SECURE LINK...";
         btn.disabled = true;
 
-
-
-
-
-        // Replace your existing actionCodeSettings with this:
-const actionCodeSettings = {
-    url: 'https://competentraders.vercel.app/login.html',
-    handleCodeInApp: true,
-};
-
-// Ensure this specific line is used to send
-await sendEmailVerification(user, actionCodeSettings);
-
-
-
-
-
-
-
-
         try {
-            // --- OPTIONAL REFERRAL VALIDATION ---
+            // 1. Check Referral ID (If provided)
             let referredBy = null;
             if(refCode !== "") {
                 const q = query(collection(db, "users"), where("referralId", "==", refCode));
-                const querySnapshot = await getDocs(q);
-                if (querySnapshot.empty) {
-                    showToast("Invalid Referral ID. Leave blank if none.");
+                const snap = await getDocs(q);
+                if (snap.empty) {
                     btn.innerText = "INITIALIZE SECURE ACCOUNT";
                     btn.disabled = false;
-                    return;
+                    return showToast("Invalid Referral ID.");
                 }
                 referredBy = refCode;
             }
 
+            // 2. Create the User in Auth
             const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
             const user = userCredential.user;
 
-            await sendEmailVerification(user, actionCodeSettings);
+            // 3. SEND THE VERIFICATION (Simplified to ensure delivery)
+            await sendEmailVerification(user);
 
+            // 4. Save User Data to Firestore
             await setDoc(doc(db, "users", user.uid), {
                 firstName: document.getElementById('f_name').value,
                 lastName: document.getElementById('l_name').value,
@@ -252,21 +244,32 @@ await sendEmailVerification(user, actionCodeSettings);
                 currency: document.getElementById('reg_currency').value,
                 uid: user.uid,
                 referredBy: referredBy,
-                accountStatus: "pending_verification",
+                accountStatus: "pending",
                 balance: 0,
                 referralEarnings: 0,
                 referralCount: 0,
                 registrationDate: new Date().toISOString()
             });
 
+            // 5. Show Success Overlay
             document.getElementById('overlay').style.display = 'flex';
 
         } catch (error) {
-            showToast(error.message);
             btn.innerText = "INITIALIZE SECURE ACCOUNT";
             btn.disabled = false;
+            showToast(error.message);
         }
     });
 </script>
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
