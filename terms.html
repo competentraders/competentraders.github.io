@@ -3,61 +3,558 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms & Conditions | Competentraders</title>
+    <title>Terms of Service | Competentraders Global</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap');
-        body { font-family: 'Outfit', sans-serif; background: #06070a; color: white; line-height: 1.6; }
-        .legal-card { background: #0f111a; border: 1px solid #1e293b; border-radius: 24px; padding: 24px; margin-bottom: 20px; }
-        .section-title { color: #3b82f6; font-weight: 900; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-        .legal-text { color: #94a3b8; font-size: 14px; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+        :root { --bg: #06070a; --card: #0f1218; --accent: #3b82f6; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: white; line-height: 1.6; }
+        .glass-card { background: var(--card); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .legal-section { border-bottom: 1px solid rgba(255, 255, 255, 0.03); padding-bottom: 2rem; margin-bottom: 2rem; }
+        .legal-text { color: #94a3b8; font-size: 12px; text-align: justify; }
+        .sticky-agreement { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: rgba(15, 18, 24, 0.98); 
+            backdrop-filter: blur(20px); 
+            border-top: 2px solid var(--accent);
+            z-index: 1000;
+        }
     </style>
 </head>
-<body class="p-4 pb-12">
+<body class="p-6 pb-48">
 
-    <div class="flex items-center gap-4 mb-8">
-        <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-full text-blue-500">
-            <i class="fas fa-arrow-left"></i>
-        </a>
-        <h1 class="text-xl font-black uppercase italic">Terms & <span class="text-blue-500">Conditions</span></h1>
+    <div class="max-w-4xl mx-auto">
+        <div class="flex flex-col items-center text-center mb-16">
+            <div class="w-16 h-16 glass-card rounded-3xl flex items-center justify-center text-accent mb-6 shadow-2xl shadow-accent/20">
+                <i class="fas fa-file-contract text-2xl"></i>
+            </div>
+            <h1 class="text-3xl font-black uppercase tracking-tighter">Legal <span class="text-accent">Framework</span></h1>
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.5em] mt-2">Competentraders Global Agreement</p>
+        </div>
+
+        <div class="glass-card p-8 md:p-12 rounded-[3rem] shadow-2xl">
+            
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">1. Binding Acceptance</h2>
+                <p class="legal-text">
+                    By registering an account with Competentraders, you enter into a legally binding contract with our global digital entity. If you do not agree to these terms, you must cease all use of the platform immediately. Your continued use constitutes an irrevocable acceptance of these bylaws.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">2. Eligibility & Compliance</h2>
+                <p class="legal-text">
+                    Access is strictly limited to individuals aged 18 or older. You represent that you are not on any international sanctions list. You are solely responsible for ensuring that your use of this platform complies with the laws of your local jurisdiction.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">3. Risk Acknowledgement</h2>
+                <p class="legal-text italic">
+                    Capital at Risk: Forex and Cryptocurrency markets are volatile. Competentraders provides algorithmic strategies and insights, but we do not provide a "Guaranteed Profit" mandate. You acknowledge that financial loss is possible and that Competentraders and Ugbesia Godswill are not liable for any depreciation of capital.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">4. Anti-Fraud & AML Policy</h2>
+                <p class="legal-text">
+                    We maintain a zero-tolerance policy regarding money laundering and fraudulent deposits. Any user found uploading fake transaction proofs or manipulating the Opay deposit system will be permanently blacklisted. Evidence of such crimes will be forwarded to our <strong>Fraud Team</strong> and relevant authorities.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">5. Account Integrity & Referrals</h2>
+                <p class="legal-text">
+                    Users are permitted only ONE account per person. The use of "bots," fake referral accounts, or "sybil attacks" to extract referral bonuses is a breach of contract. Such accounts will be liquidated and closed without notice.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">6. Withdrawal Protocal</h2>
+                <p class="legal-text">
+                    Withdrawal requests are processed within a standard 24-48 hour window for security verification. We reserve the right to delay withdrawals if suspicious activity is detected on the account or if the user has violated referral policies.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">7. Intellectual Property</h2>
+                <p class="legal-text">
+                    The Competentraders interface, logos, strategies, and the "Lifting Lives" mission statement are the exclusive intellectual property of Ugbesia Godswill. Unauthorized reproduction or "cloning" of this platform is strictly prohibited and will be met with legal action.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">8. Digital-First Operation</h2>
+                <p class="legal-text">
+                    As a 100% online entity, Competentraders does not maintain physical storefronts. All official communication must go through <strong>competentraders@gmail.com</strong> or our official Chat Terminal. We are not responsible for information provided on unofficial third-party social media pages.
+                </p>
+            </div>
+
+            <div class="legal-section">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">9. Limitation of Liability</h2>
+                <p class="legal-text">
+                    To the maximum extent permitted by law, Competentraders shall not be liable for any indirect, incidental, or special damages, including loss of profits, data, or use, even if advised of the possibility of such damages.
+                </p>
+            </div>
+
+            <div class="legal-section border-none">
+                <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">10. Termination of Service</h2>
+                <p class="legal-text">
+                    We reserve the right to suspend or terminate any account at our sole discretion, without prior notice, for conduct that we believe violates these Terms or is harmful to other users of the platform.
+                </p>
+            </div>
+
+
+
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">11. Deposit Verification Protocal</h2>
+    <p class="legal-text">
+        All financial deposits made via Opay or other integrated gateways must be accompanied by a valid transaction receipt. The system utilizes automated and manual verification. Any attempt to upload manipulated or third-party screenshots will result in an immediate account freeze for investigation by the Fraud Team.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">12. Trading Strategy Limitation</h2>
+    <p class="legal-text">
+        The strategies provided for Sports Betting and Forex Investment are proprietary. Users are granted a non-exclusive license to use these insights for personal gain within the platform. Re-selling or distributing Competentraders’ signals to external groups is a violation of our intellectual property rights.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">13. Service Availability (Uptime)</h2>
+    <p class="legal-text">
+        While we strive for 99.9% uptime, Competentraders is not liable for losses incurred during temporary system maintenance, server upgrades, or unexpected technical outages. We reserve the right to suspend the interface for critical security patches without prior notice.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">14. User Conduct & Tolerance</h2>
+    <p class="legal-text">
+        In line with our mission to "Lift Lives," we maintain a high standard of mutual respect. Harassment of staff, use of profanity in the Chat Terminal, or spreading "FUD" (Fear, Uncertainty, Doubt) regarding the platform’s liquidity will lead to account termination.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">15. Modification of Terms</h2>
+    <p class="legal-text">
+        Competentraders reserves the right to modify this legal framework at any time. Changes become effective immediately upon being posted to this page. It is the user’s responsibility to review these terms periodically to remain in compliance.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">16. Tax Responsibilities</h2>
+    <p class="legal-text">
+        Users are solely responsible for reporting and paying any taxes applicable to their earnings on this platform according to their local tax laws. Competentraders does not withhold taxes on behalf of any government entity.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">17. Data Privacy & Encryption</h2>
+    <p class="legal-text">
+        We utilize high-level encryption to protect your personal data. However, you acknowledge that no digital transmission is 100% secure. By using the platform, you agree to our data handling practices as outlined in our internal privacy policy.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">18. Referral System Manipulation</h2>
+    <p class="legal-text">
+        Referral bonuses are intended for genuine growth. "Self-referring" or using virtual private networks (VPNs) to create multiple identities to harvest bonuses is considered theft and will result in the forfeiture of all balances.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">19. External Links & Third Parties</h2>
+    <p class="legal-text">
+        Our platform may contain links to third-party sites (e.g., Opay, Binance). We do not control or endorse the content or practices of these external services and are not liable for any issues arising from your use of them.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">20. Force Majeure</h2>
+    <p class="legal-text">
+        Competentraders shall not be held liable for failure to perform its obligations due to events beyond its reasonable control, including but not limited to acts of God, war, revolution, or global internet infrastructure failure.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">21. Subscription Cycles</h2>
+    <p class="legal-text">
+        Investment plans operate on fixed cycles. Funds are locked within the chosen strategy for the duration of the cycle to ensure market stability. Early termination of a subscription is not permitted under any circumstances.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">22. Bonus Forfeiture</h2>
+    <p class="legal-text">
+        Promotional bonuses, including welcome and seasonal rewards, may have specific turnover requirements. Failure to meet these requirements within the specified timeframe may lead to the forfeiture of the bonus amount.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">23. Inactive Accounts</h2>
+    <p class="legal-text">
+        Accounts that remain inactive for more than 180 days may be subject to a maintenance fee or archival. Archival does not delete your balance but requires a formal request to the Team email to reactivate.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">24. Governing Law</h2>
+    <p class="legal-text">
+        These terms are governed by the principles of international commercial law and the digital regulations of our operating jurisdiction. Any disputes shall be resolved through binding arbitration before seeking litigation.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">25. Indemnification</h2>
+    <p class="legal-text">
+        You agree to indemnify and hold harmless Ugbesia Godswill and the Competentraders team from any claims, damages, or legal fees resulting from your violation of these terms or misuse of the platform.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">26. Account Ownership Transfers</h2>
+    <p class="legal-text">
+        Competentraders accounts are personal and non-transferable. You may not sell, trade, or gift your account to another individual. Ownership changes are only permitted in extreme legal circumstances (e.g., inheritance) with certified documentation.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">27. Language of Agreement</h2>
+    <p class="legal-text">
+        The official language of this agreement is English. In the event of any discrepancy between the English version and a translated version provided for convenience, the English version shall prevail.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">28. Refund Policy</h2>
+    <p class="legal-text">
+        Due to the nature of digital investments and live market trading, all subscription purchases are final. Refunds are not issued once a trading cycle has commenced or funds have been deployed into a strategy.
+    </p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">29. Waiver of Rights</h2>
+    <p class="legal-text">
+        Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision is held to be invalid by a court, the remaining provisions will remain in effect.
+    </p>
+</div>
+
+<div class="legal-section border-none">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">30. Entire Agreement</h2>
+    <p class="legal-text">
+        These 30 clauses constitute the entire agreement between the User and Competentraders Global. This agreement supersedes all prior verbal or written understandings. By clicking "Accept & Agree," you confirm your total commitment to these principles.
+    </p>
+</div>
+
+
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">31. Anti-Phishing Advisory</h2>
+    <p class="legal-text">Users are responsible for verifying they are on the official Competentraders domain. We are not liable for losses resulting from "clone" sites or fraudulent links shared in unofficial Telegram or WhatsApp groups.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">32. Proof of Identity (KYC)</h2>
+    <p class="legal-text">We reserve the right to request a valid government-issued ID or facial verification at any time to prevent identity theft. Failure to comply will result in a temporary suspension of withdrawal privileges.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">33. Market Volatility Protection</h2>
+    <p class="legal-text">In extreme market conditions (e.g., a "Flash Crash"), Competentraders may temporarily pause trading strategies to protect user capital from total liquidation.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">34. Automated Bot Prohibition</h2>
+    <p class="legal-text">The use of external scripts, scrapers, or automated trading bots to interact with the Competentraders interface is strictly prohibited and constitutes a security breach.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">35. Currency Conversion Rates</h2>
+    <p class="legal-text">Deposits and withdrawals are calculated based on real-time market exchange rates. Competentraders is not responsible for fluctuations in the value of the Naira (NGN) against the Dollar (USD) during processing times.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">36. Third-Party API Reliance</h2>
+    <p class="legal-text">Our system relies on third-party data providers for market prices. We are not liable for technical errors or "lag" originating from these external data sources.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">37. Public Statements & Defamation</h2>
+    <p class="legal-text">Users agree not to make false or malicious public statements regarding Competentraders. Legal action for defamation will be pursued against individuals spreading unverified claims to damage our reputation.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">38. Conflict of Interest</h2>
+    <p class="legal-text">Employees and direct relatives of the Competentraders core team are prohibited from participating in promotional contests or high-yield referral cycles to ensure fairness.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">39. Digital Inheritance Law</h2>
+    <p class="legal-text">In the event of a user's demise, account access can only be transferred to a legally designated Next of Kin upon submission of a notarized Death Certificate and Proof of Relationship.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">40. Right to Audit</h2>
+    <p class="legal-text">Competentraders reserves the right to audit any account suspected of irregular earning patterns. Accounts under audit may be frozen for up to 14 business days.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">41. Password Security Responsibility</h2>
+    <p class="legal-text">Users are 100% responsible for the strength and secrecy of their login credentials. We recommend changing passwords every 30 days for maximum security.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">42. Unclaimed Funds</h2>
+    <p class="legal-text">Funds left in a "Pending" withdrawal state for over 90 days due to incorrect user banking details will be returned to the user's internal wallet balance.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">43. Exploitation of System Glitches</h2>
+    <p class="legal-text">If a technical glitch allows for unintended profits, the user must report it. Keeping or attempting to withdraw "glitch-related" funds is considered theft.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">44. Mobile Device Compatibility</h2>
+    <p class="legal-text">We do not guarantee that all features will function on outdated mobile browsers or modified operating systems (e.g., rooted or jailbroken devices).</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">45. Regional Restrictions</h2>
+    <p class="legal-text">Competentraders does not offer services to residents of countries where digital asset trading is explicitly banned by federal law.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">46. Educational Content Disclaimer</h2>
+    <p class="legal-text">Videos, blogs, and tutorials provided are for educational purposes only and should not be taken as absolute financial advice.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">47. Server Maintenance Windows</h2>
+    <p class="legal-text">Official maintenance usually occurs between 02:00 AM and 04:00 AM (GMT+1). Users are advised not to perform heavy transactions during these windows.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">48. Zero Tolerance for Hate Speech</h2>
+    <p class="legal-text">The "Lifting Lives" mission is inclusive. Any user found using racially or religiously offensive language in support chats will be banned.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">49. IP Address Logging</h2>
+    <p class="legal-text">For security, we log IP addresses during login. Rapid switching of IP addresses (via VPN) during a withdrawal may trigger a security hold.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">50. Minimum/Maximum Limits</h2>
+    <p class="legal-text">We reserve the right to adjust minimum deposit and maximum withdrawal limits without notice to maintain platform liquidity.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">51. Promotional Content Rights</h2>
+    <p class="legal-text">By sharing a testimonial or "Profit Proof" in our community groups, you grant Competentraders the right to use that content for marketing purposes.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">52. Notification of Breach</h2>
+    <p class="legal-text">In the event of a suspected security breach, Competentraders will notify users via the official website banner or registered email within 72 hours.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">53. Account Recovery Process</h2>
+    <p class="legal-text">Recovery of lost accounts requires answering security questions and verifying the last successful deposit amount for ownership proof.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">54. Non-Solicitation</h2>
+    <p class="legal-text">Users are prohibited from soliciting other Competentraders members to join competing platforms or external investment schemes.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">55. Verification Fees</h2>
+    <p class="legal-text">Competentraders does not charge "activation fees" via DM. Any such request is a scam. All legitimate fees are handled internally through the dashboard.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">56. Strategy Rebalancing</h2>
+    <p class="legal-text">We reserve the right to rebalance or retire certain trading plans if they no longer meet our risk-to-reward safety standards.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">57. Sub-licensing Prohibition</h2>
+    <p class="legal-text">Users may not create "sub-platforms" or mirrors of Competentraders using our data or branding.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">58. Behavioral Analytics</h2>
+    <p class="legal-text">We use anonymized behavioral data to improve the user interface and detect bot-like navigation patterns.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">59. Communication Consent</h2>
+    <p class="legal-text">By agreeing, you consent to receive critical system updates via email and browser notifications.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">60. Headings for Convenience</h2>
+    <p class="legal-text">The headings used in this agreement are for convenience only and do not affect the legal interpretation of the clauses.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">61. No Partnership or Agency</h2>
+    <p class="legal-text">Being a user of Competentraders does not make you a partner, employee, or legal agent of Ugbesia Godswill.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">62. Sanctions Policy</h2>
+    <p class="legal-text">Accounts found to be associated with money laundering or terrorism financing will be seized and reported to international authorities immediately.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">63. Dispute Resolution Window</h2>
+    <p class="legal-text">Any disputes regarding account balances must be raised within 30 days of the transaction date.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">64. Hardware/Software Requirements</h2>
+    <p class="legal-text">Users are responsible for maintaining a secure internet connection and a modern web browser to access our services.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">65. Survival of Agreement</h2>
+    <p class="legal-text">Even if you close your account, the clauses regarding Indemnification and Intellectual Property remain in effect.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">66. Withdrawal Method Consistency</h2>
+    <p class="legal-text">For security, we may require that withdrawals be sent to the same Opay or Bank account used for the initial deposit.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">67. Anti-Spam Policy</h2>
+    <p class="legal-text">Users found spamming the "Chat with Us" feature with repeated messages will have their chat access revoked.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">68. Community Moderator Authority</h2>
+    <p class="legal-text">Official moderators in our community groups have the authority to remove members who violate group rules.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">69. Referral Link Expiry</h2>
+    <p class="legal-text">We reserve the right to refresh or expire old referral links to improve tracking accuracy.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">70. Platform Liquidity Reserve</h2>
+    <p class="legal-text">Competentraders maintains a liquidity reserve to ensure payouts, but we do not disclose the private volume of this reserve for security reasons.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">71. User Feedback Rights</h2>
+    <p class="legal-text">Suggestions made by users for platform improvements become the property of Competentraders without compensation.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">72. Email Verification</h2>
+    <p class="legal-text">All accounts must be linked to a verified email address. Failure to verify your email within 7 days may result in account restriction.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">73. Automated Error Correction</h2>
+    <p class="legal-text">The system automatically corrects balance errors caused by server lag or price miscalculations.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">74. Right to Discontinue</h2>
+    <p class="legal-text">We reserve the right to discontinue the platform at any time, provided all active user balances are cleared and paid out.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">75. Judicial Compliance</h2>
+    <p class="legal-text">We will comply with any court orders or legal subpoenas from recognized government agencies requesting user data.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">76. Internal Security Audits</h2>
+    <p class="legal-text">Random security checks are performed on accounts to ensure no breach has occurred.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">77. Multi-Factor Authentication (MFA)</h2>
+    <p class="legal-text">Users who choose not to enable available MFA features assume all risk for account hacking.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">78. Time Zone Standard</h2>
+    <p class="legal-text">All transaction timestamps are based on West Africa Time (WAT) unless otherwise stated.</p>
+</div>
+
+<div class="legal-section">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">79. Severability</h2>
+    <p class="legal-text">If one clause in this 80-clause document is found to be legally invalid, all other clauses remain in full force.</p>
+</div>
+
+<div class="legal-section border-none">
+    <h2 class="text-xs font-black uppercase tracking-widest text-white mb-4">80. Final Affirmation</h2>
+    <p class="legal-text font-black italic">By clicking "Accept & Agree," you acknowledge that you have read, understood, and now submit to all 80 clauses of the Competentraders Global Agreement. You enter this journey with full responsibility for your financial future. To the glory of God.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="mt-12 text-center">
+                <p class="text-[11px] font-black italic text-gray-500">To the glory of God, we operate with maximum integrity. Amen.</p>
+            </div>
+        </div>
     </div>
 
-    <div class="mb-8 px-2">
-        <p class="text-sm text-gray-400">Last Updated: January 2026</p>
-        <p class="mt-2 text-gray-300">By using the Competentraders platform, you agree to comply with and be bound by the following terms and conditions.</p>
+    <div class="sticky-agreement p-6">
+        <div class="max-w-md mx-auto space-y-4">
+            <div class="flex items-start gap-3">
+                <input type="checkbox" id="agreeCheck" class="w-5 h-5 mt-0.5 rounded border-gray-800 bg-gray-900 accent-accent">
+                <label for="agreeCheck" class="text-[10px] font-bold uppercase text-gray-400 leading-tight">
+                    I acknowledge that I have read the full 10-clause legal framework and agree to abide by the terms of Competentraders.
+                </label>
+            </div>
+            
+            <button onclick="acceptTerms()" class="w-full py-4 bg-accent rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-accent/30 hover:brightness-110 transition-all">
+                I Accept & Agree
+            </button>
+        </div>
     </div>
 
-    <div class="legal-card">
-        <div class="section-title"><i class="fas fa-user-check"></i> 1. User Eligibility</div>
-        <p class="legal-text">Users must be at least 18 years of age to participate in investment plans. By creating an account, you represent that all information provided is accurate and belongs to you.</p>
-    </div>
-
-    <div class="legal-card">
-        <div class="section-title"><i class="fas fa-triangle-exclamation"></i> 2. Risk Disclosure</div>
-        <p class="legal-text">Trading Forex, Sports strategies, and Cryptocurrency involves significant risk. Competentraders provides tools and managed services, but past performance is not a guarantee of future results. Only invest capital you can afford to lose.</p>
-    </div>
-
-    <div class="legal-card">
-        <div class="section-title"><i class="fas fa-wallet"></i> 3. Financial Transactions</div>
-        <p class="legal-text">Deposits are processed upon verification of payment. Withdrawals are processed within 24-48 business hours. Users are responsible for providing correct bank or wallet details in the settings page.</p>
-    </div>
-
-    <div class="legal-card">
-        <div class="section-title"><i class="fas fa-users"></i> 4. Referral Conduct</div>
-        <p class="legal-text">Spamming referral links or creating multiple accounts to farm referral bonuses is strictly prohibited. Violation may lead to account suspension and forfeiture of earnings.</p>
-    </div>
-
-    <div class="legal-card">
-        <div class="section-title"><i class="fas fa-lock"></i> 5. Data Privacy</div>
-        <p class="legal-text">We use local device storage to enhance your experience. You are responsible for maintaining the security of your device. Competentraders will never ask for your password via email or customer service.</p>
-    </div>
-
-    <div class="mt-8">
-        <a href="user-dashboard.html" class="block w-full py-5 bg-blue-600 rounded-3xl text-center font-black text-sm uppercase shadow-xl shadow-blue-500/20 active:scale-95 transition">
-            I Accept the Terms
-        </a>
-    </div>
+    <script>
+        function acceptTerms() {
+            if(document.getElementById('agreeCheck').checked) {
+                window.location.href = 'user-dashboard.html';
+            } else {
+                alert("Please confirm your agreement by checking the box.");
+            }
+        }
+    </script>
 
 </body>
 </html>
