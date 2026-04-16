@@ -494,5 +494,104 @@
     <script>
         new TradingView.widget({ "autosize": true, "symbol": "BINANCE:BTCUSDT", "interval": "1", "theme": "dark", "container_id": "tradingview_live" });
     </script>
+
+
+<br>
+
+
+
+
+<div id="termsModal" class="fixed inset-0 z-[9999] hidden">
+    <div class="absolute inset-0 bg-[#06070a]/90 backdrop-blur-xl"></div>
+    
+    <div class="relative h-full w-full max-w-2xl mx-auto flex flex-col p-4 md:p-8">
+        <div class="glass-card flex-1 overflow-y-auto rounded-[2.5rem] p-6 md:p-10 border border-white/10 shadow-2xl custom-scrollbar">
+            
+            <div class="flex flex-col items-center text-center mb-10">
+                <div class="w-14 h-14 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 mb-4">
+                    <i class="fas fa-file-signature text-xl"></i>
+                </div>
+                <h2 class="text-xl font-black uppercase tracking-tighter">Legal Requirement</h2>
+                <p class="text-[9px] font-bold text-gray-500 uppercase tracking-[0.3em]">Must Accept to Access Dashboard</p>
+            </div>
+
+            <div class="space-y-6">
+                <div class="p-4 bg-white/5 rounded-2xl border border-white/5">
+                    <h3 class="text-[10px] font-black uppercase text-blue-400 mb-2">1. Binding Acceptance</h3>
+                    <p class="text-[11px] text-gray-400 leading-relaxed text-justify">By registering an account with Competentraders, you enter into a legally binding contract with our global digital entity. If you do not agree to these terms, you must cease all use of the platform immediately.</p>
+                </div>
+                <div class="py-10 text-center">
+                    <p class="text-[10px] font-black text-gray-600 italic">Scroll to the bottom to confirm affirmation.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 glass-card p-6 rounded-3xl border border-blue-500/20">
+            <div class="flex items-start gap-3 mb-4">
+                <input type="checkbox" id="modalAgreeCheck" class="w-5 h-5 rounded bg-gray-900 border-gray-700 accent-blue-500">
+                <label for="modalAgreeCheck" class="text-[10px] font-bold uppercase text-gray-400 leading-tight">
+                    I have read and I irrevocably accept all 80 clauses of the Competentraders Global Agreement.
+                </label>
+            </div>
+            <button onclick="confirmAgreement()" class="w-full py-4 bg-blue-600 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-blue-500/20 hover:brightness-110 transition-all">
+                Access My Account
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom Scrollbar for the legal text */
+    .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
+</style>
+
+<script>
+    // 1. Check if they already agreed when the page loads
+    window.onload = function() {
+        const hasAgreed = localStorage.getItem('competentraders_agreed');
+        if (!hasAgreed) {
+            document.getElementById('termsModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
+        }
+    };
+
+    // 2. Function to save agreement and hide modal
+    function confirmAgreement() {
+        const checkbox = document.getElementById('modalAgreeCheck');
+        if (checkbox.checked) {
+            // Save to local storage so it doesn't show again
+            localStorage.setItem('competentraders_agreed', 'true');
+            
+            // Hide modal
+            document.getElementById('termsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+            
+            // Optional: Success message
+            console.log("Legal affirmation recorded.");
+        } else {
+            alert("To continue to your dashboard, you must acknowledge the 80-clause legal framework.");
+        }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
 </body>
 </html>
