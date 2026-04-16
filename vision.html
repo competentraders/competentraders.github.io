@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vision | Competentraders Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
+        :root { --bg: #06070a; --card: #0f1218; --text: #f8fafc; --blue: #3b82f6; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); margin: 0; }
+        .glass-card { background: var(--card); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .gradient-text { background: linear-gradient(to right, #3b82f6, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .vision-border { border-left: 2px solid var(--blue); }
+        .poverty-glow { text-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <div class="max-w-4xl mx-auto space-y-12">
+        <div class="flex justify-between items-center">
+            <a href="user-dashboard.html" class="w-10 h-10 glass-card rounded-xl flex items-center justify-center text-blue-500 hover:bg-blue-500/10 transition">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="text-right">
+                <h1 class="text-3xl font-black uppercase italic tracking-tighter">Global <span class="text-blue-600">Empire</span></h1>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]">Competentraders Security</p>
+            </div>
+        </div>
+
+        <section class="glass-card p-8 md:p-12 rounded-[3rem] relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8 opacity-5">
+                <i class="fas fa-earth-africa text-9xl"></i>
+            </div>
+            
+            <div class="relative z-10 space-y-6">
+                <span class="text-blue-500 font-black uppercase text-[10px] tracking-[0.4em]">The Core Objective</span>
+                <h2 class="text-4xl md:text-5xl font-black tracking-tighter leading-none">ERADICATING POVERTY <br><span class="gradient-text">THROUGH PRECISION.</span></h2>
+                <p class="text-gray-300 text-sm md:text-lg leading-relaxed max-w-3xl font-medium">
+                    The ultimate goal of Competentraders is to systematically reduce poverty and eliminate financial lack. We believe that poverty is a lack of information and access. This platform is built to provide that access, turning the financial markets into a tool for mass wealth creation. We are here to ensure that no dedicated individual is left behind by the global economy.
+                </p>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-card p-8 rounded-[2.5rem] space-y-4 vision-border">
+                <i class="fas fa-trophy text-blue-500 text-2xl"></i>
+                <h3 class="text-xl font-black uppercase tracking-tighter">Market Leadership</h3>
+                <p class="text-gray-500 text-[11px] leading-relaxed font-bold uppercase tracking-wider">
+                    Our vision is clear: To be the **number one leading company worldwide** in financial technology and market analysis. We don't just participate in the market; we aim to dominate it by providing accuracy that was once reserved only for the elite.
+                </p>
+            </div>
+
+            <div class="glass-card p-8 rounded-[2.5rem] space-y-4 vision-border">
+                <i class="fas fa-chart-line text-blue-500 text-2xl"></i>
+                <h3 class="text-xl font-black uppercase tracking-tighter">Global Expansion</h3>
+                <p class="text-gray-500 text-[11px] leading-relaxed font-bold uppercase tracking-wider">
+                    Competentraders is expanding across every continent. We are building a global network where financial lack is replaced with institutional-grade skills and consistent profitability.
+                </p>
+            </div>
+        </section>
+
+        <div class="glass-card p-8 rounded-[2.5rem] text-center border-t-4 border-blue-600">
+            <h4 class="text-sm font-black uppercase tracking-widest mb-4">Our Commitment</h4>
+            <p class="text-gray-400 text-xs italic font-medium leading-relaxed">
+                "We measure our success not by our profit, but by the number of people we lift out of financial struggle. When you trade with us, you are joining a movement toward a world without lack."
+            </p>
+        </div>
+
+        <div class="text-center py-10">
+            <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.5em] mb-6">World Class Trading</p>
+            <div class="flex justify-center gap-4">
+                <div class="h-[1px] w-12 bg-gray-800 self-center"></div>
+                <i class="fas fa-globe text-blue-900"></i>
+                <div class="h-[1px] w-12 bg-gray-800 self-center"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
