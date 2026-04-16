@@ -32,15 +32,15 @@
 
     <div id="overlay">
         <div class="mb-6 relative">
-            <i class="fas fa-paper-plane text-6xl text-blue-600 animate-pulse"></i>
-            <div class="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
+            <i class="fab fa-whatsapp text-6xl text-green-500 animate-pulse"></i>
+            <div class="absolute -top-2 -right-2 w-4 h-4 bg-blue-500 rounded-full animate-ping"></div>
         </div>
-        <h2 class="text-3xl font-black uppercase tracking-tighter italic">Security Link Dispatched</h2>
-        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-4 max-w-xs leading-relaxed">
-            Check your Gmail to verify credentials and return to terminal.
+        <h2 class="text-3xl font-black uppercase tracking-tighter italic">Activation Required</h2>
+        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-4 max-w-xs leading-relaxed text-center">
+            Credentials saved. Tap the button below to message the Admin and activate your terminal node.
         </p>
-        <button onclick="window.location.href='login.html'" class="mt-10 px-8 py-3 bg-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
-            Proceed to Login
+        <button id="whatsappRedirectBtn" class="mt-10 px-8 py-4 bg-green-600 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-green-700 transition shadow-lg shadow-green-600/20 flex items-center gap-3">
+            <i class="fab fa-whatsapp text-lg"></i> Message Admin for Activation
         </button>
     </div>
 
@@ -137,27 +137,15 @@
                 </div>
             </div>
 
-            <div class="text-[9px] text-gray-500 font-bold uppercase tracking-widest text-center px-4">
-                Security Policy: Password must be 8+ chars, start with Uppercase, and end with a number/symbol.
-            </div>
-
             <button type="submit" id="submitBtn" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs tracking-[0.2em] shadow-2xl shadow-blue-600/40 hover:bg-blue-700 transition-all duration-300">
                 Initialize Secure Account
             </button>
         </form>
     </div>
 
-
-
-
-
-
-
-
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -173,20 +161,25 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Helper: Toggle Password Visibility
+    // --- RE-IMPLEMENTED SECURITY POLICY ---
+    window.checkPassword = (p) => {
+        const cl = document.getElementById('crit-length');
+        const cu = document.getElementById('crit-upper');
+        const ce = document.getElementById('crit-end');
+        
+        // Validation Colors
+        if (p.length >= 8) cl.classList.add('text-blue-500'); else cl.classList.remove('text-blue-500');
+        if (/^[A-Z]/.test(p)) cu.classList.add('text-blue-500'); else cu.classList.remove('text-blue-500');
+        if (/[0-9!@#$%^&*]$/.test(p)) ce.classList.add('text-blue-500'); else ce.classList.remove('text-blue-500');
+    };
+
+    function validatePassword(p) {
+        return p.length >= 8 && /^[A-Z]/.test(p) && /[0-9!@#$%^&*]$/.test(p);
+    }
+
     window.togglePass = (id) => {
         const input = document.getElementById(id);
         input.type = input.type === 'password' ? 'text' : 'password';
-    };
-
-    // Real-time Password Validator
-    window.checkPassword = (p) => {
-        const critLength = document.getElementById('crit-length');
-        const critUpper = document.getElementById('crit-upper');
-        const critEnd = document.getElementById('crit-end');
-        if (p.length >= 8) critLength.style.color = "#3b82f6"; else critLength.style.color = "#64748b";
-        if (/^[A-Z]/.test(p)) critUpper.style.color = "#3b82f6"; else critUpper.style.color = "#64748b";
-        if (/[0-9!@#$%^&*]$/.test(p)) critEnd.style.color = "#3b82f6"; else critEnd.style.color = "#64748b";
     };
 
     function showToast(msg) {
@@ -204,59 +197,70 @@
         const confirm = document.getElementById('confirm_pass').value;
         const refCode = document.getElementById('referral_code').value.trim();
 
+        // Security Check 1: Match
         if(pass !== confirm) return showToast("Passwords do not match!");
+        
+        // Security Check 2: Policy Compliance
+        if(!validatePassword(pass)) return showToast("Password does not meet Security Policy!");
 
-        btn.innerText = "INITIALIZING SECURE LINK...";
+        btn.innerText = "SECURING TERMINAL DATA...";
         btn.disabled = true;
 
+        try {
+            // Referral Check
+            let referredBy = null;
+            if(refCode !== "") {
+                const q = query(collection(db, "users"), where("referralId", "==", refCode));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    btn.innerText = "INITIALIZE SECURE ACCOUNT";
+                    btn.disabled = false;
+                    return showToast("Invalid Referral ID.");
+                }
+                referredBy = refCode;
+            }
 
+            // Create User
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            const user = userCredential.user;
 
+            // Save Data
+            const fName = document.getElementById('f_name').value;
+            const lName = document.getElementById('l_name').value;
+            
+            await setDoc(doc(db, "users", user.uid), {
+                fullName: fName + " " + lName,
+                firstName: fName,
+                lastName: lName,
+                username: document.getElementById('reg_user').value,
+                email: email,
+                phone: document.getElementById('reg_phone').value,
+                currency: document.getElementById('reg_currency').value,
+                uid: user.uid,
+                referredBy: referredBy,
+                accountStatus: "pending",
+                balance: 0,
+                referralId: "CPT-" + Math.floor(1000 + Math.random() * 9000),
+                registrationDate: new Date().toISOString()
+            });
 
-     // INSIDE your 'mainRegForm' submit listener:
-try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-    const user = userCredential.user;
+            await signOut(auth);
+            
+            // Success State
+            const waNumber = "2349153258628";
+            const msg = `Hello CPT Admin, I just registered.%0A%0AName: ${fName} ${lName}%0AEmail: ${email}`;
+            
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('whatsappRedirectBtn').onclick = () => {
+                window.location.href = `https://wa.me/${waNumber}?text=${msg}`;
+            };
 
-    // Save to Firestore as PENDING
-    await setDoc(doc(db, "users", user.uid), {
-        fullName: document.getElementById('f_name').value + " " + document.getElementById('l_name').value,
-        email: email,
-        username: document.getElementById('reg_user').value,
-        uid: user.uid,
-        accountStatus: "pending", // <--- They can't login yet
-        balance: 0,
-        registrationDate: new Date().toISOString()
+        } catch (error) {
+            btn.innerText = "INITIALIZE SECURE ACCOUNT";
+            btn.disabled = false;
+            showToast(error.message);
+        }
     });
-
-    // Generate the WhatsApp Link
-    const adminPhone = "2349153258628";
-    const message = `Hello CPT Admin, I just registered on the Terminal.%0A%0AName: ${document.getElementById('f_name').value}%0AEmail: ${email}%0AStatus: Pending Activation`;
-    
-    // Redirect to WhatsApp
-    window.location.href = `https://wa.me/${adminPhone}?text=${message}`;
-
-} catch (error) {
-    showToast(error.message);
-}
-
-
-
-
-
 </script>
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>
-
-
-
-Update it yourself so I don't make mistake
