@@ -56,7 +56,7 @@
         </div>
 
         <div id="login-container" class="glass-panel p-8 rounded-[32px] relative overflow-hidden">
-            <div id="error-msg" class="hidden mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-500 text-xs font-bold">
+            <div id="error-msg" class="hidden mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl flex items-center gap-3 text-red-500 text-[10px] font-bold uppercase">
                 <i class="fas fa-exclamation-triangle"></i>
                 <span>Authentication Failed</span>
             </div>
@@ -102,8 +102,8 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, setPersistence, browserLocalPersistence, browserSessionPersistence, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
@@ -118,7 +118,6 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Toggle Password Visibility
     window.togglePass = () => {
         const p = document.getElementById('login_pass');
         p.type = p.type === 'password' ? 'text' : 'password';
@@ -139,7 +138,6 @@
         btn.disabled = true;
 
         try {
-            // STEP 1: If input is not an email, find the email associated with the username
             let finalEmail = identifier;
             if (!identifier.includes('@')) {
                 const q = query(collection(db, "users"), where("username", "==", identifier));
@@ -153,35 +151,42 @@
                 });
             }
 
-            // STEP 2: Handle "Remember Me"
             await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
 
-            // STEP 3: Sign In
+            // LOG IN
             const userCredential = await signInWithEmailAndPassword(auth, finalEmail, pass);
-            
-            if (!userCredential.user.emailVerified) {
-                errorBox.querySelector('span').innerText = "Account Verification Required in Gmail.";
-                errorBox.classList.remove('hidden');
-                btn.innerText = "INITIALIZE SESSION";
-                btn.disabled = false;
-                return;
-            }
+            const user = userCredential.user;
 
-            btn.innerText = "ACCESS GRANTED";
-            setTimeout(() => { window.location.href = "user-dashboard.html"; }, 800);
+            // STATUS CHECK (The Activation Gate)
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+
+                if (userData.accountStatus === "active") {
+                    btn.innerText = "ACCESS GRANTED";
+                    setTimeout(() => { window.location.href = "user-dashboard.html"; }, 800);
+                } else {
+                    // BLOCKED: Not yet activated
+                    await signOut(auth);
+                    throw { code: 'custom/pending-activation' };
+                }
+            }
 
         } catch (error) {
             console.error(error.code);
             let message = "Security Check Failed: Invalid Credentials.";
+            
             if (error.code === 'auth/user-not-found') message = "Account ID not recognized.";
             if (error.code === 'auth/wrong-password') message = "Authentication failed: Wrong password.";
+            if (error.code === 'custom/pending-activation') message = "Account Pending Activation. Contact Admin on WhatsApp.";
             
             errorBox.querySelector('span').innerText = message;
             errorBox.classList.remove('hidden');
             container.classList.add('error-shake');
             setTimeout(() => container.classList.remove('error-shake'), 400);
             
-            btn.innerText = "INITIALIZE SESSION";
+            btn.innerText = "PROCEED TO LOGIN";
             btn.disabled = false;
         }
     }
