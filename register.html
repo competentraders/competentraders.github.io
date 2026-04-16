@@ -199,10 +199,25 @@
         btn.innerText = "VERIFYING SECURITY NODE...";
         btn.disabled = true;
 
-        const actionCodeSettings = {
-            url: 'https://competentraders.vercel.app/login.html', 
-            handleCodeInApp: true,
-        };
+
+
+
+
+        // Replace your existing actionCodeSettings with this:
+const actionCodeSettings = {
+    url: 'https://competentraders.vercel.app/login.html',
+    handleCodeInApp: true,
+};
+
+// Ensure this specific line is used to send
+await sendEmailVerification(user, actionCodeSettings);
+
+
+
+
+
+
+
 
         try {
             // --- OPTIONAL REFERRAL VALIDATION ---
