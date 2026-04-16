@@ -522,141 +522,132 @@
 
 
 
+<!-- FULLSCREEN LEGAL GATE -->
+<div id="legalGate" style="
+position:fixed;
+inset:0;
+background:#06070a;
+z-index:999999;
+display:flex;
+align-items:center;
+justify-content:center;
+">
 
+    <div style="
+    width:95%;
+    max-width:700px;
+    height:85vh;
+    background:#0f1218;
+    border-radius:24px;
+    border:1px solid #1e293b;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    box-shadow:0 25px 60px rgba(0,0,0,0.6);
+    ">
 
+        <!-- HEADER -->
+        <div style="padding:24px; text-align:center; border-bottom:1px solid #1e293b;">
+            <h2 style="color:white; font-weight:900; margin:0;">LEGAL ACCESS GATE</h2>
+            <p style="color:#64748b; font-size:11px; margin-top:4px;">
+                You must accept before entering dashboard
+            </p>
+        </div>
 
+        <!-- SCROLL CONTENT -->
+        <div id="legalScroll" style="
+        flex:1;
+        overflow-y:auto;
+        padding:24px;
+        color:#94a3b8;
+        font-size:13px;
+        line-height:1.7;
+        ">
 
-<<div class="glass-card p-8 md:p-12 rounded-[3rem] shadow-2xl">
+            <p><b style="color:#3b82f6;">1.</b> By continuing, you enter a binding agreement with Competentraders.</p>
+            <p><b style="color:#3b82f6;">2.</b> All financial actions are executed at your own risk.</p>
+            <p><b style="color:#3b82f6;">3.</b> Profit is not guaranteed under any condition.</p>
+            <p><b style="color:#3b82f6;">4.</b> Fraud, manipulation, or abuse results in permanent ban.</p>
+            <p><b style="color:#3b82f6;">5.</b> Platform may suspend accounts without prior notice.</p>
+            <p><b style="color:#3b82f6;">6.</b> You are fully responsible for your account security.</p>
+            <p><b style="color:#3b82f6;">7.</b> Withdrawals are subject to verification.</p>
+            <p><b style="color:#3b82f6;">8.</b> System errors may be corrected without notice.</p>
+            <p><b style="color:#3b82f6;">9.</b> Continued usage equals full acceptance.</p>
+            <p><b style="color:#3b82f6;">10.</b> This agreement is final and enforceable.</p>
 
-<!-- SECTION A -->
-<div class="legal-section">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section A — Legal Foundation</h2>
+            <p style="margin-top:20px; font-weight:bold; color:white;">
+                Scroll to the bottom to unlock agreement.
+            </p>
 
-<p class="legal-text"><b>1.</b> By accessing Competentraders, you enter a binding digital agreement governed by these terms.</p>
-<p class="legal-text"><b>2.</b> Continued usage constitutes full and irreversible acceptance of all policies stated herein.</p>
-<p class="legal-text"><b>3.</b> This agreement overrides all prior verbal or written representations.</p>
-<p class="legal-text"><b>4.</b> Users must immediately discontinue use if they disagree with any clause.</p>
-<p class="legal-text"><b>5.</b> The platform operates under international digital commerce principles.</p>
-<p class="legal-text"><b>6.</b> Legal enforceability applies regardless of geographic location.</p>
-<p class="legal-text"><b>7.</b> This document forms the entire contractual relationship between user and platform.</p>
-<p class="legal-text"><b>8.</b> All rights not explicitly granted are reserved.</p>
-<p class="legal-text"><b>9.</b> Platform authority supersedes user assumptions or interpretations.</p>
-<p class="legal-text"><b>10.</b> Agreement validity persists beyond account termination.</p>
+            <div style="height:300px;"></div> <!-- forces scroll -->
+        </div>
+
+        <!-- FOOTER -->
+        <div style="padding:20px; border-top:1px solid #1e293b; background:#161a23;">
+
+            <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <input type="checkbox" id="agreeCheck" disabled style="width:18px; height:18px;">
+                <label style="font-size:11px; color:#cbd5e1;">
+                    I accept all terms and conditions
+                </label>
+            </div>
+
+            <button id="agreeBtn" disabled style="
+            width:100%;
+            padding:14px;
+            background:#3b82f6;
+            color:white;
+            border:none;
+            border-radius:10px;
+            font-weight:900;
+            cursor:not-allowed;
+            opacity:0.5;
+            ">
+                Agree & Continue
+            </button>
+
+        </div>
+    </div>
 </div>
 
-<!-- SECTION B -->
-<div class="legal-section">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section B — User Eligibility & Responsibility</h2>
+<script>
 
-<p class="legal-text"><b>11.</b> Users must be at least 18 years old.</p>
-<p class="legal-text"><b>12.</b> Users confirm compliance with their local laws.</p>
-<p class="legal-text"><b>13.</b> Account ownership is strictly individual and non-transferable.</p>
-<p class="legal-text"><b>14.</b> Only one account per user is permitted.</p>
-<p class="legal-text"><b>15.</b> Identity verification may be requested at any time.</p>
-<p class="legal-text"><b>16.</b> Users are solely responsible for account security.</p>
-<p class="legal-text"><b>17.</b> Password sharing is strictly prohibited.</p>
-<p class="legal-text"><b>18.</b> All actions performed under an account are deemed intentional.</p>
-<p class="legal-text"><b>19.</b> False identity usage results in immediate suspension.</p>
-<p class="legal-text"><b>20.</b> Users bear full responsibility for financial decisions made.</p>
-</div>
+// LOCK BACKGROUND SCROLL
+document.body.style.overflow = "hidden";
 
-<!-- SECTION C -->
-<div class="legal-section">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section C — Financial Risk & Liability</h2>
+const scrollBox = document.getElementById("legalScroll");
+const checkbox = document.getElementById("agreeCheck");
+const button = document.getElementById("agreeBtn");
 
-<p class="legal-text"><b>21.</b> Trading involves substantial financial risk.</p>
-<p class="legal-text"><b>22.</b> Loss of capital is possible and acknowledged.</p>
-<p class="legal-text"><b>23.</b> No profit guarantees are provided.</p>
-<p class="legal-text"><b>24.</b> Past performance does not predict future results.</p>
-<p class="legal-text"><b>25.</b> Users accept full exposure to market volatility.</p>
-<p class="legal-text"><b>26.</b> Competentraders is not liable for financial losses.</p>
-<p class="legal-text"><b>27.</b> Delays in execution may occur under market conditions.</p>
-<p class="legal-text"><b>28.</b> Price fluctuations may impact transaction outcomes.</p>
-<p class="legal-text"><b>29.</b> System errors may be corrected without notice.</p>
-<p class="legal-text"><b>30.</b> Users waive claims related to trading losses.</p>
-</div>
+// ENABLE CHECKBOX AFTER SCROLL
+scrollBox.addEventListener("scroll", () => {
+    if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 5) {
+        checkbox.disabled = false;
+    }
+});
 
-<!-- SECTION D -->
-<div class="legal-section">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section D — Platform Control</h2>
+// ENABLE BUTTON WHEN CHECKED
+checkbox.addEventListener("change", () => {
+    if (checkbox.checked) {
+        button.disabled = false;
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+    }
+});
 
-<p class="legal-text"><b>31.</b> Competentraders reserves full operational control.</p>
-<p class="legal-text"><b>32.</b> Features may be modified without prior notice.</p>
-<p class="legal-text"><b>33.</b> Services may be suspended for maintenance.</p>
-<p class="legal-text"><b>34.</b> Trading systems may be paused during volatility.</p>
-<p class="legal-text"><b>35.</b> Platform updates take immediate effect.</p>
-<p class="legal-text"><b>36.</b> User access may be restricted at discretion.</p>
-<p class="legal-text"><b>37.</b> Accounts may be audited for irregular activity.</p>
-<p class="legal-text"><b>38.</b> System rules override user expectations.</p>
-<p class="legal-text"><b>39.</b> Platform availability is not guaranteed at all times.</p>
-<p class="legal-text"><b>40.</b> Data corrections may be applied automatically.</p>
-</div>
+// FINAL ACTION
+button.onclick = () => {
+    // unlock page
+    document.body.style.overflow = "auto";
 
-<!-- SECTION E -->
-<div class="legal-section">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section E — Security & Fraud</h2>
+    // hide modal
+    document.getElementById("legalGate").style.display = "none";
 
-<p class="legal-text"><b>41.</b> Fraudulent activity results in permanent ban.</p>
-<p class="legal-text"><b>42.</b> Fake payment proofs trigger account suspension.</p>
-<p class="legal-text"><b>43.</b> Multi-account abuse is strictly prohibited.</p>
-<p class="legal-text"><b>44.</b> Referral manipulation leads to forfeiture.</p>
-<p class="legal-text"><b>45.</b> Exploiting system bugs is considered theft.</p>
-<p class="legal-text"><b>46.</b> Suspicious transactions may be delayed.</p>
-<p class="legal-text"><b>47.</b> IP tracking is used for security monitoring.</p>
-<p class="legal-text"><b>48.</b> Unauthorized access attempts are logged.</p>
-<p class="legal-text"><b>49.</b> Accounts under investigation may be frozen.</p>
-<p class="legal-text"><b>50.</b> Violations may be reported to authorities.</p>
-</div>
+    // redirect
+    window.location.href = "user-dashboard.html";
+};
 
-<!-- SECTION F -->
-<div class="legal-section">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section F — Transactions & Operations</h2>
-
-<p class="legal-text"><b>51.</b> Deposits require valid verification.</p>
-<p class="legal-text"><b>52.</b> Withdrawals are subject to security checks.</p>
-<p class="legal-text"><b>53.</b> Processing times may vary.</p>
-<p class="legal-text"><b>54.</b> Incorrect details may delay transactions.</p>
-<p class="legal-text"><b>55.</b> Funds may be held during investigation.</p>
-<p class="legal-text"><b>56.</b> Transaction limits may be adjusted.</p>
-<p class="legal-text"><b>57.</b> Currency values fluctuate in real time.</p>
-<p class="legal-text"><b>58.</b> External providers may affect processing.</p>
-<p class="legal-text"><b>59.</b> Users are responsible for payment accuracy.</p>
-<p class="legal-text"><b>60.</b> Completed transactions are final.</p>
-</div>
-
-<!-- SECTION G -->
-<div class="legal-section">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section G — Legal Enforcement</h2>
-
-<p class="legal-text"><b>61.</b> Violations may result in legal action.</p>
-<p class="legal-text"><b>62.</b> Users agree to indemnify the platform.</p>
-<p class="legal-text"><b>63.</b> Disputes must be raised within 30 days.</p>
-<p class="legal-text"><b>64.</b> Arbitration is preferred before litigation.</p>
-<p class="legal-text"><b>65.</b> Intellectual property is strictly protected.</p>
-<p class="legal-text"><b>66.</b> Unauthorized reproduction is prohibited.</p>
-<p class="legal-text"><b>67.</b> Platform branding may not be copied.</p>
-<p class="legal-text"><b>68.</b> Legal compliance with authorities is mandatory.</p>
-<p class="legal-text"><b>69.</b> Evidence may be submitted in disputes.</p>
-<p class="legal-text"><b>70.</b> Enforcement rights are not waived by inaction.</p>
-</div>
-
-<!-- SECTION H -->
-<div class="legal-section border-none">
-<h2 class="text-xs font-black uppercase tracking-widest text-accent mb-6">Section H — Final Terms</h2>
-
-<p class="legal-text"><b>71.</b> Terms may be updated at any time.</p>
-<p class="legal-text"><b>72.</b> Users must review updates periodically.</p>
-<p class="legal-text"><b>73.</b> Continued use implies acceptance of updates.</p>
-<p class="legal-text"><b>74.</b> Invalid clauses do not affect the rest.</p>
-<p class="legal-text"><b>75.</b> Communication is conducted digitally.</p>
-<p class="legal-text"><b>76.</b> Official channels must be used.</p>
-<p class="legal-text"><b>77.</b> Platform may discontinue services if required.</p>
-<p class="legal-text"><b>78.</b> Users retain responsibility for tax obligations.</p>
-<p class="legal-text"><b>79.</b> This agreement remains enforceable globally.</p>
-<p class="legal-text font-black italic"><b>80.</b> By accepting, you confirm full understanding and acceptance of all terms.</p>
-</div>
-
-</div>
+</script>
 
 
 
