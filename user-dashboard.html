@@ -514,110 +514,13 @@
 
 
 
-
 </body>
 </html>
 
 
 
 
-<!-- LEGAL GATE -->
-<div id="legalGate" style="
-position:fixed;
-inset:0;
-background:#06070a;
-z-index:999999;
-display:flex;
-align-items:center;
-justify-content:center;
-">
 
-    <div style="
-    width:95%;
-    max-width:700px;
-    height:85vh;
-    background:#0f1218;
-    border-radius:20px;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
-    ">
-
-        <div style="padding:20px; text-align:center; border-bottom:1px solid #222;">
-            <h2 style="color:white;">LEGAL AGREEMENT</h2>
-            <p style="color:gray; font-size:12px;">Scroll to continue</p>
-        </div>
-
-        <div id="legalScroll" style="
-        flex:1;
-        overflow-y:auto;
-        padding:20px;
-        color:#aaa;
-        font-size:13px;
-        ">
-
-            <p>1. You accept all risks.</p>
-            <p>2. No guaranteed profit.</p>
-            <p>3. You are responsible.</p>
-            <p>4. Fraud leads to ban.</p>
-            <p>5. Platform controls everything.</p>
-
-            <div style="height:400px;"></div>
-        </div>
-
-        <div style="padding:20px; border-top:1px solid #222;">
-            <input type="checkbox" id="agreeCheck" disabled>
-            <label style="color:#ccc; font-size:12px;">I agree</label>
-
-            <button id="agreeBtn" disabled style="
-            width:100%;
-            margin-top:10px;
-            padding:12px;
-            background:#3b82f6;
-            color:white;
-            border:none;
-            opacity:0.5;
-            ">
-                Continue
-            </button>
-        </div>
-
-    </div>
-</div>
-
-<script>
-window.onload = function () {
-
-    document.body.style.overflow = "hidden";
-
-    const scrollBox = document.getElementById("legalScroll");
-    const checkbox = document.getElementById("agreeCheck");
-    const button = document.getElementById("agreeBtn");
-
-    // enable checkbox after scroll
-    scrollBox.addEventListener("scroll", function () {
-        if (scrollBox.scrollTop + scrollBox.clientHeight >= scrollBox.scrollHeight - 5) {
-            checkbox.disabled = false;
-        }
-    });
-
-    // enable button
-    checkbox.addEventListener("change", function () {
-        if (checkbox.checked) {
-            button.disabled = false;
-            button.style.opacity = "1";
-        }
-    });
-
-    // continue
-    button.onclick = function () {
-        document.getElementById("legalGate").style.display = "none";
-        document.body.style.overflow = "auto";
-        window.location.href = "user-dashboard.html";
-    };
-
-};
-</script>
 
 
 
