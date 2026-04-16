@@ -32,15 +32,15 @@
 
     <div id="overlay">
         <div class="mb-6 relative">
-            <i class="fas fa-paper-plane text-6xl text-blue-600 animate-pulse"></i>
-            <div class="absolute -top-2 -right-2 w-4 h-4 bg-green-500 rounded-full animate-ping"></div>
+            <i class="fab fa-whatsapp text-6xl text-green-500 animate-pulse"></i>
+            <div class="absolute -top-2 -right-2 w-4 h-4 bg-blue-500 rounded-full animate-ping"></div>
         </div>
-        <h2 class="text-3xl font-black uppercase tracking-tighter italic">Security Link Dispatched</h2>
-        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-4 max-w-xs leading-relaxed">
-            Check your Gmail to verify credentials and return to terminal.
+        <h2 class="text-3xl font-black uppercase tracking-tighter italic">Activation Required</h2>
+        <p class="text-gray-400 text-[11px] font-bold uppercase tracking-[0.2em] mt-4 max-w-xs leading-relaxed text-center">
+            Credentials saved. Tap the button below to message the Admin and activate your terminal node.
         </p>
-        <button onclick="window.location.href='login.html'" class="mt-10 px-8 py-3 bg-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-600/20">
-            Proceed to Login
+        <button id="whatsappRedirectBtn" class="mt-10 px-8 py-4 bg-green-600 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-green-700 transition shadow-lg shadow-green-600/20 flex items-center gap-3">
+            <i class="fab fa-whatsapp text-lg"></i> Message Admin for Activation
         </button>
     </div>
 
@@ -147,17 +147,9 @@
         </form>
     </div>
 
-
-
-
-
-
-
-
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDocs, collection, query, where } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -173,20 +165,18 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // Helper: Toggle Password Visibility
     window.togglePass = (id) => {
         const input = document.getElementById(id);
         input.type = input.type === 'password' ? 'text' : 'password';
     };
 
-    // Real-time Password Validator
     window.checkPassword = (p) => {
-        const critLength = document.getElementById('crit-length');
-        const critUpper = document.getElementById('crit-upper');
-        const critEnd = document.getElementById('crit-end');
-        if (p.length >= 8) critLength.style.color = "#3b82f6"; else critLength.style.color = "#64748b";
-        if (/^[A-Z]/.test(p)) critUpper.style.color = "#3b82f6"; else critUpper.style.color = "#64748b";
-        if (/[0-9!@#$%^&*]$/.test(p)) critEnd.style.color = "#3b82f6"; else critEnd.style.color = "#64748b";
+        const cl = document.getElementById('crit-length');
+        const cu = document.getElementById('crit-upper');
+        const ce = document.getElementById('crit-end');
+        if (p.length >= 8) cl.style.color = "#3b82f6"; else cl.style.color = "#64748b";
+        if (/^[A-Z]/.test(p)) cu.style.color = "#3b82f6"; else cu.style.color = "#64748b";
+        if (/[0-9!@#$%^&*]$/.test(p)) ce.style.color = "#3b82f6"; else ce.style.color = "#64748b";
     };
 
     function showToast(msg) {
@@ -206,51 +196,68 @@
 
         if(pass !== confirm) return showToast("Passwords do not match!");
 
-        btn.innerText = "INITIALIZING SECURE LINK...";
+        btn.innerText = "CONNECTING TO SECURE NODE...";
         btn.disabled = true;
 
+        try {
+            // 1. Referral Validation
+            let referredBy = null;
+            if(refCode !== "") {
+                const q = query(collection(db, "users"), where("referralId", "==", refCode));
+                const snap = await getDocs(q);
+                if (snap.empty) {
+                    btn.innerText = "INITIALIZE SECURE ACCOUNT";
+                    btn.disabled = false;
+                    return showToast("Invalid Referral ID.");
+                }
+                referredBy = refCode;
+            }
 
+            // 2. Create User
+            const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+            const user = userCredential.user;
 
+            // 3. Save to Firestore as PENDING
+            const firstName = document.getElementById('f_name').value;
+            const lastName = document.getElementById('l_name').value;
+            
+            await setDoc(doc(db, "users", user.uid), {
+                fullName: firstName + " " + lastName,
+                firstName: firstName,
+                lastName: lastName,
+                username: document.getElementById('reg_user').value,
+                email: email,
+                phone: document.getElementById('reg_phone').value,
+                currency: document.getElementById('reg_currency').value,
+                uid: user.uid,
+                referredBy: referredBy,
+                accountStatus: "pending",
+                balance: 0,
+                referralEarnings: 0,
+                referralCount: 0,
+                referralId: "CPT-" + Math.floor(1000 + Math.random() * 9000),
+                registrationDate: new Date().toISOString()
+            });
 
-        // Replace the try/catch block in your registration script with this:
-try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-    const user = userCredential.user;
+            // 4. Log out (Security) & Setup WhatsApp Redirect
+            await signOut(auth);
+            
+            const adminNumber = "2349153258628";
+            const waMessage = `Hello CPT Admin, I just registered on the Terminal.%0A%0AName: ${firstName} ${lastName}%0AEmail: ${email}%0AStatus: Pending Activation`;
+            const waLink = `https://wa.me/${adminNumber}?text=${waMessage}`;
 
-    // We skip Firebase's automatic email and save the user directly
-    await setDoc(doc(db, "users", user.uid), {
-        fullName: document.getElementById('f_name').value + " " + document.getElementById('l_name').value,
-        email: email,
-        uid: user.uid,
-        accountStatus: "pending", // They start as pending
-        referralId: "CPT-" + Math.floor(1000 + Math.random() * 9000), // Give them their ID immediately
-        balance: 0,
-        registrationDate: new Date().toISOString()
+            // Show Overlay & Set Button Link
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('whatsappRedirectBtn').onclick = () => {
+                window.location.href = waLink;
+            };
+
+        } catch (error) {
+            btn.innerText = "INITIALIZE SECURE ACCOUNT";
+            btn.disabled = false;
+            showToast(error.message);
+        }
     });
-
-    // We show the overlay, but tell them to click the 'Manual' link you'll provide
-    document.getElementById('overlay').style.display = 'flex';
-    
-    // Optional: Log them out immediately so they have to login to "verify"
-    await auth.signOut();
-
-} catch (error) {
-    showToast(error.message);
-}
-
-
-
-
 </script>
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>
