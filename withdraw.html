@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Withdrawal | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
         
@@ -21,7 +21,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05); 
         }
 
-        /* Fixed Sharp Notification */
         #toast {
             position: fixed; bottom: -100px; left: 0; right: 0;
             background: #ff4d4d; color: black;
@@ -38,7 +37,7 @@
 </head>
 <body class="p-6">
 
-    <div id="toast">Error: Insufficient Funds</div>
+    <div id="toast">Notification</div>
 
     <div class="max-w-md mx-auto space-y-8">
         <div class="flex justify-between items-center">
@@ -52,54 +51,51 @@
         </div>
 
         <div class="glass-panel p-10 rounded-[2.5rem] text-center">
-            <p class="text-[10px] font-black uppercase text-gray-600 tracking-widest mb-2">Available to move</p>
+            <p class="text-[10px] font-black uppercase text-gray-600 tracking-widest mb-2">Available Balance</p>
             <h2 class="text-5xl font-black italic tracking-tighter">
                 <span class="user-currency">₦</span><span id="display-bal">0.00</span>
             </h2>
         </div>
 
-        <div class="space-y-4">
-            <div class="glass-panel p-6 rounded-3xl border-l-4 border-blue-600">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-[9px] font-black uppercase text-blue-500 tracking-widest">Target Destination</span>
-                    <a href="settings.html" class="text-[9px] font-black uppercase text-gray-600 underline">Change</a>
+        <div class="glass-panel p-6 rounded-3xl border-l-4 border-blue-600">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-[9px] font-black uppercase text-blue-500 tracking-widest">Target Bank</span>
+                <a href="settings.html" class="text-[9px] font-black uppercase text-gray-600 underline">Change</a>
+            </div>
+            <h3 id="target-bank" class="text-xs font-black uppercase tracking-tight text-white/50 tracking-widest">Checking Database...</h3>
+            <p id="target-acc" class="text-xl font-black tracking-widest my-1">---- ---- --</p>
+            <p id="target-name" class="text-[10px] font-bold uppercase text-gray-500 italic">Account Holder Name</p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-[2rem] space-y-6">
+            <div>
+                <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest block mb-4">Amount to Withdraw</label>
+                <div class="relative">
+                    <span class="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-black text-gray-700 user-currency">₦</span>
+                    <input type="number" id="withdraw-amt" placeholder="0.00" class="w-full bg-transparent border-b-2 border-white/10 py-4 pl-10 text-3xl font-black outline-none focus:border-blue-600 transition-all">
                 </div>
-                <h3 id="target-bank" class="text-xs font-black uppercase tracking-tight text-white/50">---</h3>
-                <p id="target-acc" class="text-xl font-black tracking-widest my-1">---- ---- --</p>
-                <p id="target-name" class="text-[10px] font-bold uppercase text-gray-500 italic">---</p>
             </div>
 
-            <div class="glass-panel p-8 rounded-[2rem] space-y-6">
-                <div>
-                    <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest block mb-4">Enter Amount</label>
-                    <div class="relative">
-                        <span class="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-black text-gray-700 user-currency">₦</span>
-                        <input type="number" id="withdraw-amt" placeholder="0.00" class="w-full bg-transparent border-b-2 border-white/10 py-4 pl-10 text-3xl font-black outline-none focus:border-blue-600 transition-all">
-                    </div>
-                </div>
-
-                <div class="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-600 px-1">
-                    <span>Fee: <span class="user-currency">₦</span><span id="fee-amt">0</span></span>
-                    <span>Min: <span class="user-currency">₦</span><span id="min-amt">0</span></span>
-                </div>
-
-                <button onclick="processWithdrawal()" id="withdraw-btn" class="w-full py-5 bg-white text-black rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl shadow-white/5">
-                    Authorize Payout
-                </button>
+            <div class="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-600 px-1">
+                <span>Fee: <span class="user-currency">₦</span><span id="fee-amt">0</span></span>
+                <span>Min: <span class="user-currency">₦</span><span id="min-amt">0</span></span>
             </div>
+
+            <button onclick="processWithdrawal()" id="withdraw-btn" class="w-full py-5 bg-white text-black rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all">
+                Authorize Payout
+            </button>
         </div>
 
         <p class="text-[8px] font-bold text-gray-700 uppercase tracking-[0.4em] text-center leading-loose">
-            Manual Verification Active • 1-6 Hour Window • Secure Terminal
+            Manual Verification Active • Secure Terminal • v2.0
         </p>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        // ... Config stays same ...
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
             authDomain: "competentraders-2efdc.firebaseapp.com",
@@ -132,13 +128,24 @@
                 if (snap.exists()) {
                     const data = snap.data();
                     
-                    // CURRENCY LOGIC
-                    userSymbol = data.currency === "USD" ? "$" : (data.currency === "GHS" ? "GH₵" : "₦");
-                    if (userSymbol === "$") { networkFee = 1; minWithdrawal = 10; }
-                    else if (userSymbol === "GH₵") { networkFee = 5; minWithdrawal = 50; }
-                    else { networkFee = 100; minWithdrawal = 1000; }
+                    // DYNAMIC CURRENCY LOGIC
+                    // Pulls from 'currency' field in Firestore
+                    const userPref = data.currency || "NGN";
+                    if (userPref === "USD") {
+                        userSymbol = "$";
+                        networkFee = 1;      
+                        minWithdrawal = 10;  
+                    } else if (userPref === "GHS") {
+                        userSymbol = "GH₵";
+                        networkFee = 5;      
+                        minWithdrawal = 50;  
+                    } else {
+                        userSymbol = "₦";
+                        networkFee = 100;    
+                        minWithdrawal = 1000;
+                    }
 
-                    // UI UPDATES
+                    // UPDATE UI ELEMENTS
                     document.querySelectorAll('.user-currency').forEach(el => el.innerText = userSymbol);
                     document.getElementById('fee-amt').innerText = networkFee;
                     document.getElementById('min-amt').innerText = minWithdrawal.toLocaleString();
@@ -152,10 +159,10 @@
                         document.getElementById('target-acc').innerText = bankData.accNum;
                         document.getElementById('target-name').innerText = bankData.accName;
                     } else {
-                        document.getElementById('target-bank').innerText = "MISSING DATA";
+                        document.getElementById('target-bank').innerText = "DATA MISSING";
                         const btn = document.getElementById('withdraw-btn');
                         btn.disabled = true;
-                        btn.innerText = "SET BANK IN SETTINGS";
+                        btn.innerText = "LINK BANK FIRST";
                         btn.className = "w-full py-5 bg-red-600/10 text-red-500 rounded-2xl font-black uppercase text-[11px] tracking-[0.3em]";
                     }
                 }
@@ -165,20 +172,42 @@
         window.processWithdrawal = async () => {
             const amtValue = document.getElementById('withdraw-amt').value;
             const amt = Number(amtValue);
-            const total = amt + networkFee;
+            const totalToDeduct = amt + networkFee;
 
             if(!amtValue || amt < minWithdrawal) return showNotify(`MINIMUM IS ${userSymbol}${minWithdrawal}`);
-            if(total > userBalance) return showNotify("INSUFFICIENT CAPITAL");
+            if(totalToDeduct > userBalance) return showNotify("INSUFFICIENT BALANCE");
 
             const btn = document.getElementById('withdraw-btn');
-            btn.innerHTML = "PROCESSING...";
+            btn.innerHTML = "AUTHORIZING...";
             btn.disabled = true;
 
             const ticket = "WD-" + Math.floor(1000 + Math.random() * 9000);
-            const phone = "2349157023248";
-            const text = `*WITHDRAWAL REQUEST*%0A---%0A*Ticket:* ${ticket}%0A*Email:* ${auth.currentUser.email}%0A*Amount:* ${userSymbol}${amt}%0A*Fee:* ${userSymbol}${networkFee}%0A*Total:* ${userSymbol}${total}%0A---%0A*Bank:* ${bankData.bankName}%0A*Acc:* ${bankData.accNum}%0A*Name:* ${bankData.accName}`;
+            const adminPhone = "2349157023248";
+            
+            // WHATSAPP MESSAGE FORMATTING
+            const text = `*WITHDRAWAL REQUEST*%0A---%0A*Ticket:* ${ticket}%0A*Client:* ${auth.currentUser.email}%0A*Amount:* ${userSymbol}${amt.toLocaleString()}%0A*Fee:* ${userSymbol}${networkFee}%0A*Total to Deduct:* ${userSymbol}${totalToDeduct.toLocaleString()}%0A---%0A*Bank:* ${bankData.bankName}%0A*Account:* ${bankData.accNum}%0A*Name:* ${bankData.accName}`;
 
-            window.location.href = `https://wa.me/${phone}?text=${text}`;
+            try {
+                // Log to database first for your records
+                await addDoc(collection(db, "withdrawals"), {
+                    uid: auth.currentUser.uid,
+                    email: auth.currentUser.email,
+                    amount: amt,
+                    currency: userSymbol,
+                    fee: networkFee,
+                    total: totalToDeduct,
+                    bank: bankData,
+                    status: "pending",
+                    ticket: ticket,
+                    timestamp: serverTimestamp()
+                });
+
+                // Redirect to WhatsApp
+                window.location.href = `https://wa.me/${adminPhone}?text=${text}`;
+            } catch (e) {
+                // If DB fails, still redirect so you don't lose the lead
+                window.location.href = `https://wa.me/${adminPhone}?text=${text}`;
+            }
         };
     </script>
 </body>
