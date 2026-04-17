@@ -1,91 +1,185 @@
-<div class="text-center mb-8">
-    <p class="text-[10px] font-black uppercase text-gray-500 tracking-[0.2em] mb-1">Available Balance</p>
-    <h1 class="text-4xl font-black italic"><span class="user-currency">₦</span><span id="display-bal">0.00</span></h1>
-</div>
-
-<div>
-    <label class="text-[10px] font-black uppercase text-gray-500 mb-2 block tracking-widest ml-1">Withdrawal Amount</label>
-    <div class="relative">
-        <span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-600 user-currency">₦</span>
-        <input type="number" id="withdraw-amt" placeholder="0.00" class="w-full bg-black/40 border border-white/5 p-5 pl-10 rounded-2xl font-black text-xl outline-none focus:border-blue-500 transition-all text-white">
-    </div>
-    <div class="flex justify-between items-center mt-3 px-1">
-        <p class="text-[9px] text-gray-500 font-bold uppercase italic">Network Fee: <span class="user-currency">₦</span><span id="fee-amt">100</span></p>
-        <p class="text-[9px] text-blue-500 font-bold uppercase tracking-tighter">Min: <span class="user-currency">₦</span><span id="min-amt">1,000</span></p>
-    </div>
-</div>
-
-<script type="module">
-    // ... (Keep your existing Firebase imports)
-
-    let userBalance = 0;
-    let bankData = null;
-    let userSymbol = "₦"; // Default
-    let networkFee = 100;
-    let minWithdrawal = 1000;
-
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const snap = await getDoc(doc(db, "users", user.uid));
-            if (snap.exists()) {
-                const data = snap.data();
-                
-                // 1. GET USER CURRENCY FROM DATABASE
-                // Assuming your field is named 'currency' or 'symbol'
-                userSymbol = data.currency === "USD" ? "$" : (data.currency === "GHS" ? "GH₵" : "₦");
-                
-                // 2. ADJUST FEES BASED ON CURRENCY
-                if (userSymbol === "$") {
-                    networkFee = 1;      // $1 fee
-                    minWithdrawal = 10;  // $10 minimum
-                } else if (userSymbol === "GH₵") {
-                    networkFee = 5;      // 5 GHS fee
-                    minWithdrawal = 50;  // 50 GHS minimum
-                }
-
-                // 3. UPDATE ALL UI ELEMENTS
-                document.querySelectorAll('.user-currency').forEach(el => el.innerText = userSymbol);
-                document.getElementById('fee-amt').innerText = networkFee;
-                document.getElementById('min-amt').innerText = minWithdrawal.toLocaleString();
-                
-                userBalance = data.balance || 0;
-                document.getElementById('display-bal').innerText = userBalance.toLocaleString();
-                
-                if(data.bankDetails) {
-                    bankData = data.bankDetails;
-                    document.getElementById('target-bank').innerText = bankData.bankName;
-                    document.getElementById('target-acc').innerText = bankData.accNum;
-                    document.getElementById('target-name').innerText = bankData.accName;
-                } else {
-                    document.getElementById('target-bank').innerHTML = `<span class="text-red-500">Bank Details Missing</span>`;
-                    document.getElementById('withdraw-btn').disabled = true;
-                    document.getElementById('withdraw-btn').style.opacity = "0.5";
-                    document.getElementById('withdraw-btn').innerText = "SET UP BANK IN SETTINGS";
-                }
-            }
-        } else {
-            window.location.href = "login.html";
-        }
-    });
-
-    window.processWithdrawal = async () => {
-        const amtValue = document.getElementById('withdraw-amt').value;
-        const amt = Number(amtValue);
-        const totalToDeduct = amt + networkFee;
-
-        if(!amtValue || amt < minWithdrawal) return showNotify(`Minimum withdrawal is ${userSymbol}${minWithdrawal}`);
-        if(totalToDeduct > userBalance) return showNotify("Insufficient Balance (Fee Included)");
-
-        const btn = document.getElementById('withdraw-btn');
-        btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> SECURING REQUEST...`;
-        btn.disabled = true;
-
-        const ticket = "WD-" + Math.floor(1000 + Math.random() * 9000);
-        const phone = "2349157023248";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal | Competentraders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap');
         
-        // DYNAMIC WHATSAPP MESSAGE
-        const text = `*WITHDRAWAL REQUEST*%0A---%0A*Ticket:* ${ticket}%0A*Email:* ${auth.currentUser.email}%0A*Amount:* ${userSymbol}${amt}%0A*Fee:* ${userSymbol}${networkFee}%0A*Total:* ${userSymbol}${totalToDeduct}%0A---%0A*Bank:* ${bankData.bankName}%0A*Acc:* ${bankData.accNum}%0A*Name:* ${bankData.accName}`;
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: #06070a; 
+            color: white; 
+            overflow-x: hidden; 
+        }
 
-        // ... (Keep the rest of your Firebase addDoc and redirect logic)
-    };
-</script>
+        .glass-panel { 
+            background: #0f1218; 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+
+        /* Fixed Sharp Notification */
+        #toast {
+            position: fixed; bottom: -100px; left: 0; right: 0;
+            background: #ff4d4d; color: black;
+            padding: 20px; font-weight: 900; font-size: 11px;
+            text-transform: uppercase; text-align: center;
+            letter-spacing: 2px; z-index: 9999;
+            transition: all 0.4s cubic-bezier(0.9, 0, 0.1, 1);
+        }
+        #toast.show { bottom: 0; }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    </style>
+</head>
+<body class="p-6">
+
+    <div id="toast">Error: Insufficient Funds</div>
+
+    <div class="max-w-md mx-auto space-y-8">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-black uppercase italic tracking-tighter">Withdraw<span class="text-blue-600">.</span></h1>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]">Capital Outflow</p>
+            </div>
+            <a href="user-dashboard.html" class="w-12 h-12 rounded-2xl glass-panel flex items-center justify-center text-white text-xs">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+
+        <div class="glass-panel p-10 rounded-[2.5rem] text-center">
+            <p class="text-[10px] font-black uppercase text-gray-600 tracking-widest mb-2">Available to move</p>
+            <h2 class="text-5xl font-black italic tracking-tighter">
+                <span class="user-currency">₦</span><span id="display-bal">0.00</span>
+            </h2>
+        </div>
+
+        <div class="space-y-4">
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-blue-600">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-[9px] font-black uppercase text-blue-500 tracking-widest">Target Destination</span>
+                    <a href="settings.html" class="text-[9px] font-black uppercase text-gray-600 underline">Change</a>
+                </div>
+                <h3 id="target-bank" class="text-xs font-black uppercase tracking-tight text-white/50">---</h3>
+                <p id="target-acc" class="text-xl font-black tracking-widest my-1">---- ---- --</p>
+                <p id="target-name" class="text-[10px] font-bold uppercase text-gray-500 italic">---</p>
+            </div>
+
+            <div class="glass-panel p-8 rounded-[2rem] space-y-6">
+                <div>
+                    <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest block mb-4">Enter Amount</label>
+                    <div class="relative">
+                        <span class="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-black text-gray-700 user-currency">₦</span>
+                        <input type="number" id="withdraw-amt" placeholder="0.00" class="w-full bg-transparent border-b-2 border-white/10 py-4 pl-10 text-3xl font-black outline-none focus:border-blue-600 transition-all">
+                    </div>
+                </div>
+
+                <div class="flex justify-between text-[9px] font-black uppercase tracking-widest text-gray-600 px-1">
+                    <span>Fee: <span class="user-currency">₦</span><span id="fee-amt">0</span></span>
+                    <span>Min: <span class="user-currency">₦</span><span id="min-amt">0</span></span>
+                </div>
+
+                <button onclick="processWithdrawal()" id="withdraw-btn" class="w-full py-5 bg-white text-black rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl shadow-white/5">
+                    Authorize Payout
+                </button>
+            </div>
+        </div>
+
+        <p class="text-[8px] font-bold text-gray-700 uppercase tracking-[0.4em] text-center leading-loose">
+            Manual Verification Active • 1-6 Hour Window • Secure Terminal
+        </p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+        // ... Config stays same ...
+        const firebaseConfig = {
+            apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
+            authDomain: "competentraders-2efdc.firebaseapp.com",
+            projectId: "competentraders-2efdc",
+            storageBucket: "competentraders-2efdc.firebasestorage.app",
+            messagingSenderId: "150379227882",
+            appId: "1:150379227882:web:19d9c19805ef68b016c593"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let userBalance = 0;
+        let bankData = null;
+        let userSymbol = "₦"; 
+        let networkFee = 100;
+        let minWithdrawal = 1000;
+
+        window.showNotify = (msg) => {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const snap = await getDoc(doc(db, "users", user.uid));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    
+                    // CURRENCY LOGIC
+                    userSymbol = data.currency === "USD" ? "$" : (data.currency === "GHS" ? "GH₵" : "₦");
+                    if (userSymbol === "$") { networkFee = 1; minWithdrawal = 10; }
+                    else if (userSymbol === "GH₵") { networkFee = 5; minWithdrawal = 50; }
+                    else { networkFee = 100; minWithdrawal = 1000; }
+
+                    // UI UPDATES
+                    document.querySelectorAll('.user-currency').forEach(el => el.innerText = userSymbol);
+                    document.getElementById('fee-amt').innerText = networkFee;
+                    document.getElementById('min-amt').innerText = minWithdrawal.toLocaleString();
+                    
+                    userBalance = data.balance || 0;
+                    document.getElementById('display-bal').innerText = userBalance.toLocaleString();
+                    
+                    if(data.bankDetails) {
+                        bankData = data.bankDetails;
+                        document.getElementById('target-bank').innerText = bankData.bankName;
+                        document.getElementById('target-acc').innerText = bankData.accNum;
+                        document.getElementById('target-name').innerText = bankData.accName;
+                    } else {
+                        document.getElementById('target-bank').innerText = "MISSING DATA";
+                        const btn = document.getElementById('withdraw-btn');
+                        btn.disabled = true;
+                        btn.innerText = "SET BANK IN SETTINGS";
+                        btn.className = "w-full py-5 bg-red-600/10 text-red-500 rounded-2xl font-black uppercase text-[11px] tracking-[0.3em]";
+                    }
+                }
+            } else { window.location.href = "login.html"; }
+        });
+
+        window.processWithdrawal = async () => {
+            const amtValue = document.getElementById('withdraw-amt').value;
+            const amt = Number(amtValue);
+            const total = amt + networkFee;
+
+            if(!amtValue || amt < minWithdrawal) return showNotify(`MINIMUM IS ${userSymbol}${minWithdrawal}`);
+            if(total > userBalance) return showNotify("INSUFFICIENT CAPITAL");
+
+            const btn = document.getElementById('withdraw-btn');
+            btn.innerHTML = "PROCESSING...";
+            btn.disabled = true;
+
+            const ticket = "WD-" + Math.floor(1000 + Math.random() * 9000);
+            const phone = "2349157023248";
+            const text = `*WITHDRAWAL REQUEST*%0A---%0A*Ticket:* ${ticket}%0A*Email:* ${auth.currentUser.email}%0A*Amount:* ${userSymbol}${amt}%0A*Fee:* ${userSymbol}${networkFee}%0A*Total:* ${userSymbol}${total}%0A---%0A*Bank:* ${bankData.bankName}%0A*Acc:* ${bankData.accNum}%0A*Name:* ${bankData.accName}`;
+
+            window.location.href = `https://wa.me/${phone}?text=${text}`;
+        };
+    </script>
+</body>
+</html>
