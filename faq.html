@@ -44,6 +44,20 @@
             background: #0f1218;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
+
+        /* Category Header Styling */
+        .category-label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 8px;
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 <body class="p-4 md:p-10 pb-32">
@@ -54,13 +68,13 @@
                 <i class="fas fa-arrow-left text-[8px]"></i> Return to Dashboard
             </a>
             <div class="px-4 py-1 rounded-full border border-cyan-500/20 bg-cyan-500/5">
-                <span class="text-[9px] font-black text-cyan-400 uppercase tracking-widest">Knowledge Base v1.0</span>
+                <span class="text-[9px] font-black text-cyan-400 uppercase tracking-widest">Global Support v2.0</span>
             </div>
         </div>
 
         <div class="text-center mb-20">
-            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">CPT Support <span class="text-cyan-400">FAQ</span></h1>
-            <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.5em]"></p>
+            <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-4">Support <span class="text-cyan-400">Hub</span></h1>
+            <p class="text-[10px] font-bold text-gray-600 uppercase tracking-[0.5em]">Comprehensive System Protocols</p>
         </div>
 
         <div id="faq-master-container" class="space-y-6">
@@ -77,78 +91,68 @@
 
     <script>
         const faqDatabase = [
-            // CATEGORY: REGISTRATION & LOGIN (1-5)
-            { q: "Is there a registration link sent to my email?", a: "No. Registration is instant. You are redirected straight to the dashboard. We do not send activation links to avoid ISP delays and filter issues." },
-            { q: "Can I use a VPN during registration or login?", a: "No. Using a VPN masks your location and can trigger our Anti-Fraud system, leading to an automatic security lock on your account." },
-            { q: "What should I do if the login page says 'Account Suspended'?", a: "Suspensions occur if the system detects multiple accounts on one device. Contact support to prove your identity and request a manual review." },
-            { q: "I forgot my transaction PIN. How do I recover it?", a: "Go to your Profile Settings and select 'Reset PIN'. You will need to answer your security questions to set a new 4-digit code." },
-            { q: "Can I stay logged in on multiple devices?", a: "No. For security, logging into a new device will automatically log you out of any previous active sessions." },
+            // ACCESS & CORE (1-5)
+            { cat: "Access", q: "Is there a registration link sent to my email?", a: "No. Registration is instant. You are redirected straight to the dashboard to avoid ISP delays and filter issues." },
+            { cat: "Security", q: "Can I use a VPN during registration or login?", a: "No. Using a VPN masks your location and can trigger our Anti-Fraud system, leading to an automatic security lock." },
+            { cat: "Security", q: "What should I do if my account is suspended?", a: "Suspensions occur due to multiple account detection. Contact support with proof of identity for manual review." },
+            { cat: "Security", q: "How do I recover my transaction PIN?", a: "Go to Profile Settings > Reset PIN. You must answer your secret security questions to authorize the reset." },
+            { cat: "Security", q: "Can I stay logged in on multiple devices?", a: "No. For the safety of your funds, logging into a new device will automatically terminate previous sessions." },
 
-            // CATEGORY: DEPOSITS & FUNDING (6-10)
-            { q: "How do I fund my account via Opay?", a: "Copy the corporate account number from the Deposit page. After payment, upload the clear transaction receipt to your dashboard for instant verification." },
-            { q: "Why is my deposit still pending after 30 minutes?", a: "This usually happens if the uploaded receipt is blurry or the transaction reference is missing. Ensure you upload high-quality screenshots for the AI to read." },
-            { q: "What is the minimum deposit amount?", a: "The minimum threshold is currently N1000 Naira. This ensures every account has enough liquidity to enter a trading cycle." },
-            { q: "Can I use someone else's bank account to deposit?", a: "Yes, as long as you provide the correct transaction proof, funds can be sent from any account to your unique dashboard wallet." },
-            { q: "Are there fees for funding my account?", a: "Competentraders charges 0% on all incoming deposits. You only pay the standard transfer fees charged by your bank or Opay." },
+            // REFERRAL (6-10)
+            { cat: "Referral", q: "How do I earn referral bonuses?", a: "Share your unique link from the 'Affiliate' tab. Bonuses are credited once your referral completes their first investment cycle." },
+            { cat: "Referral", q: "What is 'Sybil Activity'?", a: "Sybil activity is creating fake accounts under your own link. This results in a permanent ban of all linked accounts." },
+            { cat: "Referral", q: "Where can I find my affiliate link?", a: "Your link is prominently displayed in the Referral/Affiliate section of your user dashboard." },
+            { cat: "Referral", q: "Are referral earnings withdrawable?", a: "Yes, referral commissions are moved to your main balance and can be withdrawn or re-invested instantly." },
+            { cat: "Referral", q: "Is there a limit to how many people I can refer?", a: "No. There is no cap on the number of partners you can bring into the Competentraders ecosystem." },
 
-            // CATEGORY: WITHDRAWALS & PROFITS (11-15)
-            { q: "When can I withdraw my profit?", a: "Profit is available for withdrawal once your active trading cycle reaches 'Maturity'. You can see the countdown timer on your Investment page." },
-            { q: "Why does my withdrawal status say 'Audit'?", a: "All withdrawals go through a brief security audit to ensure funds are not being sent to fraudulent accounts. This usually takes 6-24 hours." },
-            { q: "Is there a maximum withdrawal limit?", a: "Standard accounts are limited to $2,000 daily. To increase this, you must complete full KYC verification and upgrade your account tier." },
-            { q: "What happens if I enter the wrong bank details?", a: "If the transfer has not been processed, contact support immediately. If already processed, the funds cannot be retrieved as bank transfers are final." },
-            { q: "Is there a fee for withdrawing funds?", a: "Yes, we apply a 2% maintenance fee to all withdrawals to cover network gateway costs and platform sustainability." },
+            // FOOTBALL PREDICTION (11-15)
+            { cat: "Football", q: "What is Football Prediction?", a: "It is a data-driven analysis service providing high-probability sports outcomes for educational and entertainment purposes." },
+            { cat: "Football", q: "How do I access daily predictions?", a: "Active members can find the latest analysis in the 'Sports' or 'Prediction' tab of the dashboard." },
+            { cat: "Football", q: "Are the predictions 100% guaranteed?", a: "No sports prediction is guaranteed. We provide the highest mathematical probability, but users should follow strict bankroll management." },
+            { cat: "Football", q: "Do you offer 'Fixed Matches'?", a: "No. We provide analytical predictions based on team form, injuries, and statistics. We do not engage in match-fixing." },
+            { cat: "Football", q: "Which leagues are covered?", a: "We cover the Premier League, La Liga, Serie A, Bundesliga, and major International tournaments." },
 
-            // CATEGORY: REFERRALS & TECH (16-20)
-            { q: "How do I earn referral bonuses?", a: "Share your unique link. When your referral completes their first investment cycle, a bonus is instantly credited to your referral wallet." },
-            { q: "What is 'Sybil Activity' and why is it banned?", a: "Sybil activity is creating fake accounts under your own link. This is theft of referral funds and results in a permanent ban of all linked accounts." },
-            { q: "How do I compound my profits?", a: "Instead of withdrawing, select 'Re-invest' at the end of your cycle to add your profits back into the principal for higher future returns." },
-            { q: "The dashboard is not loading correctly. What do I do?", a: "Clear your browser cache and refresh. Ensure you are using a modern browser like Chrome or Safari. Avoid using rooted or jailbroken devices." },
-            { q: "Who owns Competentraders Global?", a: "The platform is founded and managed by Ugbesia Godswill, focused on the mission of 'Lifting Lives' through secure digital asset management." }
+            // INVESTMENT PLAN (16-20)
+            { cat: "Investment", q: "What is an Investment Plan?", a: "It is a fixed-duration contract where your capital is deployed in various markets to generate a target return." },
+            { cat: "Investment", q: "Can I run multiple plans at once?", a: "Yes, you can have several active cycles across different tiers (Starter, Pro, Elite) simultaneously." },
+            { cat: "Investment", q: "What happens when a cycle matures?", a: "Your capital and profit are moved to your maturity balance, where you can choose to withdraw or re-invest." },
+            { cat: "Investment", q: "Can I cancel an active plan?", a: "No. Once a cycle begins, the funds are locked in the market liquidity pool until the duration is complete." },
+            { cat: "Investment", q: "How are profits calculated?", a: "Profits are based on the specific ROI percentage of your chosen plan and the total capital invested." },
+
+            // FOREX TRADING (21-25)
+            { cat: "Forex", q: "Do I need trading skills to earn?", a: "No. Our automated systems and pro-desk manage the trades. You simply provide the capital and collect the returns." },
+            { cat: "Forex", q: "Which pairs do we trade?", a: "We specialize in high-liquidity pairs like EUR/USD and GBP/USD, alongside Gold (XAU/USD) and BTC/USD." },
+            { cat: "Forex", q: "Is Forex trading risky?", a: "Yes, all trading carries risk. We use advanced stop-loss protocols to ensure your principal capital remains protected." },
+            { cat: "Forex", q: "Can I see the trade history?", a: "Yes, high-tier accounts can view periodic trade reports in their dashboard under 'Market History'." },
+            { cat: "Forex", q: "How does the AI assist in trading?", a: "Our AI monitors 24/7 for specific price action patterns, executing trades faster than manual human capacity." },
+
+            // VIP (26-28)
+            { cat: "VIP", q: "How do I become a VIP member?", a: "VIP status is unlocked by reaching a specific total investment volume or through a direct invite from the administration." },
+            { cat: "VIP", q: "What are the VIP perks?", a: "VIPs enjoy priority withdrawals, 0% maintenance fees, and access to exclusive 'Flash Cycles' with higher ROI." },
+            { cat: "VIP", q: "Is there a VIP support line?", a: "Yes, VIP members have access to a dedicated account manager for 24/7 personalized assistance." },
+
+            // UNIVERSITY (29-31)
+            { cat: "University", q: "What is Competentraders University?", a: "It is our educational platform where you can learn about financial literacy, technical analysis, and wealth management." },
+            { cat: "University", q: "How do I enroll in courses?", a: "Courses are available via the 'University' tab. Some are free, while others require an active investment plan to unlock." },
+            { cat: "University", q: "Do I get a certificate?", a: "Yes, upon completion of our Masterclasses, digital certificates are issued to verify your financial literacy training." },
+
+            // OUR GOALS (32-34)
+            { cat: "Our Goals", q: "What is your main mission?", a: "To empower individuals with secure, simplified access to global wealth-building tools, fulfilling the 'Lifting Lives' vision." },
+            { cat: "Our Goals", q: "Is Competentraders a local or global brand?", a: "We are a global entity with users spanning multiple continents, focusing on decentralized financial growth." },
+            { cat: "Our Goals", q: "Do you have physical offices?", a: "We are a digital-first organization. This allows us to maintain low overhead and provide higher returns to our users." },
+
+            // CONNECT WITH US (35-37)
+            { cat: "Connect", q: "How do I contact support?", a: "Use the 'Email Support' button below or join our official Telegram community for real-time updates." },
+            { cat: "Connect", q: "Where are your social media handles?", a: "Verified links to our WhatsApp, Telegram, and Twitter are found in the footer of your user dashboard." },
+            { cat: "Connect", q: "Can I join the leadership team?", a: "We periodically open applications for Regional Representatives. Check the announcements for recruitment phases." },
+
+            // TERMS & PRIVACY (38-42)
+            { cat: "Legal", q: "Where are the Terms & Conditions?", a: "The full legal framework is available via the 'Terms' link. It outlines the rules of the ecosystem." },
+            { cat: "Legal", q: "How is my data protected?", a: "We use high-level encryption and do not share user data with third-party marketers. Your privacy is our priority." },
+            { cat: "Legal", q: "What is your refund policy?", a: "Due to the nature of market trading, capital currently in an active cycle cannot be refunded until the cycle is complete." },
+            { cat: "Legal", q: "Can I close my account?", a: "Yes. You can request account deletion in settings. All personal data will be purged in 30 days." },
+            { cat: "Legal", q: "Is Competentraders regulated?", a: "We operate as a private digital asset management firm. We comply with standard AML and KYC security protocols." }
         ];
-
-
-
-
-
-        // CATEGORY: FOOTBALL PREDICTION (26-28)
-        { q: "What is the Football Prediction service?", a: "We provide high-probability sports analysis. Note that these are predictions based on data, and users should manage their risk accordingly." },
-        { q: "How often are predictions posted?", a: "Daily analysis is provided during active league seasons, focusing on top European and International fixtures." },
-
-        // CATEGORY: INVESTMENT PLANS (29-31)
-        { q: "What are the different investment plans?", a: "We offer tiers ranging from 'Starter' to 'Elite'. Each has different minimum entry requirements, cycle durations, and profit margins." },
-        { q: "Can I run two investment plans at once?", a: "Yes. You can have multiple active cycles running simultaneously on different plans to diversify your earnings." },
-
-        // CATEGORY: FOREX TRADING (32-34)
-        { q: "Do I need to trade Forex myself?", a: "No. Our systems and expert traders manage the trades. You simply select a plan, and the system handles the technical execution." },
-        { q: "Which currency pairs are traded?", a: "Our desk focuses on major pairs like EUR/USD, GBP/USD, and XAU/USD (Gold) due to their high liquidity." },
-
-        // CATEGORY: VIP MEMBERSHIP (35-37)
-        { q: "How do I join the VIP circle?", a: "VIP status is attained by maintaining a specific capital threshold or through a direct invitation based on your platform activity." },
-        { q: "What are the benefits of VIP?", a: "VIP members enjoy 0% withdrawal fees, a dedicated account manager, and early access to high-yield investment cycles." },
-
-        // CATEGORY: COMPETENTRADERS UNIVERSITY (38-40)
-        { q: "What is Competentraders University?", a: "An educational wing designed to teach users the fundamentals of financial markets, technical analysis, and digital asset security." },
-        { q: "Are the courses free?", a: "Basic modules are free for all registered users. Advanced certification courses are reserved for active investors." },
-
-        // CATEGORY: OUR GOALS (41-43)
-        { q: "What is the mission of Competentraders Global?", a: "Our mission is to bridge the wealth gap by providing simplified, secure access to global financial markets for everyone." },
-        { q: "Where do you see the platform in 5 years?", a: "We aim to be the leading decentralized finance hub in Africa, empowering over 1 million users with financial literacy." },
-
-        // CATEGORY: CONNECT WITH US (44-46)
-        { q: "How do I join the official community?", a: "Follow our verified Telegram and WhatsApp channels. Links are provided in the 'Community' section of your dashboard." },
-        { q: "Is there an office I can visit?", a: "We operate as a digital-first global entity. Support is provided through our online terminal to ensure 24/7 availability for users worldwide." },
-
-        // CATEGORY: TERMS & PRIVACY (47-50)
-        { q: "Where can I read the full Terms and Conditions?", a: "A link is provided at the footer of the dashboard. It covers our legal framework, user obligations, and platform liabilities." },
-        { q: "Is my data safe from hackers?", a: "We use AES-256 encryption. Your personal data is never shared with third-party marketing firms; it is strictly used for account security." },
-        { q: "How do I report a privacy breach?", a: "If you suspect your data has been compromised, immediately use the 'Security Alert' button or email our Data Protection Officer." }
-    ];
-
-
-
-
-
-
 
         const container = document.getElementById('faq-master-container');
 
@@ -156,8 +160,8 @@
             container.innerHTML = faqDatabase.map((item, index) => `
                 <div class="faq-item glass-card rounded-3xl transition-all cursor-pointer overflow-hidden border border-white/5" onclick="toggleItem(this)">
                     <div class="p-6 md:p-8 flex justify-between items-center gap-6">
-                        <div class="flex gap-4 items-center">
-                            <span class="text-[9px] font-black text-cyan-500/50 uppercase tracking-widest">${(index + 1).toString().padStart(2, '0')}</span>
+                        <div class="flex flex-col gap-1">
+                            <span class="category-label">${item.cat}</span>
                             <h3 class="text-[13px] md:text-sm font-black uppercase tracking-tight text-gray-200">${item.q}</h3>
                         </div>
                         <i class="fas fa-plus chevron text-[10px] text-gray-600 transition-transform"></i>
