@@ -3,75 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Deposit | Competentraders</title>
+    <title>Deposit Terminal | Competentraders</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0B0E11; color: white; overflow-x: hidden; }
-        .glass-card { background: #181A20; border: 1px solid #2B2F36; border-radius: 24px; }
-        .accent-text { color: #00D071; }
-        .wa-btn { background: #25D366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); transition: all 0.3s ease; }
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
         
-        #toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: #1e222d; border: 1px solid #2B2F36; color: white;
-            padding: 12px 24px; border-radius: 12px; font-size: 12px; font-weight: 800;
-            z-index: 9999; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            width: 80%; max-width: 300px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px;
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: #06070a; 
+            color: white; 
+            overflow-x: hidden;
         }
-        #toast.show { top: 20px; }
+
+        .glass-panel {
+            background: #0f1218;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .input-gradient {
+            background: linear-gradient(145deg, #0f1218, #0a0c10);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .accent-border {
+            border-left: 4px solid #00D071;
+        }
+
+        /* Top Notification */
+        #toast {
+            position: fixed; top: -100px; left: 0; right: 0;
+            background: #00D071; color: black;
+            padding: 18px; font-weight: 900; font-size: 11px;
+            text-transform: uppercase; text-align: center;
+            letter-spacing: 2px; z-index: 9999;
+            transition: all 0.4s cubic-bezier(0.9, 0, 0.1, 1);
+        }
+        #toast.show { top: 0; }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
-<body class="p-6">
+<body class="p-6 pb-20">
 
-    <div id="toast"><i class="fas fa-info-circle accent-text"></i> <span id="toast-msg">Notification</span></div>
+    <div id="toast">Account Number Copied</div>
 
-    <div class="max-w-md mx-auto">
-        <div class="flex items-center justify-between mb-10">
-            <a href="user-dashboard.html" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all">
+    <div class="max-w-md mx-auto space-y-8">
+        
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-black uppercase italic tracking-tighter">Deposit<span class="text-[#00D071]">.</span></h1>
+                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]">Institutional Node</p>
+            </div>
+            <a href="user-dashboard.html" class="w-12 h-12 rounded-2xl glass-panel flex items-center justify-center text-white/50 hover:text-white transition-all">
                 <i class="fas fa-arrow-left"></i>
             </a>
-            <span class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Manual Business OPay Payment Gateway</span>
-            <div class="w-10"></div>
         </div>
 
-        <div class="text-center mb-10">
-            <div class="w-16 h-16 bg-[#00D071]/10 rounded-3xl flex items-center justify-center mx-auto mb-4 border border-[#00D071]/20">
-                <i class="fas fa-building accent-text text-2xl"></i>
+        <div class="glass-panel p-8 rounded-[2.5rem] relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-6 opacity-10">
+                <i class="fas fa-building text-5xl"></i>
             </div>
-            <h1 class="text-xl font-black uppercase italic tracking-tighter">Business <span class="accent-text">Node</span></h1>
-            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mt-1">Merchant: Business OPay  (Godswill Ugbesia)</p>
-        </div>
-
-        <div class="glass-card p-6 mb-6">
-            <div class="mb-8 text-center">
-                <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest mb-4">Enter Amount to Fund</p>
-                <div class="relative">
-                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-600">₦</span>
-                    <input type="number" id="dep-amt" placeholder="1,000-1000000" class="w-full bg-black/30 border border-white/5 p-5 pl-10 rounded-2xl text-3xl font-black outline-none focus:border-green-500 transition-all text-white">
+            
+            <div class="relative z-10 space-y-6">
+                <div>
+                    <label class="text-[9px] font-black uppercase text-[#00D071] tracking-[0.2em] block mb-1">Target Bank</label>
+                    <h2 class="text-lg font-black uppercase tracking-tight">OPay Digital Bank</h2>
                 </div>
-            </div>
 
-            <div class="space-y-4 bg-black/20 p-5 rounded-2xl border border-white/5">
-                <div class="flex justify-between items-center">
-                    <span class="text-[10px] text-gray-500 font-black uppercase">Bank Name</span>
-                    <span class="text-xs font-bold text-gray-300">OPay Business Digital Bank</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-[10px] text-gray-500 font-black uppercase">Account Number</span>
-                    <div class="flex items-center gap-3">
-                        <span class="text-lg font-black tracking-tighter"> Business OPay Payment Account Number 6119316029</span>
-                        <button onclick="copyAcc()" class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center accent-text"><i class="fas fa-copy text-xs"></i></button>
+                <div class="flex justify-between items-end">
+                    <div>
+                        <label class="text-[9px] font-black uppercase text-gray-500 tracking-[0.2em] block mb-1">Account Number</label>
+                        <p id="acc-num" class="text-3xl font-black tracking-widest text-white">6119316029</p>
                     </div>
+                    <button onclick="copyAcc()" class="w-12 h-12 rounded-xl bg-[#00D071]/10 text-[#00D071] flex items-center justify-center hover:bg-[#00D071] hover:text-black transition-all">
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+
+                <div class="pt-4 border-t border-white/5">
+                    <label class="text-[9px] font-black uppercase text-gray-500 tracking-[0.2em] block mb-1">Beneficiary</label>
+                    <p class="text-xs font-bold uppercase tracking-widest">Business OPay (Godswill Ugbesia)</p>
                 </div>
             </div>
         </div>
 
-        <button id="main-btn" onclick="initiateWhatsAppDeposit()" class="w-full wa-btn py-5 rounded-[22px] font-black uppercase text-xs flex items-center justify-center gap-3 transition-transform active:scale-95">
-            <i class="fab fa-whatsapp text-lg"></i> I Have Paid
-        </button>
-        <p class="text-[9px] text-gray-600 text-center font-bold uppercase mt-4 tracking-widest">Verification managed by Competentraders official  Fraud team.</p>
+        <div class="glass-panel p-8 rounded-[2.5rem] space-y-6">
+            <div>
+                <label class="text-[10px] font-black uppercase text-gray-500 tracking-widest block mb-4 ml-1">Funding Amount</label>
+                <div class="relative">
+                    <span class="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-black text-gray-700 user-currency">₦</span>
+                    <input type="number" id="dep-amt" placeholder="0.00" class="w-full bg-transparent border-b-2 border-white/10 py-4 pl-10 text-4xl font-black outline-none focus:border-[#00D071] transition-all text-white">
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 p-4 bg-blue-500/5 rounded-2xl border border-blue-500/10">
+                <i class="fas fa-info-circle text-blue-500 text-xs"></i>
+                <p class="text-[9px] font-bold text-gray-400 uppercase leading-relaxed">
+                    Transfer funds to the account above, then click the button below to submit your receipt via WhatsApp.
+                </p>
+            </div>
+
+            <button id="main-btn" onclick="initiateWhatsAppDeposit()" class="w-full py-6 bg-white text-black rounded-2xl font-black uppercase text-[11px] tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-[#00D071] hover:text-black transition-all shadow-2xl shadow-white/5">
+                <i class="fab fa-whatsapp text-lg"></i> Confirm Payment
+            </button>
+        </div>
+
+        <div class="text-center space-y-2">
+            <p class="text-[8px] font-black text-gray-700 uppercase tracking-[0.4em]">Secure Merchant Gateway • 256-Bit SSL</p>
+            <p class="text-[8px] font-black text-[#00D071] uppercase tracking-[0.4em]">Verified by Competentraders Fraud Team</p>
+        </div>
     </div>
 
     <script type="module">
@@ -79,6 +122,7 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
         import { getFirestore, doc, getDoc, addDoc, collection, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+        // ... (Your Firebase Config)
         const firebaseConfig = {
             apiKey: "AIzaSyDJkvNofiX0SjvqsIBaJj81y38yRVsjSFQ",
             authDomain: "competentraders-2efdc.firebaseapp.com",
@@ -93,85 +137,63 @@
         const db = getFirestore(app);
 
         let userName = "Client";
+        let userSymbol = "₦";
 
         onAuthStateChanged(auth, async (user) => {
             if(user) {
                 const snap = await getDoc(doc(db, "users", user.uid));
-                if(snap.exists()) userName = snap.data().fullName;
+                if(snap.exists()) {
+                    const data = snap.data();
+                    userName = data.fullName;
+                    // Dynamic Currency Logic
+                    const pref = data.currency || "NGN";
+                    userSymbol = pref === "USD" ? "$" : (pref === "GHS" ? "GH₵" : "₦");
+                    document.querySelectorAll('.user-currency').forEach(el => el.innerText = userSymbol);
+                }
             }
         });
 
         window.showToast = (msg) => {
             const toast = document.getElementById('toast');
-            document.getElementById('toast-msg').innerText = msg;
+            toast.innerText = msg;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        window.copyAcc = () => {
+            const num = document.getElementById('acc-num').innerText;
+            navigator.clipboard.writeText(num);
+            showToast("Account Number Copied!");
         }
 
         window.initiateWhatsAppDeposit = async () => {
             const amt = document.getElementById('dep-amt').value;
             const btn = document.getElementById('main-btn');
             
-            if(!amt || amt < 1000) return showToast("Min deposit ₦1,000 required");
+            if(!amt || amt < 1000) return showToast(`MIN DEPOSIT ${userSymbol}1,000 REQUIRED`);
 
             const ticketID = "CT-" + Math.floor(1000 + Math.random() * 9000);
-            const phone = "2349157023248";
-            const message = `*I HAVE PAID*%0A---%0A*Ticket:* ${ticketID}%0A*Name:* ${userName}%0A*Amount:* ₦${amt}%0A---%0A_Attached is my payment proof._`;
+            const adminPhone = "2349157023248";
+            const message = `*DEPOSIT NOTIFICATION*%0A---%0A*Ticket:* ${ticketID}%0A*Name:* ${userName}%0A*Amount:* ${userSymbol}${amt}%0A---%0A_I have completed the transfer. Attached is my proof of payment._`;
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> PROCESSING...`;
-
-            const forceTimeout = setTimeout(() => {
-                window.location.href = `https://wa.me/${phone}?text=${message}`;
-            }, 1500);
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> SECURING NODE...`;
 
             try {
                 await addDoc(collection(db, "deposits"), {
                     uid: auth.currentUser ? auth.currentUser.uid : "guest",
                     email: auth.currentUser ? auth.currentUser.email : "guest",
                     amount: Number(amt),
+                    currency: userSymbol,
                     ticket: ticketID,
                     status: "pending_verification",
                     timestamp: serverTimestamp()
                 });
-                
-                clearTimeout(forceTimeout);
-                window.location.href = `https://wa.me/${phone}?text=${message}`;
+                window.location.href = `https://wa.me/${adminPhone}?text=${message}`;
             } catch (e) {
-                console.log("DB Offline - Auto Redirecting...");
+                window.location.href = `https://wa.me/${adminPhone}?text=${message}`;
             }
-        }
-
-        window.copyAcc = () => {
-            navigator.clipboard.writeText("6119316029");
-            showToast("Account Number Copied!");
         }
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-<!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/69d36adc9ba1621c3a200a7d/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
-
-
-
