@@ -75,7 +75,6 @@
             </div>
         </div>
     </div>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -104,43 +103,60 @@
                 userDetails = userDoc.data();
                 document.getElementById('referralCode').innerText = userDetails.referralId;
                 
-                // Fetch only 'active' referrals (optional: you only pay for active ones)
-                const q = query(collection(db, "users"), where("referredBy", "==", userDetails.referralId));
+                // WISE QUERY: Only fetch users who are 'active' (Meaning they deposited & bought a plan)
+                const q = query(
+                    collection(db, "users"), 
+                    where("referredBy", "==", userDetails.referralId),
+                    where("accountStatus", "==", "active") 
+                );
+                
                 const querySnapshot = await getDocs(q);
                 
-                const count = querySnapshot.size;
-                currentBalance = count * 1000; // Assuming 1k per person
+                // NEW CALCULATION: 250 Naira per ACTIVE referral
+                const activeCount = querySnapshot.size;
+                currentBalance = activeCount * 250; 
                 
-                document.getElementById('referralCount').innerText = count;
-                document.getElementById('referralEarnings').innerText = `₦${currentBalance}`;
+                document.getElementById('referralCount').innerText = activeCount;
+                document.getElementById('referralEarnings').innerText = `₦${currentBalance.toLocaleString()}`;
 
-                // Handle Withdraw Button Logic
+                // Handle Withdraw Button Logic (Min 2,000)
                 const wBtn = document.getElementById('withdrawBtn');
                 if (currentBalance >= 2000) {
                     wBtn.disabled = false;
                     wBtn.innerText = "Request Withdrawal";
-                    wBtn.className = "w-full py-4 bg-green-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all";
+                    wBtn.className = "w-full py-4 bg-green-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-green-700 shadow-lg shadow-green-600/20 transition-all cursor-pointer";
                     wBtn.onclick = handleWithdraw;
+                } else {
+                    wBtn.disabled = true;
+                    wBtn.innerText = "Insufficient Valid Referrals";
+                    wBtn.className = "w-full py-4 bg-gray-800 text-gray-500 rounded-2xl font-black uppercase text-[10px] tracking-widest";
                 }
 
-                // List Referrals
+                // List Only the Validated Referrals
                 if (!querySnapshot.empty) {
                     const listHtml = [];
                     querySnapshot.forEach((doc) => {
                         const s = doc.data();
                         listHtml.push(`
-                            <div class="glass-panel p-4 rounded-2xl flex justify-between items-center border-l-4 ${s.accountStatus === 'active' ? 'border-green-500' : 'border-amber-500'}">
+                            <div class="glass-panel p-4 rounded-2xl flex justify-between items-center border-l-4 border-green-500 bg-green-500/5">
                                 <div>
                                     <p class="text-[11px] font-bold">${s.fullName}</p>
-                                    <p class="text-[8px] text-gray-500 uppercase font-black">${s.accountStatus}</p>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[7px] bg-green-500 text-black px-1 rounded font-black uppercase text-[6px]">Verified</span>
+                                        <p class="text-[8px] text-gray-500 uppercase font-black">Plan Active</p>
+                                    </div>
                                 </div>
-                                <span class="text-[9px] font-black text-gray-400">${s.registrationDate.split('T')[0]}</span>
+                                <span class="text-[9px] font-black text-blue-400">+₦250</span>
                             </div>
                         `);
                     });
                     document.getElementById('referralList').innerHTML = listHtml.join('');
                 } else {
-                    document.getElementById('referralList').innerHTML = `<div class="text-center py-10 text-gray-600 text-[10px] font-bold uppercase tracking-widest">No Referrals Recorded</div>`;
+                    document.getElementById('referralList').innerHTML = `
+                        <div class="text-center py-10 space-y-2">
+                            <p class="text-gray-600 text-[10px] font-bold uppercase tracking-widest">No Active Referrals Found</p>
+                            <p class="text-[8px] text-gray-700 uppercase">Referrals only count after they fund their account and buy a plan.</p>
+                        </div>`;
                 }
             }
         } else {
@@ -151,9 +167,9 @@
     function handleWithdraw() {
         const netAmount = currentBalance - 500;
         const waNumber = "2349153258628";
-        const msg = `Hello Admin, I want to withdraw my Referral Earnings.%0A%0AName: ${userDetails.fullName}%0AUsername: ${userDetails.username}%0ABalance: ₦${currentBalance}%0AAfter Fee (₦500): ₦${netAmount}%0A%0APlease provide bank details form.`;
+        const msg = `Hello Admin, I want to withdraw my Referral Earnings.%0A%0AName: ${userDetails.fullName}%0AUsername: ${userDetails.username}%0AActive Referrals: ${currentBalance / 250}%0ATotal Balance: ₦${currentBalance}%0AAfter Fee (₦500): ₦${netAmount}%0A%0AI have confirmed all my referrals have active plans.`;
         
-        if(confirm(`Confirm Withdrawal Request?\nTotal: ₦${currentBalance}\nFee: ₦500\nYou will receive: ₦${netAmount}`)) {
+        if(confirm(`Confirm Withdrawal Request?\nTotal: ₦${currentBalance}\nFee: ₦500\nNet Payout: ₦${netAmount}`)) {
             window.location.href = `https://wa.me/${waNumber}?text=${msg}`;
         }
     }
@@ -168,8 +184,19 @@
         const code = document.getElementById('referralCode').innerText;
         const link = `https://competentraders.vercel.app/register.html?ref=${code}`;
         navigator.clipboard.writeText(link);
-        alert("Link Copied to Clipboard!");
+        alert("Full Referral Link Copied!");
     };
 </script>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
